@@ -1,0 +1,61 @@
+kind: kapeta/block-type-service:0.0.2
+metadata:
+  name: kapeta/users
+  title: User service
+spec:
+  target:
+    kind: kapeta/language-target-nodejs:local
+  entities:
+    source:
+      type: kapeta-dsl
+      value: |-
+        //User object
+        //More lines
+        User {	
+        	id: string	
+        	name?: string	
+        	email: string
+        }
+  configuration:
+    source:
+      type: kapeta-dsl
+      value: |-
+        //Configuration for e-mails
+        EmailConfig {
+        	//Sender for e-mails. Note that you should be allowed to send e-mails from this domain and user
+            @global
+        	from: string = 'support@kapeta.com'
+        }
+
+  consumers:
+    - kind: kapeta/resource-type-postgresql:0.0.2
+      metadata:
+        name: users
+    - kind: kapeta/resource-type-smtp-client:0.0.2
+      metadata:
+        name: emailclient
+    - kind: kapeta/resource-type-cloud-bucket:0.0.2
+      metadata:
+        name: cdnBucket
+  providers:
+    - kind: kapeta/resource-type-auth-jwt-provider:0.0.2
+      metadata:
+        name: auth
+    - kind: kapeta/resource-type-rest-api:0.0.4
+      metadata:
+        name: users
+      spec:
+        source:
+          type: kapeta-dsl
+          value: |-
+            //Create user
+            @POST("/users/{id}")
+            createUser(@Path id:string, @Query user:User, @Body metadata:Map<string,string>, @Query tags?:Set<string>):User
+
+            //Get user by id
+            @GET("/users/{id}")
+            getUser(@Path id:string, @Header metadata:any):User
+
+            //Delete user by id
+            @DELETE("/users/{id}")
+            deleteUser(@Path id:string):void

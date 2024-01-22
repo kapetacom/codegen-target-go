@@ -1,0 +1,10 @@
+{
+    "extends": "@tsconfig/node18/tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./node",
+        "declaration": true,
+        "esModuleInterop": true
+    },
+    "exclude": ["node_modules", "web", "node"],
+    "include": ["src/**/*.ts", "definitions.d.ts"]
+}

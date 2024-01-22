@@ -1,0 +1,44 @@
+{{#usesAnyOf (toArray 'kapeta/resource-type-auth-jwt-provider' 'kapeta/resource-type-auth-jwt-consumer') }}
+//#FILENAME:src/.generated/auth/auth-middleware.ts:write-always
+import {
+{{#consumes 'kapeta/resource-type-auth-jwt-consumer'}}
+createExternalKeyStore,
+{{/consumes}}
+{{#provides 'kapeta/resource-type-auth-jwt-provider'}}
+jwksRoutes,
+{{/provides}}
+jwtAuthorization, JWTKeyStore} from "@kapeta/sdk-auth-jwt";
+import {ConfigProvider} from "@kapeta/sdk-config";
+import {Router} from "express";
+
+{{#provides 'kapeta/resource-type-auth-jwt-provider'}}
+import {createProviderKeyStore} from "../../auth/keystore-provider";
+{{/provides}}
+
+export const createAuthMiddleware = async (config: ConfigProvider): Promise<Router> => {
+
+    {{#provides 'kapeta/resource-type-auth-jwt-provider'}}
+    const providerKeyStore:JWTKeyStore = await createProviderKeyStore();
+    {{/provides}}
+
+    const router = Router();
+    const keyStores:JWTKeyStore[] = [
+        {{#consumers-of-type 'kapeta/resource-type-auth-jwt-consumer'}}
+            await createExternalKeyStore('{{string metadata.name}}', config),
+        {{/consumers-of-type}}
+        {{#provides 'kapeta/resource-type-auth-jwt-provider'}}
+        providerKeyStore,
+        {{/provides}}
+    ];
+
+    router.use(jwtAuthorization({
+        keyStores
+    }));
+
+    {{#provides 'kapeta/resource-type-auth-jwt-provider'}}
+    router.use(jwksRoutes(providerKeyStore));
+    {{/provides}}
+
+    return router;
+};
+{{/usesAnyOf}}

@@ -1,0 +1,14 @@
+#FILENAME:.devcontainer/devcontainer.json:merge
+{
+    "name": "{{dashify data.metadata.name}}",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+    "containerEnv": {
+        "KAPETA_LOCAL_SERVER": "0.0.0.0",
+        "KAPETA_LOCAL_CLUSTER_HOST": "host.docker.internal",
+        "KAPETA_ENVIRONMENT_TYPE": "docker",
+        "KAPETA_BLOCK_REF": "{{data.metadata.name}}:local",
+        "KAPETA_LOCAL_SERVER_PORT_REST": "80"
+    },
+    "forwardPorts": [80],
+    "postCreateCommand": "npm install"
+}

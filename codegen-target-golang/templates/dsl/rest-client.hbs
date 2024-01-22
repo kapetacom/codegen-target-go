@@ -1,0 +1,12 @@
+{{#switch type}}
+    {{#case 'controller'}}
+        {{#kaplang-reader-rest-controller}}
+        {{/kaplang-reader-rest-controller}}
+    {{/case}}
+    {{#case 'datatype'}}
+        {{> dsl/entity.ts.hbs}}
+    {{/case}}
+    {{#case 'enum'}}
+        {{> dsl/entity.ts.hbs}}
+    {{/case}}
+{{/switch}}

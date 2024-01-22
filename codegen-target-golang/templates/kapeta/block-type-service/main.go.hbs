@@ -1,0 +1,37 @@
+// #FILENAME:main.go:write-always
+package main
+
+import (
+{{#provides 'kapeta/resource-type-rest-api'}}
+    "github.com/labstack/echo/v4"
+"{{@root.options.basePackage}}/pkg/generated"
+    sdkgoconfig "github.com/kapetacom/golang-language-target/sdk-go-config"
+{{/provides}}
+)
+
+func main() {
+	{{#provides 'kapeta/resource-type-rest-api'}}
+	e := echo.New()
+	{{#providers-of-type 'kapeta/resource-type-rest-api'}}
+	generated.AddRoutes(e, nil)
+	{{/providers-of-type}}
+    config, err := sdkgoconfig.Init(".")
+    if err != nil {
+        panic(err)
+    }
+    port, err := config.GetServerPort("rest")
+    if err != nil {
+        panic(err)
+    }
+
+    host, err := config.GetServerHost()
+    if err != nil {
+        panic(err)
+    }
+
+    generated.AddRoutes(e, config)
+    // Start the server and log if it fails
+    fmt.Println("Starting server on port " + port)
+    e.Logger.Fatal(e.Start(host + ":"+port))
+	{{/provides}}
+}

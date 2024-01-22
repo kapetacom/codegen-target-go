@@ -1,0 +1,20 @@
+{{#kaplang-config data.spec.configuration.source}}
+    //#FILENAME:pkg/generated/config/{{type name}}Config.txt:write-always
+    import Config from "@kapeta/sdk-config";
+    {{#kaplang-has-reference this 'Instance'}}
+        import { InstanceValue } from "@kapeta/sdk-config";
+    {{/kaplang-has-reference}}
+    {{#kaplang-has-reference this 'InstanceProvider'}}
+        import { InstanceProviderValue } from "@kapeta/sdk-config";
+    {{/kaplang-has-reference}}
+
+    {{typescript-imports-config this}}
+    {{typescript-config this}}
+
+    {{#when type type='datatype'}}
+        export const get{{type name}}Config = (defaultValue:{{type name}}Config):{{type name}}Config => {
+            return Config.getOrDefault<{{type name}}Config>('{{string name}}', defaultValue);
+        };
+    {{/when}}
+
+{{/kaplang-config}}
