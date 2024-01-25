@@ -31,7 +31,7 @@ func main() {
 
     generated.AddRoutes(e, config)
     // Start the server and log if it fails
-    fmt.Println("Starting server on port " + port)
+    e.Logger.Debug("Starting server on port " + port)
     e.Logger.Fatal(e.Start(host + ":"+port))
 	{{/provides}}
 }
