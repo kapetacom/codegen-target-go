@@ -18,7 +18,11 @@ const (
 )
 
 type ClusterConfig struct {
-	Cluster map[string]interface{} `json:"cluster,omitempty"`
+	Cluster *Cluster `json:"cluster,omitempty"`
+}
+type Cluster struct {
+	Port string `yaml:"port"`
+	Host string `yaml:"host"`
 }
 
 // NewClusterConfig creates a new instance of ClusterConfig
@@ -31,15 +35,14 @@ func (c *ClusterConfig) getClusterServicePort() string {
 		return envPort
 	}
 
-	port := c.GetClusterConfig().Cluster["port"]
-	return fmt.Sprintf("%v", port)
+	return c.GetClusterConfig().Cluster.Port
 }
 
 func (c *ClusterConfig) getClusterServiceHost() string {
 	if envHost := os.Getenv("KAPETA_LOCAL_CLUSTER_HOST"); envHost != "" {
 		return envHost
 	}
-	return c.GetClusterConfig().Cluster["host"].(string)
+	return c.GetClusterConfig().Cluster.Host
 }
 
 func (c *ClusterConfig) getKapetaBasedir() string {
@@ -77,15 +80,15 @@ func (c *ClusterConfig) GetClusterConfig() *ClusterConfig {
 	}
 
 	if c.Cluster == nil {
-		c.Cluster = make(map[string]interface{})
+		c.Cluster = &Cluster{}
 	}
 
-	if c.Cluster["port"] == nil {
-		c.Cluster["port"] = KAPETA_CLUSTER_SERVICE_DEFAULT_PORT
+	if c.Cluster.Port == "" {
+		c.Cluster.Port = KAPETA_CLUSTER_SERVICE_DEFAULT_PORT
 	}
 
-	if c.Cluster["host"] == nil {
-		c.Cluster["host"] = KAPETA_CLUSTER_SERVICE_DEFAULT_HOST
+	if c.Cluster.Host == "" {
+		c.Cluster.Host = KAPETA_CLUSTER_SERVICE_DEFAULT_HOST
 	}
 
 	fmt.Printf("Read cluster config from file: %s\n", c.getClusterConfigFile())
