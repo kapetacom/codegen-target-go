@@ -66,7 +66,6 @@ export default class GoTarget extends Target {
     }
 
     async postprocess(targetDir: string, files: GeneratedAsset[]): Promise<void> {
-        console.log("postprocessing...............*")
         const anyFilesChanged = files.some((file) => file.filename.endsWith('.go'));
         const packageJsonChanged = files.some((file) => file.filename === 'go.mod.ts.hbs');
             // we should run go mod tidy and gofmt

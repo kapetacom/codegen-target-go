@@ -23,8 +23,7 @@ func main() {
 		panic(err)
 	}
 
-	generated.AddRoutes(e, config)
 	// Start the server and log if it fails
-
+	e.Logger.Debug("Starting server on port " + port)
 	e.Logger.Fatal(e.Start(host + ":" + port))
 }

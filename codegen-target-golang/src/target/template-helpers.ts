@@ -111,7 +111,6 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         if (!value) {
             return '';
         }
-        console.log("returnType...........................",value)
         const entities = getParsedEntities();
 
         if(entities.length === 0) {
@@ -130,6 +129,38 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return Template.SafeString(GoWriter.toTypeCode(value));
     });
     
+    engine.registerHelper('returnTypeDefaultValue', (value: DSLType) => {
+        if (!value) {
+            return '';
+        }
+        const entities = getParsedEntities();
+
+        if(entities.length === 0) {
+            return Template.SafeString(GoWriter.toTypeCode(value));
+        }
+        const type = asComplexType(value);
+        if(type.name === 'void') {
+            return Template.SafeString('nil');
+        }
+
+        for (const entity of entities) {
+            if (entity.name === type.name) {
+                return Template.SafeString("entities."+GoWriter.toTypeCode(value)+"{}");
+            }
+        }
+        const gotype = GoWriter.toTypeCode(value)
+        switch(gotype) {
+            case "string":
+                return Template.SafeString('""');
+            case "int":
+                return Template.SafeString('0');
+            case "bool":
+                return Template.SafeString('false');
+            default:
+                return Template.SafeString('nil');
+        }
+    });
+
     engine.registerHelper('ucFirst', (value: string) => {
         return ucFirst(value);
     });
@@ -226,6 +257,11 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return $toTypeList(method, 'body');
     });
 
+    // returns a list of the variables for the @path parameters in the order they appear in the path
+    engine.registerHelper('queryParamsList', (method: RESTMethodReader) => {
+        return $toTypeList(method, 'query');
+    });
+    
     engine.registerHelper('paramsMap', (method: RESTMethodReader) => {
         return $toTypeMap(method, 'path');
     });
@@ -248,6 +284,28 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         }
 
         return GoWriter.toTypeCode(bodyArgument.type);
+    });
+
+    engine.registerHelper('queryParametersVariables', (method: RESTMethodReader) => {
+        if (!method.parameters) {
+            return Template.SafeString('');
+        }
+
+        const queryParameters = method.parameters.filter(
+            (value) => value.transport && value.transport.toLowerCase() === 'query'
+        );
+
+        if (queryParameters.length === 0) {
+            return Template.SafeString('');
+        }
+
+        return Template.SafeString(
+            queryParameters
+                .map((value) => {
+                    return `_ = ctx.Param("${value.name}")`;
+                })
+                .join('\n')
+        );
     });
 
     engine.registerHelper('fullName', (value: string) => {
@@ -299,7 +357,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         }
         return true;
     });
-    engine.registerHelper('typescript-imports-config', function (arg: DSLEntity) {
+    engine.registerHelper('go-imports-config', function (arg: DSLEntity) {
         const entities = getParsedEntities();
         const resolver = new DSLReferenceResolver();
         const referencesEntities = resolver.resolveReferencesFrom([arg], entities);
@@ -333,7 +391,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         }
     });
 
-    engine.registerHelper('typescript-config', (entity: DSLData) => {
+    engine.registerHelper('go-config', (entity: DSLData) => {
         const writer = new GoWriter();
 
         try {

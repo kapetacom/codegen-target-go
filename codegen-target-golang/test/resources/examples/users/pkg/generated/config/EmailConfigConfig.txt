@@ -4,7 +4,7 @@
     // Configuration for e-mails
 type EmailConfigConfig struct {
 	// Sender for e-mails. Note that you should be allowed to send e-mails from this domain and user
-	from string
+	From string `json:"from" xml:"from" yaml:"from"`
 }
 
         export const getEmailConfigConfig = (defaultValue:EmailConfigConfig):EmailConfigConfig => {

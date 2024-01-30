@@ -1,5 +1,8 @@
 {{#usesAnyOf (toArray 'kapeta/resource-type-auth-jwt-provider' 'kapeta/resource-type-auth-jwt-consumer') }}
-//#FILENAME:src/.generated/auth/auth-middleware.ts:write-always
+//#FILENAME:pkg/generated/auth/auth-middleware.go:write-always
+package auth
+/*
+// Not supported yet
 import {
 {{#consumes 'kapeta/resource-type-auth-jwt-consumer'}}
 createExternalKeyStore,
@@ -41,4 +44,5 @@ export const createAuthMiddleware = async (config: ConfigProvider): Promise<Rout
 
     return router;
 };
+*/
 {{/usesAnyOf}}

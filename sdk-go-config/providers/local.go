@@ -54,7 +54,7 @@ func CreateLocalConfigProvider(blockRef, systemID, instanceID string, blockDefin
 		panic(fmt.Errorf("failed to resolve identity: %w", err))
 	}
 	// Only relevant locally
-	if err := localProvider.RegisterInstance(); err != nil {
+	if err := localProvider.RegisterInstanceWithLocalClusterService(); err != nil {
 		panic(fmt.Errorf("failed to register instance: %w", err))
 	}
 	return localProvider

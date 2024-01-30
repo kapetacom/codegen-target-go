@@ -4,14 +4,11 @@ go 1.21.5
 
 toolchain go1.21.6
 
-require github.com/labstack/echo/v4 v4.11.3
-
-require gopkg.in/yaml.v3 v3.0.1 // indirect
-
+require  github.com/labstack/echo/v4 v4.11.3
 replace github.com/kapetacom/golang-language-target/sdk-go-config v0.0.0-unpublished => /home/smo/go/src/github.com/kapetacom/golang-language-target/sdk-go-config
 
 require (
-	github.com/kapetacom/golang-language-target/sdk-go-config v0.0.0-unpublished
+    github.com/kapetacom/golang-language-target/sdk-go-config v0.0.0-unpublished
 	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect

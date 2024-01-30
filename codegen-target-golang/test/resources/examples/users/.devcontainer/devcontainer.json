@@ -1,6 +1,6 @@
 {
     "name": "kapeta-users",
-    "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+    "image": "mcr.microsoft.com/devcontainers/go:0-1.19-bullseye",
     "containerEnv": {
         "KAPETA_LOCAL_SERVER": "0.0.0.0",
         "KAPETA_LOCAL_CLUSTER_HOST": "host.docker.internal",
@@ -9,5 +9,5 @@
         "KAPETA_LOCAL_SERVER_PORT_REST": "80"
     },
     "forwardPorts": [80],
-    "postCreateCommand": "npm install"
+    "postCreateCommand": "go mod tidy"
 }

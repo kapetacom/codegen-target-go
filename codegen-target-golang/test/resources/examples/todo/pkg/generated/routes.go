@@ -10,4 +10,5 @@ func AddRoutes(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
 	rest.CreateTasksInnerRouter(e, cfg)
 
 	rest.CreateTasksRouter(e, cfg)
+	rest.CreateHealth(e, cfg)
 }

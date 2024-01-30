@@ -10,7 +10,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"sync"
 
 	"github.com/kapetacom/golang-language-target/sdk-go-config/providers"
 	"gopkg.in/yaml.v3"
@@ -23,7 +22,6 @@ type InstanceValue struct {
 type Config struct {
 	provider  providers.ConfigProvider
 	callbacks []func(providers.ConfigProvider)
-	once      sync.Once
 }
 
 // TODO: See if we can remove this global variable

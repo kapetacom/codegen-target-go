@@ -4,17 +4,16 @@
 package services
 
 import (
+	"github.com/kapeta/todo/pkg/generated/entities"
 	"github.com/labstack/echo/v4"
 )
 
 func RemoveTask(ctx echo.Context) error {
-	return ctx.JSON(200, map[string]interface{}{
-		"message": "Hello from RemoveTask",
-	})
+
+	return ctx.JSON(200, nil)
 }
 
 func GetTask(ctx echo.Context) error {
-	return ctx.JSON(200, map[string]interface{}{
-		"message": "Hello from GetTask",
-	})
+
+	return ctx.JSON(200, entities.Task{})
 }

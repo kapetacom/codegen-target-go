@@ -8,4 +8,5 @@ import (
 
 func AddRoutes(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
 	rest.CreateUsersRouter(e, cfg)
+	rest.CreateHealth(e, cfg)
 }

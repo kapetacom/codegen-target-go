@@ -5,11 +5,13 @@
 package services
 import (
     "github.com/labstack/echo/v4"
+{{#if (golang-import-entities .)}}
+    "{{@root.options.basePackage}}/pkg/generated/entities"
+{{/if}}
 )
 {{#methods methods}}
 func {{pascalCase (method name)}}(ctx echo.Context) error {
-    return ctx.JSON(200, map[string]interface{}{
-        "message": "Hello from {{pascalCase (method name)}}",
-    })
+    {{queryParametersVariables this}}
+    return ctx.JSON(200, {{returnTypeDefaultValue returnType}})
 }
 {{/methods}}

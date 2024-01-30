@@ -8,8 +8,8 @@
         import { InstanceProviderValue } from "@kapeta/sdk-config";
     {{/kaplang-has-reference}}
 
-    {{typescript-imports-config this}}
-    {{typescript-config this}}
+    {{go-imports-config this}}
+    {{go-config this}}
 
     {{#when type type='datatype'}}
         export const get{{type name}}Config = (defaultValue:{{type name}}Config):{{type name}}Config => {
