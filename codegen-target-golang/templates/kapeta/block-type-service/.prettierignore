@@ -1,6 +1,0 @@
-#FILENAME:.prettierignore:create-only
-dist/*
-node_modules
-*.md
-src/.generated/*
-.kapeta/*

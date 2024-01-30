@@ -1,0 +1,52 @@
+//#FILENAME:pkg/generated/clients/{{controller-name this}}Client.go:write-always
+package clients
+//
+// GENERATED SOURCE - DO NOT EDIT
+//
+import (
+    "encoding/json"
+{{#if (golang-import-entities .)}}
+    "{{@root.options.basePackage}}/pkg/generated/entities"
+{{/if}}
+ "{{@root.options.basePackage}}/pkg/sdk"
+)
+
+type {{controller-name this}} interface {
+    {{#methods methods}}
+        {{ucFirst name}}({{#arguments parameters}}{{variable name}}{{#if this.optional}}...{{/if}} {{variableType type}}{{/arguments}}) ({{returnTypeInterface returnType}})
+    {{/methods}}
+}
+
+type {{controller-name this}}Client struct {
+    client *sdk.RestClient
+}
+
+// New{{controller-name this}}Client creates new {{controller-name this}} client
+func New{{controller-name this}}Client() {{controller-name this}} {
+    return &{{controller-name this}}Client{client:  sdk.NewRestClient("{{controller-name this}}", true)}
+}
+
+{{#methods methods}}
+func (c *{{controller-name ..}}Client) {{ucFirst name}}({{#arguments parameters}}{{variable name}}{{#if this.optional}}...{{/if}} {{variableType type}}{{/arguments}}) ({{returnTypeInterface returnType}}) {
+    {{#if (hasReturnValue returnType) }}
+    var result {{returnType returnType}}
+    {{/if}}
+    resp, err := c.client.{{./method}}(c.client.ResolveURL("{{urlString path base=../path}}"{{pathParamsList this}}) {{bodyParamsList this}})
+    if err != nil {
+         {{#if (hasReturnValue returnType) }}
+        return result, err
+        {{else}}
+        return err
+        {{/if}}
+    }
+    defer resp.Body.Close()
+
+     {{#if (hasReturnValue returnType) }}
+    err = json.NewDecoder(resp.Body).Decode(&result)
+    return result, err
+    {{else}}
+    return nil
+    {{/if}}
+    
+}
+{{/methods}}

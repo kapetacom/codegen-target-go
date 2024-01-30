@@ -2,13 +2,17 @@
 package generated
 import (
     "github.com/labstack/echo/v4"
+{{#providers-of-type 'kapeta/resource-type-rest-api'}}
     "{{@root.options.basePackage}}/pkg/generated/rest"
+{{/providers-of-type}}
     sdkgoconfig "github.com/kapetacom/golang-language-target/sdk-go-config/providers"
 )
+
 func AddRoutes(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
 {{#providers-of-type 'kapeta/resource-type-rest-api'}}
     {{#kaplang-rest-methods spec.source namespace=metadata.name}}
         rest.Create{{controller-name this}}Router(e, cfg);
     {{/kaplang-rest-methods}}
+    rest.CreateHealth(e, cfg);
 {{/providers-of-type}}
 }

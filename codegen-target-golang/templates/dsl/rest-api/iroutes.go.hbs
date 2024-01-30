@@ -8,6 +8,7 @@ import (
     sdkgoconfig "github.com/kapetacom/golang-language-target/sdk-go-config/providers"
     "{{@root.options.basePackage}}/pkg/generated/services"
 )
+
 func Create{{controller-name this}}Router(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
     {{#methods methods}}
     e.{{./method}}("{{echoURLPath path base=../path}}", services.{{pascalCase (method name)}})

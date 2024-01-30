@@ -1,8 +1,8 @@
 {{#switch type}}
     {{#case 'controller'}}
         {{#kaplang-reader-rest-controller}}
-            {{> dsl/rest-api/iroutes.ts.hbs}}
-            {{> dsl/rest-api/services.ts.hbs}}
+            {{> dsl/rest-api/iroutes.go.hbs}}
+            {{> dsl/rest-api/services.go.hbs}}
         {{/kaplang-reader-rest-controller}}
     {{/case}}
     {{#case 'datatype'}}

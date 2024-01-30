@@ -23,7 +23,6 @@ import {
 const DB_TYPES = ['kapeta/resource-type-mongodb', 'kapeta/resource-type-postgresql'];
 export type HandleBarsType = typeof Handlebars;
 
-const githubLocation = "github.com/kapeta/todo";
 export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: any): void => {
     const TypeMap: { [key: string]: string } = {
         Instance: 'InstanceValue',
@@ -68,12 +67,71 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return Template.SafeString(GoWriter.toTypeCode(type));
     });
 
+    // return type for interfaces this is either error or the entity and error
+    engine.registerHelper('returnTypeInterface', (value: DSLType) => {
+        const type = asComplexType(value);
+        if(type.name === 'void') {
+            return Template.SafeString('error');
+        }
+        const entities = getParsedEntities();
+        for (const entity of entities) {
+            if (entity.name === type.name) {
+                return Template.SafeString("*entities."+GoWriter.toTypeCode(value)+", error");
+            }
+        }
+        const returnValue = GoWriter.toTypeCode(value)
+        if(returnValue === '') {
+            return Template.SafeString('error');
+        }
+        return Template.SafeString(GoWriter.toTypeCode(value)+", error");
+    
+    });
+
+    // returns the variable type for the return type including package name
+    engine.registerHelper('variableType', (value: DSLType) => {
+        const type = asComplexType(value);
+        const entities = getParsedEntities();
+        for (const entity of entities) {
+            if (entity.name === type.name) {
+                return Template.SafeString("*entities."+GoWriter.toTypeCode(value));
+            }
+        }
+        return Template.SafeString(GoWriter.toTypeCode(value));
+    });
+
+    engine.registerHelper('hasReturnValue', (value: DSLType) => {
+        const type = asComplexType(value);
+        if(type.name === 'void') {
+            return false;
+        }
+        return true;
+    });
+
     engine.registerHelper('returnType', (value: DSLType) => {
         if (!value) {
-            return 'void';
+            return '';
+        }
+        console.log("returnType...........................",value)
+        const entities = getParsedEntities();
+
+        if(entities.length === 0) {
+            return Template.SafeString(GoWriter.toTypeCode(value));
+        }
+        const type = asComplexType(value);
+        if(type.name === 'void') {
+            return Template.SafeString('');
         }
 
+        for (const entity of entities) {
+            if (entity.name === type.name) {
+                return Template.SafeString("*entities."+GoWriter.toTypeCode(value));
+            }
+        }
         return Template.SafeString(GoWriter.toTypeCode(value));
+    });
+    
+    engine.registerHelper('ucFirst', (value: string) => {
+        return ucFirst(value);
     });
 
     engine.registerHelper('path', resolvePath);
@@ -102,9 +160,15 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return fullPath.replace(/\{([^}]+)}/g, ':$1').toLowerCase();
     });
 
+    engine.registerHelper('urlString', (path, options: HelperOptions) => {
+        // take the url and replace all parameters with fmt.Sprintf("%v", param)
+        const fullPath = resolvePath(path, options);
+        return fullPath.replace(/\{([^}]+)}/g, '%v').toLowerCase();
+    });
+
     const $toTypeMap = (method: RESTMethodReader, transport: string) => {
         if (!method.parameters) {
-            return Template.SafeString('void');
+            return Template.SafeString('');
         }
 
         const transportArgs: RESTMethodParameterReader[] = method.parameters.filter(
@@ -113,7 +177,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         );
 
         if (transportArgs.length === 0) {
-            return Template.SafeString('void');
+            return Template.SafeString('');
         }
 
         return Template.SafeString(
@@ -128,6 +192,40 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         );
     };
 
+    const $toTypeList = (method: RESTMethodReader, transport: string) => {
+        if (!method.parameters) {
+            return Template.SafeString('');
+        }
+
+        const transportArgs: RESTMethodParameterReader[] = method.parameters.filter(
+            (value: RESTMethodParameterReader) =>
+                value.transport && value.transport.toLowerCase() === transport.toLowerCase()
+        );
+
+        if (transportArgs.length === 0) {
+            return Template.SafeString('');
+        }
+
+        return Template.SafeString(","+
+            transportArgs
+                .map(
+                    (value) =>
+                        `${value.name}`
+                )
+                .join(', ')
+        );
+    };
+
+    // returns a list of the variables for the @path parameters in the order they appear in the path
+    engine.registerHelper('pathParamsList', (method: RESTMethodReader) => {
+        return $toTypeList(method, 'path');
+    });
+
+    // returns a list of the variables for the @body parameters in the order they appear in the path
+    engine.registerHelper('bodyParamsList', (method: RESTMethodReader) => {
+        return $toTypeList(method, 'body');
+    });
+
     engine.registerHelper('paramsMap', (method: RESTMethodReader) => {
         return $toTypeMap(method, 'path');
     });
@@ -138,7 +236,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
 
     engine.registerHelper('bodyType', (method: RESTMethodReader) => {
         if (!method.parameters) {
-            return Template.SafeString('void');
+            return Template.SafeString('');
         }
 
         const bodyArgument = method.parameters.find(
@@ -146,7 +244,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         );
 
         if (!bodyArgument) {
-            return Template.SafeString('void');
+            return Template.SafeString('');
         }
 
         return GoWriter.toTypeCode(bodyArgument.type);
@@ -193,6 +291,14 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return Template.SafeString(result);
     });
 
+    engine.registerHelper('golang-import-entities',function (value) {
+        console.log("golang-import-entities...........................")
+        const entities = getParsedEntities();
+        if (entities.length === 0) {
+            return false;
+        }
+        return true;
+    });
     engine.registerHelper('typescript-imports-config', function (arg: DSLEntity) {
         const entities = getParsedEntities();
         const resolver = new DSLReferenceResolver();
