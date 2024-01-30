@@ -4,6 +4,7 @@
 package providers
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -18,10 +19,36 @@ func hostAndFromURL(url string) (string, string) {
 	return strings.Split(hostAndPort, ":")[0], strings.Split(hostAndPort, ":")[1]
 }
 func TestLocal(t *testing.T) {
-	// Mock environment variables for testing
-	provider := NewLocalConfigProvider("kapeta/block-type-gateway-http", "systemID", "instanceID", map[string]interface{}{})
 
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.URL.Path)
+		if strings.HasSuffix(r.URL.Path, "/config/identity") {
+			_, _ = w.Write([]byte("{\"systemId\": \"system-id\", \"instanceId\": \"instance-id\"}"))
+			return
+		}
+		if strings.HasSuffix(r.URL.Path, "config/instance") {
+			_, _ = w.Write([]byte("{\"id\": \"instance-id\"}"))
+			return
+		}
+		if strings.HasSuffix(r.URL.Path, "provides/rest") {
+			_, _ = w.Write([]byte("8080"))
+			return
+		} else if strings.HasSuffix(r.URL.Path, "provides/grpc") {
+			_, _ = w.Write([]byte("8081"))
+			return
+		}
+		if strings.HasSuffix(r.URL.Path, "consumes/foo/rest") {
+			_, _ = w.Write([]byte("10.0.0.1:8080"))
+			return
+		}
+		if strings.HasSuffix(r.URL.Path, "consumes/bar/grpc") {
+			_, _ = w.Write([]byte("10.0.0.2:8081"))
+			return
+		}
+		if strings.HasSuffix(r.URL.Path, "consumes/baz/rest") {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 		_, _ = w.Write([]byte("40004"))
 	}))
 	defer srv.Close()
@@ -32,126 +59,60 @@ func TestLocal(t *testing.T) {
 	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_HOST")
 	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_PORT")
 
+	// Mock environment variables for testing
+	provider := CreateLocalConfigProvider("kapeta/block-type-gateway-http", "systemID", "instanceID", map[string]interface{}{})
+
 	serverPort, err := provider.GetServerPort("http")
 	assert.NoError(t, err)
 	assert.Equal(t, "40004", serverPort)
 
-}
-func TestCreateLocalConfigProvider(t *testing.T) {
-	blockRef := "block-ref"
-	systemID := "system-id"
-	instanceID := "instance-id"
-	blockDefinition := map[string]interface{}{
-		"type": "local",
-	}
-
-	provider := NewLocalConfigProvider(blockRef, systemID, instanceID, blockDefinition)
-
-	assert.Equal(t, blockRef, provider.GetBlockReference())
-	assert.Equal(t, systemID, provider.GetSystemId())
-	assert.Equal(t, instanceID, provider.GetInstanceId())
-	assert.Equal(t, "local", provider.GetProviderId())
-}
-
-func TestResolveIdentity(t *testing.T) {
-	os.Setenv("KAPETA_ENVIRONMENT_TYPE", "process")
-	os.Setenv("KAPETA_BLOCK", "block-ref")
-	os.Setenv("KAPETA_SYSTEM", "system-id")
-	os.Setenv("KAPETA_INSTANCE", "instance-id")
-	defer func() {
-		os.Unsetenv("KAPETA_ENVIRONMENT_TYPE")
-		os.Unsetenv("KAPETA_BLOCK")
-		os.Unsetenv("KAPETA_SYSTEM")
-		os.Unsetenv("KAPETA_INSTANCE")
-	}()
-	provider := NewLocalConfigProvider("block-ref", "system-id", "instance-id", map[string]interface{}{
-		"type": "local",
-	})
-
 	assert.Equal(t, "system-id", provider.GetSystemId())
 	assert.Equal(t, "instance-id", provider.GetInstanceId())
-}
+	assert.Equal(t, "kapeta/block-type-gateway-http", provider.GetBlockReference())
+	assert.Equal(t, "local", provider.GetProviderId())
 
-func TestLoadConfiguration(t *testing.T) {
-	// create test server that return the correct values
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if strings.HasSuffix(r.URL.Path, "/rest") {
-			_, _ = w.Write([]byte("8080"))
-		} else if strings.HasSuffix(r.URL.Path, "/grpc") {
-			_, _ = w.Write([]byte("8081"))
-		}
-	}))
-	defer srv.Close()
+	t.Run("verify that we can get port and host configurations", func(t *testing.T) {
+		port, err := provider.GetServerPort("rest")
+		assert.NoError(t, err)
+		assert.Equal(t, "8080", port)
 
-	host, port := hostAndFromURL(srv.URL)
-	os.Setenv("KAPETA_LOCAL_CLUSTER_HOST", host)
-	os.Setenv("KAPETA_LOCAL_CLUSTER_PORT", port)
+		port, err = provider.GetServerPort("grpc")
+		assert.NoError(t, err)
+		assert.Equal(t, "8081", port)
 
-	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_HOST")
-	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_PORT")
-
-	provider := NewLocalConfigProvider("block-ref", "system-id", "instance-id", map[string]interface{}{
-		"type": "local",
+		testhost, err := provider.GetServerHost()
+		assert.NoError(t, err)
+		assert.Equal(t, "127.0.0.1", testhost)
 	})
+	t.Run("verify that we can get service address", func(t *testing.T) {
 
-	port, err := provider.GetServerPort("rest")
-	assert.NoError(t, err)
-	assert.Equal(t, "8080", port)
+		address, err := provider.GetServiceAddress("foo", "rest")
+		assert.NoError(t, err)
+		assert.Equal(t, "10.0.0.1:8080", address)
 
-	port, err = provider.GetServerPort("grpc")
-	assert.NoError(t, err)
-	assert.Equal(t, "8081", port)
+		address, err = provider.GetServiceAddress("bar", "grpc")
+		assert.NoError(t, err)
+		assert.Equal(t, "10.0.0.2:8081", address)
 
-	testhost, err := provider.GetServerHost()
-	assert.NoError(t, err)
-	assert.Equal(t, "127.0.0.1", testhost)
-}
-
-func TestGetServiceAddress1(t *testing.T) {
-	// create test server that return the correct values
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if strings.Contains(r.URL.Path, "baz") {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-		if strings.HasSuffix(r.URL.Path, "/rest") {
-			_, _ = w.Write([]byte("10.0.0.1:8080"))
-			return
-		}
-		if strings.HasSuffix(r.URL.Path, "/grpc") {
-			_, _ = w.Write([]byte("10.0.0.2:8081"))
-			return
-		}
-	}))
-	defer srv.Close()
-
-	host, port := hostAndFromURL(srv.URL)
-	os.Setenv("KAPETA_LOCAL_CLUSTER_HOST", host)
-	os.Setenv("KAPETA_LOCAL_CLUSTER_PORT", port)
-
-	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_HOST")
-	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_PORT")
-
-	provider := NewLocalConfigProvider("block-ref", "kapeta://soren_mathiasen/java-cloud-bucket:local", "instance-id", map[string]interface{}{
-		"type": "local",
+		_, err = provider.GetServiceAddress("baz", "rest")
+		assert.Error(t, err)
+		assert.Equal(t, "failed to send GET request: request failed - Status: 500", err.Error())
 	})
-
-	address, err := provider.GetServiceAddress("foo", "rest")
-	assert.NoError(t, err)
-	assert.Equal(t, "10.0.0.1:8080", address)
-
-	address, err = provider.GetServiceAddress("bar", "grpc")
-	assert.NoError(t, err)
-	assert.Equal(t, "10.0.0.2:8081", address)
-
-	_, err = provider.GetServiceAddress("baz", "rest")
-	assert.Error(t, err)
-	assert.Equal(t, "failed to send GET request: request failed - Status: 500", err.Error())
 }
 
 func TestGetInstanceHost1(t *testing.T) {
 	// create test server that return the correct values
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		if strings.HasSuffix(r.URL.Path, "/config/identity") {
+			_, _ = w.Write([]byte("{\"systemId\": \"system-id\", \"instanceId\": \"instance-id\"}"))
+			return
+		}
+		if strings.HasSuffix(r.URL.Path, "config/instance") {
+			_, _ = w.Write([]byte("{\"id\": \"instance-id\"}"))
+			return
+		}
+
 		if strings.Contains(r.URL.Path, "system-id/unknown-instance-id") {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -172,7 +133,7 @@ func TestGetInstanceHost1(t *testing.T) {
 
 	os.Setenv("KAPETA_INSTANCE_CONFIG", "{\"foo\": \"bar\"}")
 	defer os.Unsetenv("KAPETA_INSTANCE_CONFIG")
-	provider := NewLocalConfigProvider("block-ref", "system-id", "instance-id", map[string]interface{}{
+	provider := CreateLocalConfigProvider("block-ref", "system-id", "instance-id", map[string]interface{}{
 		"type": "local",
 	})
 

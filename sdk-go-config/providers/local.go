@@ -38,9 +38,9 @@ type LocalConfigProvider struct {
 	cfg           *cfg.ClusterConfig
 }
 
-// NewLocalConfigProvider creates an instance of LocalConfigProvider
-func NewLocalConfigProvider(blockRef, systemID, instanceID string, blockDefinition map[string]interface{}) *LocalConfigProvider {
-	return &LocalConfigProvider{
+// CreateLocalConfigProvider creates an instance of LocalConfigProvider
+func CreateLocalConfigProvider(blockRef, systemID, instanceID string, blockDefinition map[string]interface{}) *LocalConfigProvider {
+	localProvider := &LocalConfigProvider{
 		AbstractConfigProvider: AbstractConfigProvider{
 			BlockRef:        blockRef,
 			SystemID:        systemID,
@@ -50,6 +50,14 @@ func NewLocalConfigProvider(blockRef, systemID, instanceID string, blockDefiniti
 		configuration: make(map[string]interface{}),
 		cfg:           cfg.NewClusterConfig(),
 	}
+	if err := localProvider.ResolveIdentity(); err != nil {
+		panic(err)
+	}
+	if err := localProvider.RegisterInstanceWithLocalClusterService(); err != nil {
+		panic(err)
+	}
+
+	return localProvider
 
 }
 
