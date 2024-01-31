@@ -1,0 +1,6 @@
+{{#kaplang-rest-methods data.spec.source namespace=metadata.name}}
+    {{> dsl/rest-api.hbs}}
+{{/kaplang-rest-methods}}
+{{#providers-of-type 'kapeta/resource-type-rest-api'}}
+{{> dsl/rest-api/health.go.hbs}}
+{{/providers-of-type}}

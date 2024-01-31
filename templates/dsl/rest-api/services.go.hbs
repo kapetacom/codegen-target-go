@@ -1,0 +1,17 @@
+//#FILENAME:pkg/generated/services/{{controller-name this}}Handler.go:write-always
+//
+// GENERATED SOURCE - DO NOT EDIT
+//
+package services
+import (
+    "github.com/labstack/echo/v4"
+{{#if (golang-import-entities .)}}
+    "{{@root.options.basePackage}}/pkg/generated/entities"
+{{/if}}
+)
+{{#methods methods}}
+func {{pascalCase (method name)}}(ctx echo.Context) error {
+    {{queryParametersVariables this}}
+    return ctx.JSON(200, {{returnTypeDefaultValue returnType}})
+}
+{{/methods}}

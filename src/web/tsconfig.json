@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
+    "allowArbitraryExtensions": true,
+    "jsx": "react"
+  },
+  "include": ["index.tsx", "../../kapeta.yml", "../../package.json"]
+}

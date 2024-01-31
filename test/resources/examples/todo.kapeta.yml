@@ -1,0 +1,123 @@
+kind: kapeta/block-type-service:0.0.8
+metadata:
+  name: kapeta/todo
+  title: Todo service
+spec:
+  target:
+    kind: kapeta/language-target-nodejs:local
+  entities:
+    source:
+      type: kapeta-dsl
+      value: |+
+
+        //A state
+        enum State {
+        	OK, 
+        	NOT_OK
+        }
+        
+        Idable {
+            //Primary ID
+            id: string
+        }
+
+        //Task type
+        Task extends Idable {
+        	userId: string	
+        	//Name of the task
+        	title: string	
+        	//Longer description
+        	description?: string	
+
+        	//Defines if the task is done or not
+        	done: boolean
+    
+            //Age of the task    
+            age?: number
+    
+            //Created date
+            created: date
+        
+            metadata: any
+        
+            details: {
+                innerProp: string
+                
+                moreDetails: {
+                    innerProp2: string
+                }
+            }
+        }
+
+        //User - from Users block
+        User extends Idable {	
+        	name?: string	
+        	email: string
+        	state: State
+        }
+        
+        Page<T> {
+            content: T[]
+        }
+        
+        //User page
+        UserPage extends Page<User> {
+            //Total number of users
+            total: number
+        }
+
+  consumers:
+    - kind: kapeta/resource-type-auth-jwt-consumer:0.0.2
+      metadata:
+        name: auth
+    - kind: kapeta/resource-type-mongodb:0.0.2
+      metadata:
+        name: todo
+    - kind: kapeta/resource-type-rest-client:0.0.4
+      metadata:
+        name: users
+      spec:
+        source:
+          type: kapeta-dsl
+          value: |-
+            //Get users by id
+            @GET("/users/{id}")
+            getUserById(@Path id:string, @Header metadata?:any):User
+
+            //Delete user by id
+            @DELETE("/users/{id}")
+            deleteUser(@Path id:string, @Body metadata:Map<string,State>, tags:Set<string>):void
+            
+            controller Inner('/v2/users') {
+              //Get users by id
+              @GET("/{id}")
+              getUserById(@Path id:string, @Header metadata?:any):User
+  
+              //Delete user by id
+              @DELETE("/{id}")
+              deleteUser(@Path id:string, @Body metadata:Map<string,State>, tags:Set<string>):void
+            }
+  providers:
+    - kind: kapeta/resource-type-rest-api:0.0.4
+      metadata:
+        name: tasks
+      spec:
+        source:
+          type: kapeta-dsl
+          value: |-
+            //Add task for user
+            @POST("/tasks/{userId}/{id}")
+            addTask(@Path userId:string, @Path id:string, @Body task:Task):void
+
+            //Mark task as done
+            @POST("/tasks/{id}/done")
+            markAsDone(@Path id:string):void
+            
+            controller Inner('/v2/tasks') {
+              //Delete task
+              @DELETE("/{id}")
+              removeTask(@Path id:string):void
+              
+              @GET("/{id}")
+              getTask(@Path id:string):Task
+            }

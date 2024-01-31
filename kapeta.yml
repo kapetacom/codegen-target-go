@@ -1,0 +1,25 @@
+kind: core/language-target
+metadata:
+  name: kapeta/language-target-go
+  title: Go
+  description: Generate block service code in Go
+  visibility: public
+spec:
+  icon:
+    type: url
+    value: https://storage.googleapis.com/kapeta-public-cdn/icons/go.svg
+  schema:
+    type: object
+    properties:
+      basePackage:
+        type: string
+  local:
+    image: golang:latest
+    workingDir: /workspace
+    healthcheck: 'wget --no-verbose --tries=1 --spider "http://localhost:80/.kapeta/health" || exit 0'
+    handlers:
+      onCreate: /workspace/scripts/start-dev.sh
+    HostConfig:
+      Binds:
+        - ~/go:/home/smo/go
+        - ~/.ssh:/home/smo/.ssh

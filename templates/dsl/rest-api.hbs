@@ -1,0 +1,14 @@
+{{#switch type}}
+    {{#case 'controller'}}
+        {{#kaplang-reader-rest-controller}}
+            {{> dsl/rest-api/iroutes.go.hbs}}
+            {{> dsl/rest-api/services.go.hbs}}
+        {{/kaplang-reader-rest-controller}}
+    {{/case}}
+    {{#case 'datatype'}}
+        {{> dsl/entity.ts.hbs}}
+    {{/case}}
+    {{#case 'enum'}}
+        {{> dsl/entity.ts.hbs}}
+    {{/case}}
+{{/switch}}
