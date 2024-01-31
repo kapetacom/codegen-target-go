@@ -1,4 +1,4 @@
-module github.com/kapetacom/golang-language-target/sdk-go-config
+module github.com/kapetacom/codegen-target-go/sdk-go-config
 
 go 1.21.5
 
