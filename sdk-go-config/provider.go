@@ -4,6 +4,8 @@
 package sdkgoconfig
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -153,4 +155,17 @@ func Init(blockDir string) (providers.ConfigProvider, error) {
 	}
 
 	return provider, nil
+}
+
+func Transcode(in, out interface{}) error {
+	buf := new(bytes.Buffer)
+	err := json.NewEncoder(buf).Encode(in)
+	if err != nil {
+		return err
+	}
+	err = json.NewDecoder(buf).Decode(out)
+	if err != nil {
+		return err
+	}
+	return nil
 }
