@@ -8,7 +8,6 @@ import type { GeneratedAsset, SourceFile, GeneratedFile } from '@kapeta/codegen'
 import Path from 'path';
 import { exec } from '@kapeta/nodejs-process';
 import { execSync } from 'child_process';
-import { mergePackageJson } from './target/merge-package';
 import { mergeDevcontainers } from './target/merge-devcontainers';
 import { addTemplateHelpers } from './target/template-helpers';
 
@@ -18,10 +17,6 @@ export default class GoTarget extends Target {
     }
 
     mergeFile(sourceFile: SourceFile, newFile: GeneratedFile, lastFile: GeneratedFile): GeneratedFile {
-        if (sourceFile.filename === 'package.json') {
-            return mergePackageJson(sourceFile, newFile, lastFile);
-        }
-
         if (sourceFile.filename === '.devcontainer/devcontainer.json') {
             return mergeDevcontainers(sourceFile, newFile, lastFile);
         }
