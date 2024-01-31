@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/kapetacom/golang-language-target/sdk-go-config/providers"
 	"gopkg.in/yaml.v3"
@@ -22,6 +23,7 @@ type InstanceValue struct {
 type Config struct {
 	provider  providers.ConfigProvider
 	callbacks []func(providers.ConfigProvider)
+	once      sync.Once
 }
 
 // TODO: See if we can remove this global variable
@@ -46,11 +48,13 @@ func getEnvOrDefault(envVarName, defaultValue string) string {
 }
 
 func (c *Config) OnReady(callback func(providers.ConfigProvider)) {
-	if c.provider != nil {
-		callback(c.provider)
-		return
-	}
-	c.callbacks = append(c.callbacks, callback)
+	c.once.Do(func() {
+		if c.provider != nil {
+			callback(c.provider)
+			return
+		}
+		c.callbacks = append(c.callbacks, callback)
+	})
 }
 
 func (c *Config) IsReady() bool {
@@ -133,7 +137,13 @@ func Init(blockDir string) (providers.ConfigProvider, error) {
 		provider = providers.NewKubernetesConfigProvider(blockRef, systemID, instanceID, blockDefinition)
 
 	case "development", "dev", "local":
-		provider = providers.CreateLocalConfigProvider(blockRef, systemID, instanceID, blockDefinition)
+		localProvider := providers.NewLocalConfigProvider(blockRef, systemID, instanceID, blockDefinition)
+		// Only relevant locally
+		if err := localProvider.RegisterInstanceWithLocalClusterService(); err != nil {
+			return nil, err
+		}
+		provider = localProvider
+
 	default:
 		return nil, fmt.Errorf("unknown environment: %s", systemType)
 	}

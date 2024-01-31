@@ -20,13 +20,17 @@ jobs:
         id: setup-node
       - name: Install dependencies
         run: npm install
+        working-directory: ./codegen-target-golang        
+
       - name: Build
         run: npm run build
+        working-directory: ./codegen-target-golang
 
       - name: Publish to Kapeta
         id: kapeta-registry-push
-        uses: kapetacom/core-registry-action@v4
+        uses: kapetacom/core-registry-action@v4.1
         with:
+          working-directory: ./codegen-target-golang
           credentials: ${{ secrets.KAPETA_TOKEN }}
           release_branch: production
           action: publish

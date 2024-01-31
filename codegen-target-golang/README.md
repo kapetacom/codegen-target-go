@@ -12,8 +12,9 @@ To lean more about Kapeta, see https://kapeta.com or https://docs.kapeta.com
 
 Features
 
-[] Rest server
-[] Rest API
+[X] Rest server
+[X] Rest API
+[] JWT Support
 [] Postgres
 [] Redis
 [] Mongo

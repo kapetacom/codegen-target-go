@@ -2,10 +2,30 @@ package sdkgoconfig
 
 import (
 	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"strings"
 	"testing"
 )
 
+func hostAndFromURL(url string) (string, string) {
+	hostAndPort := url[7:]
+	return strings.Split(hostAndPort, ":")[0], strings.Split(hostAndPort, ":")[1]
+}
 func TestInit(t *testing.T) {
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte("40004"))
+	}))
+	defer srv.Close()
+
+	host, port := hostAndFromURL(srv.URL)
+	os.Setenv("KAPETA_LOCAL_CLUSTER_HOST", host)
+	os.Setenv("KAPETA_LOCAL_CLUSTER_PORT", port)
+	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_HOST")
+	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_PORT")
+
 	tests := []struct {
 		name        string
 		blockDir    string
@@ -41,6 +61,17 @@ func TestInit(t *testing.T) {
 }
 
 func TestGetOrDefault(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte("40004"))
+	}))
+	defer srv.Close()
+
+	host, port := hostAndFromURL(srv.URL)
+	os.Setenv("KAPETA_LOCAL_CLUSTER_HOST", host)
+	os.Setenv("KAPETA_LOCAL_CLUSTER_PORT", port)
+	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_HOST")
+	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_PORT")
+
 	tests := []struct {
 		name         string
 		blockDir     string

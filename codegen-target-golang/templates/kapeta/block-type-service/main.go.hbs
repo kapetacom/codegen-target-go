@@ -10,10 +10,10 @@ import (
 )
 
 func main() {
-	{{#provides 'kapeta/resource-type-rest-api'}}
-	e := echo.New()
-	{{#providers-of-type 'kapeta/resource-type-rest-api'}}
-	generated.AddRoutes(e, nil)
+    {{#provides 'kapeta/resource-type-rest-api'}}
+    e := echo.New()
+    {{#providers-of-type 'kapeta/resource-type-rest-api'}}
+    generated.AddRoutes(e, nil)
 	{{/providers-of-type}}
     config, err := sdkgoconfig.Init(".")
     if err != nil {

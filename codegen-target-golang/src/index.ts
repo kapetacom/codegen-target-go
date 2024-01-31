@@ -38,7 +38,7 @@ export default class GoTarget extends Target {
     }
 
     protected _postProcessCode(filename: string, code: string) {
-        if(filename.endsWith('.go')){
+        if (filename.endsWith('.go')) {
             try {
                 code = this.formatGoCode(code);
                 return code;
@@ -66,21 +66,23 @@ export default class GoTarget extends Target {
     }
 
     async postprocess(targetDir: string, files: GeneratedAsset[]): Promise<void> {
-        const anyFilesChanged = files.some((file) => file.filename.endsWith('.go'));
-        const packageJsonChanged = files.some((file) => file.filename === 'go.mod.ts.hbs');
-            // we should run go mod tidy and gofmt
-            console.log('Running gofmt in %s', targetDir);
-            const fmtchild = exec(`gofmt -w ${targetDir}`);
-            await fmtchild.wait();
-            console.log("done formatting");
+        const anyFilesChanged = files.some((file) => file.filename.endsWith('.go') || file.filename === '.mod');
+        if (!anyFilesChanged) {
+            return;
+        }
+        // we should run go mod tidy and gofmt
+        console.log('Running gofmt in %s', targetDir);
+        const fmtchild = exec(`gofmt -w ${targetDir}`);
+        await fmtchild.wait();
+        console.log("done formatting");
 
-            console.log('Running go mod tidy in %s', targetDir);
-            const child = exec('go mod tidy', {
-                cwd: targetDir,
-            });
+        console.log('Running go mod tidy in %s', targetDir);
+        const child = exec('go mod tidy', {
+            cwd: targetDir,
+        });
 
-            await child.wait();
+        await child.wait();
 
-            console.log('done tidying');
+        console.log('done tidying');
     }
 }

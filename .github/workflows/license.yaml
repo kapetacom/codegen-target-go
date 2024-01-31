@@ -14,5 +14,5 @@ jobs:
         with:
           holder: 'Kapeta Inc.'
           license: 'MIT'
-          sources: 'sdk-go-config/**/*.go codegen-target-golang/**/*'
+          sources: 'sdk-go-config/**/*.go codegen-target-golang/src/**/* codegen-target-golang/web/**/* codegen-target-golang/test/spec/**/*'
 

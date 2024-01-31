@@ -5,7 +5,6 @@ go 1.21.5
 toolchain go1.21.6
 
 require  github.com/labstack/echo/v4 v4.11.3
-replace github.com/kapetacom/golang-language-target/sdk-go-config v0.0.0-unpublished => /home/smo/go/src/github.com/kapetacom/golang-language-target/sdk-go-config
 
 require (
     github.com/kapetacom/golang-language-target/sdk-go-config v0.0.0-unpublished

@@ -29,13 +29,13 @@ jobs:
 
       - name: Publish to Kapeta
         id: kapeta-registry-push
-        uses: kapetacom/core-registry-action@v4
+        uses: kapetacom/core-registry-action@v4.1
         with:
+          working-directory: ./codegen-target-golang
           credentials: ${{ secrets.KAPETA_TOKEN_STAGING }}
           staging: true
           base_url: ${{ secrets.KAPETA_STAGING_URL }}
           action: publish
-          working-directory: ./codegen-target-golang
 
 
       - name: slack - GitHub Actions Slack integration

@@ -1,3 +1,8 @@
+/**
+ * Copyright 2023 Kapeta Inc.
+ * SPDX-License-Identifier: MIT
+ */
+
 import { describe, test, beforeEach, expect } from '@jest/globals';
 import Target from '../../src';
 import Path from 'path';

@@ -19,7 +19,7 @@ func hostAndFromURL(url string) (string, string) {
 }
 func TestLocal(t *testing.T) {
 	// Mock environment variables for testing
-	provider := CreateLocalConfigProvider("kapeta/block-type-gateway-http", "systemID", "instanceID", map[string]interface{}{})
+	provider := NewLocalConfigProvider("kapeta/block-type-gateway-http", "systemID", "instanceID", map[string]interface{}{})
 
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte("40004"))
@@ -45,7 +45,7 @@ func TestCreateLocalConfigProvider(t *testing.T) {
 		"type": "local",
 	}
 
-	provider := CreateLocalConfigProvider(blockRef, systemID, instanceID, blockDefinition)
+	provider := NewLocalConfigProvider(blockRef, systemID, instanceID, blockDefinition)
 
 	assert.Equal(t, blockRef, provider.GetBlockReference())
 	assert.Equal(t, systemID, provider.GetSystemId())
@@ -64,7 +64,7 @@ func TestResolveIdentity(t *testing.T) {
 		os.Unsetenv("KAPETA_SYSTEM")
 		os.Unsetenv("KAPETA_INSTANCE")
 	}()
-	provider := CreateLocalConfigProvider("block-ref", "system-id", "instance-id", map[string]interface{}{
+	provider := NewLocalConfigProvider("block-ref", "system-id", "instance-id", map[string]interface{}{
 		"type": "local",
 	})
 
@@ -90,7 +90,7 @@ func TestLoadConfiguration(t *testing.T) {
 	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_HOST")
 	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_PORT")
 
-	provider := CreateLocalConfigProvider("block-ref", "system-id", "instance-id", map[string]interface{}{
+	provider := NewLocalConfigProvider("block-ref", "system-id", "instance-id", map[string]interface{}{
 		"type": "local",
 	})
 
@@ -132,7 +132,7 @@ func TestGetServiceAddress1(t *testing.T) {
 	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_HOST")
 	defer os.Unsetenv("KAPETA_LOCAL_CLUSTER_PORT")
 
-	provider := CreateLocalConfigProvider("block-ref", "kapeta://soren_mathiasen/java-cloud-bucket:local", "instance-id", map[string]interface{}{
+	provider := NewLocalConfigProvider("block-ref", "kapeta://soren_mathiasen/java-cloud-bucket:local", "instance-id", map[string]interface{}{
 		"type": "local",
 	})
 
@@ -172,7 +172,7 @@ func TestGetInstanceHost1(t *testing.T) {
 
 	os.Setenv("KAPETA_INSTANCE_CONFIG", "{\"foo\": \"bar\"}")
 	defer os.Unsetenv("KAPETA_INSTANCE_CONFIG")
-	provider := CreateLocalConfigProvider("block-ref", "system-id", "instance-id", map[string]interface{}{
+	provider := NewLocalConfigProvider("block-ref", "system-id", "instance-id", map[string]interface{}{
 		"type": "local",
 	})
 
