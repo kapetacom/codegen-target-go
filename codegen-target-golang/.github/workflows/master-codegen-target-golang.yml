@@ -21,8 +21,11 @@ jobs:
         id: setup-node
       - name: Install dependencies
         run: npm install
+        working-directory: ./codegen-target-golang
+
       - name: Build
         run: npm run build
+        working-directory: ./codegen-target-golang
 
       - name: Publish to Kapeta
         id: kapeta-registry-push
@@ -32,6 +35,8 @@ jobs:
           staging: true
           base_url: ${{ secrets.KAPETA_STAGING_URL }}
           action: publish
+          working-directory: ./codegen-target-golang
+
 
       - name: slack - GitHub Actions Slack integration
         uses: act10ns/slack@v2.0.0

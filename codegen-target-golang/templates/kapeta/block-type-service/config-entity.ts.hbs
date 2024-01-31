@@ -1,20 +1,35 @@
 {{#kaplang-config data.spec.configuration.source}}
-    //#FILENAME:pkg/generated/config/{{type name}}Config.txt:write-always
-    import Config from "@kapeta/sdk-config";
-    {{#kaplang-has-reference this 'Instance'}}
-        import { InstanceValue } from "@kapeta/sdk-config";
-    {{/kaplang-has-reference}}
-    {{#kaplang-has-reference this 'InstanceProvider'}}
-        import { InstanceProviderValue } from "@kapeta/sdk-config";
-    {{/kaplang-has-reference}}
+//#FILENAME:pkg/generated/config/{{type name}}Config.go:write-always
+package config
+import (
+    "fmt"
+    sdkgoconfig "github.com/kapetacom/golang-language-target/sdk-go-config"
+)
+{{go-imports-config this}}
+{{go-config this}}
 
-    {{go-imports-config this}}
-    {{go-config this}}
+{{#when type type='datatype'}}
+func Get{{type name}}ConfigWithDefault(defaultValue {{type name}}Config) {{type name}}Config {
+    anyconfig := sdkgoconfig.CONFIG.GetOrDefault("config", defaultValue)
+	result := {{type name}}Config{}
+	err := sdkgoconfig.Transcode(anyconfig, &result)
+	if err != nil {
+		panic(fmt.Errorf("failed to transcode config: %w", err))
+	}
 
-    {{#when type type='datatype'}}
-        export const get{{type name}}Config = (defaultValue:{{type name}}Config):{{type name}}Config => {
-            return Config.getOrDefault<{{type name}}Config>('{{string name}}', defaultValue);
-        };
-    {{/when}}
+	return result
+}
+
+func Get{{type name}}Config() {{type name}}Config {
+    anyconfig := sdkgoconfig.CONFIG.Get("config")
+	result := {{type name}}Config{}
+	err := sdkgoconfig.Transcode(anyconfig, &result)
+	if err != nil {
+		panic(fmt.Errorf("failed to transcode config: %w", err))
+	}
+
+	return result
+}
+{{/when}}
 
 {{/kaplang-config}}

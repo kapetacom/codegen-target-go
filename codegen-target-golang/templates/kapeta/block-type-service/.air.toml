@@ -1,4 +1,4 @@
-// #FILENAME:.air.toml:write-always
+// #FILENAME:.air.toml:merge
 root = "."
 testdata_dir = "testdata"
 tmp_dir = "tmp"
