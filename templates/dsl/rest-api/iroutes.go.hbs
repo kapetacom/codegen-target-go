@@ -1,0 +1,16 @@
+//#FILENAME:pkg/generated/rest/{{controller-name this}}Routes.go:write-always
+//
+// GENERATED SOURCE - DO NOT EDIT
+//
+package rest
+import (
+    "github.com/labstack/echo/v4"
+    sdkgoconfig "github.com/kapetacom/sdk-go-config/providers"
+    "{{@root.options.basePackage}}/pkg/generated/services"
+)
+
+func Create{{controller-name this}}Router(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
+    {{#methods methods}}
+    e.{{./method}}("{{echoURLPath path base=../path}}", services.{{pascalCase (method name)}})
+    {{/methods}}
+}
