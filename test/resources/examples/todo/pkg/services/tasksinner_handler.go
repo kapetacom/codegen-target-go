@@ -1,6 +1,3 @@
-//
-// GENERATED SOURCE - DO NOT EDIT
-//
 package services
 
 import (
@@ -8,12 +5,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func RemoveTask(ctx echo.Context) error {
+type TasksInnerHandler struct {
+}
+
+func (u *TasksInnerHandler) RemoveTask(ctx echo.Context) error {
 
 	return ctx.JSON(200, nil)
 }
 
-func GetTask(ctx echo.Context) error {
+func (u *TasksInnerHandler) GetTask(ctx echo.Context) error {
 
 	return ctx.JSON(200, entities.Task{})
 }

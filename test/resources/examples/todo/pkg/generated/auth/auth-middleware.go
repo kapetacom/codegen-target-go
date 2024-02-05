@@ -1,27 +1,11 @@
 package auth
 
-/*
-// Not supported yet
-import {
-createExternalKeyStore,
-jwtAuthorization, JWTKeyStore} from "@kapeta/sdk-auth-jwt";
-import {ConfigProvider} from "@kapeta/sdk-config";
-import {Router} from "express";
+import (
+	"github.com/kapetacom/sdk-go-auth-jwt/middleware"
+	"github.com/kapetacom/sdk-go-config/providers"
+	"github.com/labstack/echo/v4"
+)
 
-
-export const createAuthMiddleware = async (config: ConfigProvider): Promise<Router> => {
-
-
-    const router = Router();
-    const keyStores:JWTKeyStore[] = [
-            await createExternalKeyStore('auth', config),
-    ];
-
-    router.use(jwtAuthorization({
-        keyStores
-    }));
-
-
-    return router;
-};
-*/
+func AddJWTMiddleware(config providers.ConfigProvider) []echo.MiddlewareFunc {
+	return middleware.JWTMiddlewareFromConfig("auth", config)
+}

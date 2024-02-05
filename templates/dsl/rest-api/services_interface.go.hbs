@@ -1,0 +1,14 @@
+//#FILENAME:pkg/generated/services/{{lowercase (controller-name this)}}_interface.go:write-always
+// GENERATED SOURCE - DO NOT EDIT
+//
+package services
+import (
+    "github.com/labstack/echo/v4"
+)
+// {{pascalCase (controller-name this)}}Interface is an interface for {{controller-name this}}Handler
+// It is used to define the methods that are implemented in the {{controller-name this}}Handler
+type {{pascalCase (controller-name this)}}Interface interface {
+{{#methods methods}}
+    {{pascalCase (method name)}}(ctx echo.Context) error
+{{/methods}}
+}

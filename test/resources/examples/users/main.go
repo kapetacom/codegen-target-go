@@ -8,7 +8,7 @@ import (
 
 func main() {
 	e := echo.New()
-	generated.AddRoutes(e, nil)
+	generated.RegisterRouters(e, nil)
 	config, err := sdkgoconfig.Init(".")
 	if err != nil {
 		panic(err)

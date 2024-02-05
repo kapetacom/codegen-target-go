@@ -1,7 +1,4 @@
-//#FILENAME:pkg/generated/services/{{controller-name this}}Handler.go:write-always
-//
-// GENERATED SOURCE - DO NOT EDIT
-//
+//#FILENAME:pkg/services/{{lowercase (controller-name this)}}_handler.go:create-only
 package services
 import (
     "github.com/labstack/echo/v4"
@@ -9,8 +6,10 @@ import (
     "{{@root.options.basePackage}}/pkg/generated/entities"
 {{/if}}
 )
+type {{pascalCase (controller-name this)}}Handler struct {
+}
 {{#methods methods}}
-func {{pascalCase (method name)}}(ctx echo.Context) error {
+func (handler *{{pascalCase (controller-name ..)}}Handler) {{pascalCase (method name)}}(ctx echo.Context) error {
     {{queryParametersVariables this}}
     return ctx.JSON(200, {{returnTypeDefaultValue returnType}})
 }

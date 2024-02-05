@@ -1,6 +1,3 @@
-//
-// GENERATED SOURCE - DO NOT EDIT
-//
 package services
 
 import (
@@ -8,12 +5,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func AddTask(ctx echo.Context) error {
+type TasksHandler struct {
+}
+
+func (u *TasksHandler) AddTask(ctx echo.Context) error {
 
 	return ctx.JSON(200, nil)
 }
 
-func MarkAsDone(ctx echo.Context) error {
+func (u *TasksHandler) MarkAsDone(ctx echo.Context) error {
 
 	return ctx.JSON(200, nil)
 }
