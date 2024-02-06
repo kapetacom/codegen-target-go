@@ -4,7 +4,7 @@
 package rest
 
 import (
-	genservices "github.com/kapeta/todo/pkg/generated/services"
+	genservices "github.com/kapeta/todo/generated/services"
 	"github.com/kapeta/todo/pkg/services"
 	sdkgoconfig "github.com/kapetacom/sdk-go-config/providers"
 	"github.com/labstack/echo/v4"

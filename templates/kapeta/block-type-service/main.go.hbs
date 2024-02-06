@@ -4,11 +4,11 @@ package main
 import (
 {{#provides 'kapeta/resource-type-rest-api'}}
     "github.com/labstack/echo/v4"
-"{{@root.options.basePackage}}/pkg/generated"
+"{{@root.options.basePackage}}/generated"
     sdkgoconfig "github.com/kapetacom/sdk-go-config"
 {{/provides}}
 {{#consumers-of-type 'kapeta/resource-type-auth-jwt-consumer'}}
-        "{{@root.options.basePackage}}/pkg/generated/auth"
+        "{{@root.options.basePackage}}/generated/auth"
 {{/consumers-of-type}}
 )
 

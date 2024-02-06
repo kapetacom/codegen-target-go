@@ -3,7 +3,7 @@ package services
 import (
     "github.com/labstack/echo/v4"
 {{#if (golang-import-entities .)}}
-    "{{@root.options.basePackage}}/pkg/generated/entities"
+    "{{@root.options.basePackage}}/generated/entities"
 {{/if}}
 )
 type {{pascalCase (controller-name this)}}Handler struct {

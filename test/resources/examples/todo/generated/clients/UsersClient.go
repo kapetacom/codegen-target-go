@@ -5,7 +5,7 @@ package clients
 //
 import (
 	"encoding/json"
-	"github.com/kapeta/todo/pkg/generated/entities"
+	"github.com/kapeta/todo/generated/entities"
 	"github.com/kapetacom/sdk-go-rest-client"
 )
 

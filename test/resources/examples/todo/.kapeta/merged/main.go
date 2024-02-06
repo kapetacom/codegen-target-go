@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/kapeta/todo/pkg/generated"
-	"github.com/kapeta/todo/pkg/generated/auth"
+	"github.com/kapeta/todo/generated"
+	"github.com/kapeta/todo/generated/auth"
 	sdkgoconfig "github.com/kapetacom/sdk-go-config"
 	"github.com/labstack/echo/v4"
 )
