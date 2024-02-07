@@ -1,14 +1,14 @@
-//#FILENAME:pkg/generated/routes.go:write-always
+//#FILENAME:generated/router.go:write-always
 package generated
 import (
     "github.com/labstack/echo/v4"
 {{#providers-of-type 'kapeta/resource-type-rest-api'}}
-    "{{@root.options.basePackage}}/pkg/generated/rest"
+    "{{@root.options.basePackage}}/generated/rest_api"
 {{/providers-of-type}}
     sdkgoconfig "github.com/kapetacom/sdk-go-config/providers"
 )
 
-func AddRoutes(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
+func RegisterRouters(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
 {{#providers-of-type 'kapeta/resource-type-rest-api'}}
     {{#kaplang-rest-methods spec.source namespace=metadata.name}}
         rest.Create{{controller-name this}}Router(e, cfg);

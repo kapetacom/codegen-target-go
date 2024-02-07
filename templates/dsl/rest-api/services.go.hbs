@@ -1,17 +1,15 @@
-//#FILENAME:pkg/generated/services/{{controller-name this}}Handler.go:write-always
-//
-// GENERATED SOURCE - DO NOT EDIT
-//
+//#FILENAME:pkg/services/{{lowercase (controller-name this)}}_handler.go:create-only
 package services
 import (
     "github.com/labstack/echo/v4"
 {{#if (golang-import-entities .)}}
-    "{{@root.options.basePackage}}/pkg/generated/entities"
+    "{{@root.options.basePackage}}/generated/entities"
 {{/if}}
 )
+type {{pascalCase (controller-name this)}}Handler struct {
+}
 {{#methods methods}}
-func {{pascalCase (method name)}}(ctx echo.Context) error {
-    {{queryParametersVariables this}}
+func (handler *{{pascalCase (controller-name ..)}}Handler) {{pascalCase (method name)}}(ctx echo.Context {{request_parameter_arguments_with_type this}}) error {
     return ctx.JSON(200, {{returnTypeDefaultValue returnType}})
 }
 {{/methods}}

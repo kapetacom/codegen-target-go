@@ -1,4 +1,4 @@
-//#FILENAME:pkg/generated/clients/{{controller-name this}}Client.go:write-always
+//#FILENAME:generated/clients/{{controller-name this}}Client.go:write-always
 package clients
 //
 // GENERATED SOURCE - DO NOT EDIT
@@ -6,7 +6,7 @@ package clients
 import (
     "encoding/json"
 {{#if (golang-import-entities .)}}
-    "{{@root.options.basePackage}}/pkg/generated/entities"
+    "{{@root.options.basePackage}}/generated/entities"
 {{/if}}
  "github.com/kapetacom/sdk-go-rest-client"
 )

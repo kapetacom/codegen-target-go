@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: MIT
  */
 import Handlebars = require('handlebars');
-import {parseEntities, Template} from '@kapeta/codegen-target';
-import {HelperOptions} from 'handlebars';
-import {parseKapetaUri} from '@kapeta/nodejs-utils';
+import { parseEntities, Template } from '@kapeta/codegen-target';
+import { HelperOptions } from 'handlebars';
 import {
     asComplexType,
     DataTypeReader,
@@ -59,32 +58,24 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return fullPath;
     };
 
-    engine.registerHelper('valueType', (value: DSLType) => {
-        const type = asComplexType(value);
-        if (TypeMap[type.name]) {
-            type.name = TypeMap[type.name];
-        }
-        return Template.SafeString(GoWriter.toTypeCode(type));
-    });
-
     // return type for interfaces this is either error or the entity and error
     engine.registerHelper('returnTypeInterface', (value: DSLType) => {
         const type = asComplexType(value);
-        if(type.name === 'void') {
+        if (type.name === 'void') {
             return Template.SafeString('error');
         }
         const entities = getParsedEntities();
         for (const entity of entities) {
             if (entity.name === type.name) {
-                return Template.SafeString("*entities."+GoWriter.toTypeCode(value)+", error");
+                return Template.SafeString("*entities." + GoWriter.toTypeCode(value) + ", error");
             }
         }
         const returnValue = GoWriter.toTypeCode(value)
-        if(returnValue === '') {
+        if (returnValue === '') {
             return Template.SafeString('error');
         }
-        return Template.SafeString(GoWriter.toTypeCode(value)+", error");
-    
+        return Template.SafeString(GoWriter.toTypeCode(value) + ", error");
+
     });
 
     // returns the variable type for the return type including package name
@@ -93,7 +84,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         const entities = getParsedEntities();
         for (const entity of entities) {
             if (entity.name === type.name) {
-                return Template.SafeString("*entities."+GoWriter.toTypeCode(value));
+                return Template.SafeString("*entities." + GoWriter.toTypeCode(value));
             }
         }
         return Template.SafeString(GoWriter.toTypeCode(value));
@@ -101,7 +92,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
 
     engine.registerHelper('hasReturnValue', (value: DSLType) => {
         const type = asComplexType(value);
-        if(type.name === 'void') {
+        if (type.name === 'void') {
             return false;
         }
         return true;
@@ -113,43 +104,43 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         }
         const entities = getParsedEntities();
 
-        if(entities.length === 0) {
+        if (entities.length === 0) {
             return Template.SafeString(GoWriter.toTypeCode(value));
         }
         const type = asComplexType(value);
-        if(type.name === 'void') {
+        if (type.name === 'void') {
             return Template.SafeString('');
         }
 
         for (const entity of entities) {
             if (entity.name === type.name) {
-                return Template.SafeString("*entities."+GoWriter.toTypeCode(value));
+                return Template.SafeString("*entities." + GoWriter.toTypeCode(value));
             }
         }
         return Template.SafeString(GoWriter.toTypeCode(value));
     });
-    
+
     engine.registerHelper('returnTypeDefaultValue', (value: DSLType) => {
         if (!value) {
             return '';
         }
         const entities = getParsedEntities();
 
-        if(entities.length === 0) {
+        if (entities.length === 0) {
             return Template.SafeString(GoWriter.toTypeCode(value));
         }
         const type = asComplexType(value);
-        if(type.name === 'void') {
+        if (type.name === 'void') {
             return Template.SafeString('nil');
         }
 
         for (const entity of entities) {
             if (entity.name === type.name) {
-                return Template.SafeString("entities."+GoWriter.toTypeCode(value)+"{}");
+                return Template.SafeString("entities." + GoWriter.toTypeCode(value) + "{}");
             }
         }
         const gotype = GoWriter.toTypeCode(value)
-        switch(gotype) {
+        switch (gotype) {
             case "string":
                 return Template.SafeString('""');
             case "int":
@@ -197,32 +188,6 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return fullPath.replace(/\{([^}]+)}/g, '%v').toLowerCase();
     });
 
-    const $toTypeMap = (method: RESTMethodReader, transport: string) => {
-        if (!method.parameters) {
-            return Template.SafeString('');
-        }
-
-        const transportArgs: RESTMethodParameterReader[] = method.parameters.filter(
-            (value: RESTMethodParameterReader) =>
-                value.transport && value.transport.toLowerCase() === transport.toLowerCase()
-        );
-
-        if (transportArgs.length === 0) {
-            return Template.SafeString('');
-        }
-
-        return Template.SafeString(
-            '{' +
-            transportArgs
-                .map(
-                    (value) =>
-                        `'${value.name}'${value.optional ? '?' : ''}: ${GoWriter.toTypeCode(value.type)}`
-                )
-                .join(', ') +
-            '}'
-        );
-    };
-
     const $toTypeList = (method: RESTMethodReader, transport: string) => {
         if (!method.parameters) {
             return Template.SafeString('');
@@ -237,7 +202,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
             return Template.SafeString('');
         }
 
-        return Template.SafeString(","+
+        return Template.SafeString("," +
             transportArgs
                 .map(
                     (value) =>
@@ -257,33 +222,66 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return $toTypeList(method, 'body');
     });
 
-    // returns a list of the variables for the @path parameters in the order they appear in the path
-    engine.registerHelper('queryParamsList', (method: RESTMethodReader) => {
-        return $toTypeList(method, 'query');
-    });
-    
-    engine.registerHelper('paramsMap', (method: RESTMethodReader) => {
-        return $toTypeMap(method, 'path');
-    });
 
-    engine.registerHelper('queryMap', (method: RESTMethodReader) => {
-        return $toTypeMap(method, 'query');
-    });
-
-    engine.registerHelper('bodyType', (method: RESTMethodReader) => {
+    engine.registerHelper('bodyParametersVariables', (method: RESTMethodReader) => {
         if (!method.parameters) {
             return Template.SafeString('');
         }
 
-        const bodyArgument = method.parameters.find(
+        const queryParameters = method.parameters.filter(
             (value) => value.transport && value.transport.toLowerCase() === 'body'
         );
 
-        if (!bodyArgument) {
+        if (queryParameters.length === 0) {
+            return Template.SafeString('');
+        }
+        return Template.SafeString(
+            queryParameters
+                .map((value) => {
+                    const entities = getParsedEntities();
+                    let typename = `${GoWriter.toTypeCode(value.type)}`;
+                    for (const entity of entities) {
+                        if (entity.name === value.type.name) {
+                            typename = `entities.${GoWriter.toTypeCode(value.type)}`;
+                        }
+                    }
+                    let valueName = value.name
+                    if (valueName === "type") {
+                        valueName = "_type"
+                    }
+                    let out = `${valueName} := &${typename}{}\n`
+                    out += `if body, err = request.GetBody(ctx, body); err != nil {\n`
+                    out += `return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal ${value.name} %v", err))\n}`;
+                    return out;
+                })
+                .join('\n')
+        );
+    });
+
+
+    engine.registerHelper('pathParametersVariables', (method: RESTMethodReader) => {
+        if (!method.parameters) {
             return Template.SafeString('');
         }
 
-        return GoWriter.toTypeCode(bodyArgument.type);
+        const queryParameters = method.parameters.filter(
+            (value) => value.transport && value.transport.toLowerCase() === 'path'
+        );
+
+        if (queryParameters.length === 0) {
+            return Template.SafeString('');
+        }
+        return Template.SafeString(
+            queryParameters
+                .map((value) => {
+                    let valueName = value.name
+                    if (valueName === "type") {
+                        valueName = "_type"
+                    }
+                    return `var ${valueName} = ctx.Param("${value.name}")`;
+                })
+                .join('\n')
+        );
     });
 
     engine.registerHelper('queryParametersVariables', (method: RESTMethodReader) => {
@@ -298,20 +296,72 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         if (queryParameters.length === 0) {
             return Template.SafeString('');
         }
-
         return Template.SafeString(
             queryParameters
                 .map((value) => {
-                    return `_ = ctx.Param("${value.name}")`;
+                    let valueName = value.name
+                    if (valueName === "type") {
+                        valueName = "_type"
+                    }
+
+                    let out =  `var ${valueName} ${value.type.name}\n`
+                    out += `if ${valueName}, err = request.GetQueryParam(ctx, "${value.name}", &${valueName}); err != nil {\n`
+                    out += `return ctx.String(400, fmt.Sprintf("bad request, unable to get query param ${value.name} %v", err))\n}`;
+                    return out
                 })
                 .join('\n')
         );
     });
 
-    engine.registerHelper('fullName', (value: string) => {
-        const uri = parseKapetaUri(value);
-        return uri.fullName;
+    function getRestParameters(method: RESTMethodReader, includeTypes: boolean) {
+        if (!method.parameters) {
+            return Template.SafeString('');
+        }
+
+        const entities = getParsedEntities();
+
+        const parameters = method.parameters.filter(
+            (value) => value.transport
+        );
+
+        if (parameters.length === 0) {
+            return Template.SafeString('');
+        }
+        let args = parameters
+            .map((value) => {
+                if (includeTypes) {
+                    for (const entity of entities) {
+                        if (entity.name === value.type.name) {
+                            return Template.SafeString(`${value.name} *entities.${GoWriter.toTypeCode(value.type)}`);
+                        }
+                    }
+                    let valueName = value.name
+                    if (valueName === "type") {
+                        valueName = "_type"
+                    }
+                    return `${valueName} ${GoWriter.toTypeCode(value.type)}`;
+                }
+                let valueName = value.name
+                if (valueName === "type") {
+                    valueName = "_type"
+                }
+                return valueName;
+
+            })
+            .join(',')
+        // prefix args with , if not there
+        if (args.length > 0 && !args.startsWith(",")) {
+            args = "," + args;
+        }
+        return args;
+    }
+    engine.registerHelper('requestparameterarguments', (method: RESTMethodReader) => {
+        return getRestParameters(method, false);
     });
+    engine.registerHelper('request_parameter_arguments_with_type', (method: RESTMethodReader) => {
+        return getRestParameters(method, true);
+    });
+
 
     engine.registerHelper('golang-imports-dto', function (arg: DSLEntity) {
         const entities = getParsedEntities();
@@ -334,9 +384,9 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
             // cast to DSLEntityType.DATATYPE
             const datatype = arg as DSLDataType;
             const imports = datatype.properties?.map((property) => {
-             const thisProp = property.type as DSLDataTypeProperty;
+                const thisProp = property.type as DSLDataTypeProperty;
                 if (thisProp.name === "date") {
-                    return  Template.SafeString(`import "time"`);
+                    return Template.SafeString(`import "time"`);
                 }
                 return '';
             }).filter(item => item !== "");
@@ -349,7 +399,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return Template.SafeString(result);
     });
 
-    engine.registerHelper('golang-import-entities',function (value) {
+    engine.registerHelper('golang-import-entities', function (value) {
         const entities = getParsedEntities();
         if (entities.length === 0) {
             return false;
@@ -395,7 +445,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
 
         try {
             // All config entities are postfixed with Config
-            const copy = {...entity, name: entity.name + 'Config'};
+            const copy = { ...entity, name: entity.name + 'Config' };
             return Template.SafeString(writer.write([copy]));
         } catch (e) {
             console.warn('Failed to write entity', entity);
