@@ -4,11 +4,14 @@
 package services
 import (
     "github.com/labstack/echo/v4"
+{{#if (golang-import-entities .)}}
+    "{{@root.options.basePackage}}/generated/entities"
+{{/if}}
 )
 // {{pascalCase (controller-name this)}}Interface is an interface for {{controller-name this}}Handler
 // It is used to define the methods that are implemented in the {{controller-name this}}Handler
 type {{pascalCase (controller-name this)}}Interface interface {
 {{#methods methods}}
-    {{pascalCase (method name)}}(ctx echo.Context) error
+    {{pascalCase (method name)}}(ctx echo.Context {{request_parameter_arguments_with_type this}}) error
 {{/methods}}
 }

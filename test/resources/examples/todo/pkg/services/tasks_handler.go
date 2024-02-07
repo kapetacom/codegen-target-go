@@ -8,12 +8,10 @@ import (
 type TasksHandler struct {
 }
 
-func (handler *TasksHandler) AddTask(ctx echo.Context) error {
-
+func (handler *TasksHandler) AddTask(ctx echo.Context, userId string, id string, task *entities.Task) error {
 	return ctx.JSON(200, nil)
 }
 
-func (handler *TasksHandler) MarkAsDone(ctx echo.Context) error {
-
+func (handler *TasksHandler) MarkAsDone(ctx echo.Context, id string) error {
 	return ctx.JSON(200, nil)
 }
