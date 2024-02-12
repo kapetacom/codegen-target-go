@@ -26,7 +26,10 @@ func main() {
 
 	e.Use(auth.AddJWTMiddleware(config)...)
 
-	generated.RegisterRouters(e, config)
+	err = generated.RegisterRouters(e, config)
+	if err != nil {
+		panic(err)
+	}
 
 	// Start the server and log if it fails
 	e.Logger.Debug("Starting server on port " + port)

@@ -23,7 +23,10 @@ func main() {
 		panic(err)
 	}
 
-	generated.RegisterRouters(e, config)
+	err = generated.RegisterRouters(e, config)
+	if err != nil {
+		panic(err)
+	}
 
 	// Start the server and log if it fails
 	e.Logger.Debug("Starting server on port " + port)

@@ -6,7 +6,7 @@ package rest
 import (
 	"fmt"
 	"github.com/kapeta/todo/generated/entities"
-	genservices "github.com/kapeta/todo/generated/services"
+	generated "github.com/kapeta/todo/generated/services"
 	"github.com/kapeta/todo/pkg/services"
 	providers "github.com/kapetacom/sdk-go-config/providers"
 	"github.com/kapetacom/sdk-go-rest-server/request"
@@ -18,22 +18,23 @@ func CreateTasksInnerRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 	if err != nil {
 		return err
 	}
-	handlerFunc := func(s genservices.TasksInnerInterface) {
+
+	// Done like this to ensure interface compliance
+	func(serviceInterface generated.TasksInnerInterface) {
 		e.DELETE("/v2/tasks/:id", func(ctx echo.Context) error {
 
 			var id = ctx.Param("id")
 
-			return services.RemoveTask(ctx, id)
+			return serviceInterface.RemoveTask(ctx, id)
 		})
 
 		e.GET("/v2/tasks/:id", func(ctx echo.Context) error {
 
 			var id = ctx.Param("id")
 
-			return services.GetTask(ctx, id)
+			return serviceInterface.GetTask(ctx, id)
 		})
-	}
-	handlerFunc(routeHandler)
+	}(routeHandler)
 
 	return nil
 }

@@ -6,7 +6,7 @@ package rest
 import (
    "github.com/labstack/echo/v4"
    providers "github.com/kapetacom/sdk-go-config/providers"
-   genservices  "{{@root.options.basePackage}}/generated/services"
+   generated  "{{@root.options.basePackage}}/generated/services"
    "fmt"
    	"github.com/kapetacom/sdk-go-rest-server/request"
    "{{@root.options.basePackage}}/pkg/services"
@@ -20,7 +20,9 @@ func Create{{controller-name this}}Router(e *echo.Echo, cfg providers.ConfigProv
     if err != nil {
         return err
     }
-    handlerFunc := func(s genservices.{{pascalCase (controller-name this)}}Interface) {
+
+    // Done like this to ensure interface compliance
+    func(serviceInterface generated.{{pascalCase (controller-name this)}}Interface) {
     {{#methods methods}}
         e.{{./method}}("{{echoURLPath path base=../path}}",  func(ctx echo.Context) error {
         {{#parametersNeedError this}}
@@ -29,11 +31,10 @@ func Create{{controller-name this}}Router(e *echo.Echo, cfg providers.ConfigProv
         {{queryParametersVariables this}}
         {{pathParametersVariables this}}
         {{bodyParametersVariables this}}
-        return services.{{pascalCase (method name)}}(ctx{{requestparameterarguments this}})
+        return serviceInterface.{{pascalCase (method name)}}(ctx{{requestparameterarguments this}})
         })
     {{/methods}}
-    }
-    handlerFunc(routeHandler)
+    }(routeHandler)
 
     return nil
 }
