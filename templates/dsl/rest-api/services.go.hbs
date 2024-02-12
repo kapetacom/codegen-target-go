@@ -1,7 +1,8 @@
-//#FILENAME:pkg/services/{{lowercase (controller-name this)}}_handler.go:create-only
+//#FILENAME:pkg/services/{{snakeCase (controller-name this)}}_handler.go:create-only
 package services
 import (
     "github.com/labstack/echo/v4"
+    providers "github.com/kapetacom/sdk-go-config/providers"
 {{#if (golang-import-entities .)}}
     "{{@root.options.basePackage}}/generated/entities"
 {{/if}}
@@ -9,7 +10,7 @@ import (
 type {{pascalCase (controller-name this)}}Handler struct {
 }
 
-func New{{pascalCase (controller-name this)}}Handler() (*{{pascalCase (controller-name this)}}Handler, error) {
+func New{{pascalCase (controller-name this)}}Handler(cfg providers.ConfigProvider) (*{{pascalCase (controller-name this)}}Handler, error) {
     return &{{pascalCase (controller-name this)}}Handler{}, nil
 }
 

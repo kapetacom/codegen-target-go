@@ -14,7 +14,7 @@ import (
 )
 
 func CreateTasksInnerRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
-	routeHandler, err := services.NewTasksInnerHandler()
+	routeHandler, err := services.NewTasksInnerHandler(cfg)
 	if err != nil {
 		return err
 	}

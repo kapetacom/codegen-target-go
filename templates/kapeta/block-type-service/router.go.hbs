@@ -8,10 +8,21 @@ import (
     kapeta "github.com/kapetacom/sdk-go-config/providers"
 )
 
-func RegisterRouters(e *echo.Echo, cfg kapeta.ConfigProvider) {
-    {{#kaplang-rest-methods spec.source namespace=metadata.name}}
-        rest.Create{{controller-name this}}Router(e, cfg);
-    {{/kaplang-rest-methods}}
-    rest.CreateHealth(e);
+func RegisterRouters(e *echo.Echo, cfg kapeta.ConfigProvider) error {
+    {{#providers-of-type 'kapeta/resource-type-rest-api'}}
+        var err error
+        {{#kaplang-rest-methods spec.source namespace=metadata.name}}
+            err = rest.Create{{controller-name this}}Router(e, cfg);
+            if err != nil {
+                return err
+            }
+        {{/kaplang-rest-methods}}
+    {{/providers-of-type}}
 
+    err = rest.CreateHealth(e);
+    if err != nil {
+        return err
+    }
+
+    return nil
 }

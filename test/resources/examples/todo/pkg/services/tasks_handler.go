@@ -2,13 +2,14 @@ package services
 
 import (
 	"github.com/kapeta/todo/generated/entities"
+	providers "github.com/kapetacom/sdk-go-config/providers"
 	"github.com/labstack/echo/v4"
 )
 
 type TasksHandler struct {
 }
 
-func NewTasksHandler() (*TasksHandler, error) {
+func NewTasksHandler(cfg providers.ConfigProvider) (*TasksHandler, error) {
 	return &TasksHandler{}, nil
 }
 

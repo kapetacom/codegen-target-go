@@ -1,4 +1,4 @@
-//#FILENAME:generated/rest_api/{{lowercase (controller-name this)}}_router.go:write-always
+//#FILENAME:generated/rest_api/{{snakeCase (controller-name this)}}_router.go:write-always
 //
 // GENERATED SOURCE - DO NOT EDIT
 //
@@ -16,7 +16,7 @@ import (
 )
 
 func Create{{controller-name this}}Router(e *echo.Echo, cfg providers.ConfigProvider) error {
-    routeHandler, err := services.New{{pascalCase (controller-name this)}}Handler()
+    routeHandler, err := services.New{{pascalCase (controller-name this)}}Handler(cfg)
     if err != nil {
         return err
     }

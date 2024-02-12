@@ -2,13 +2,14 @@ package services
 
 import (
 	"github.com/kapeta/todo/generated/entities"
+	providers "github.com/kapetacom/sdk-go-config/providers"
 	"github.com/labstack/echo/v4"
 )
 
 type UsersHandler struct {
 }
 
-func NewUsersHandler() (*UsersHandler, error) {
+func NewUsersHandler(cfg providers.ConfigProvider) (*UsersHandler, error) {
 	return &UsersHandler{}, nil
 }
 

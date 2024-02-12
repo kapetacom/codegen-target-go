@@ -14,7 +14,7 @@ import (
 )
 
 func CreateUsersRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
-	routeHandler, err := services.NewUsersHandler()
+	routeHandler, err := services.NewUsersHandler(cfg)
 	if err != nil {
 		return err
 	}

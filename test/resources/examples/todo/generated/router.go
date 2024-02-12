@@ -6,7 +6,22 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func RegisterRouters(e *echo.Echo, cfg kapeta.ConfigProvider) {
-	rest.CreateHealth(e)
+func RegisterRouters(e *echo.Echo, cfg kapeta.ConfigProvider) error {
+	var err error
+	err = rest.CreateTasksInnerRouter(e, cfg)
+	if err != nil {
+		return err
+	}
 
+	err = rest.CreateTasksRouter(e, cfg)
+	if err != nil {
+		return err
+	}
+
+	err = rest.CreateHealth(e)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

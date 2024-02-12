@@ -14,7 +14,7 @@ import (
 )
 
 func CreateTasksRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
-	routeHandler, err := services.NewTasksHandler()
+	routeHandler, err := services.NewTasksHandler(cfg)
 	if err != nil {
 		return err
 	}
