@@ -16,7 +16,7 @@ spec:
   local:
     image: golang:latest
     workingDir: /workspace
-    healthcheck: 'wget --no-verbose --tries=1 --spider "http://localhost:80/.kapeta/health" || exit 1'
+    healthcheck: 'curl -sSf "http://localhost:80/.kapeta/health" > /dev/null || exit 1'
     handlers:
       onCreate: /workspace/scripts/start-dev.sh
     HostConfig:
