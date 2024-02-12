@@ -7,6 +7,6 @@ import (
 )
 
 func RegisterRouters(e *echo.Echo, cfg kapeta.ConfigProvider) {
-	rest.CreateHealth(e, cfg)
+	rest.CreateHealth(e)
 
 }
