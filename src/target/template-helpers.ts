@@ -362,7 +362,6 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return getRestParameters(method, true);
     });
 
-
     engine.registerHelper('golang-imports-dto', function (arg: DSLEntity) {
         const entities = getParsedEntities();
         const resolver = new DSLReferenceResolver();

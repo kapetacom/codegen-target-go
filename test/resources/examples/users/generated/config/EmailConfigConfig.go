@@ -12,7 +12,7 @@ type EmailConfigConfig struct {
 }
 
 func GetEmailConfigConfigWithDefault(defaultValue EmailConfigConfig) EmailConfigConfig {
-	anyconfig := kapeta.CONFIG.GetOrDefault("config", defaultValue)
+	anyconfig := kapeta.CONFIG.GetOrDefault("EmailConfig", defaultValue)
 	result := EmailConfigConfig{}
 	err := kapeta.Transcode(anyconfig, &result)
 	if err != nil {
@@ -23,7 +23,7 @@ func GetEmailConfigConfigWithDefault(defaultValue EmailConfigConfig) EmailConfig
 }
 
 func GetEmailConfigConfig() EmailConfigConfig {
-	anyconfig := kapeta.CONFIG.Get("config")
+	anyconfig := kapeta.CONFIG.Get("EmailConfig")
 	result := EmailConfigConfig{}
 	err := kapeta.Transcode(anyconfig, &result)
 	if err != nil {

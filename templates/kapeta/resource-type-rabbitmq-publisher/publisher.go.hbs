@@ -1,0 +1,16 @@
+//#FILENAME:generated/queues/{{snakeCase data.metadata.name}}-publisher.go:write-always
+package queues
+
+import (
+	"{{@root.options.basePackage}}/generated/entities"
+	"github.com/kapetacom/sdk-go-config/providers"
+	"github.com/kapetacom/sdk-go-rabbitmq/rabbitmq"
+)
+
+type {{pascalCase data.metadata.name}}Publisher = rabbitmq.Publisher[entities.{{data.spec.payloadType.type}}, map[string]any, string]
+
+type {{pascalCase data.metadata.name}}Payload = rabbitmq.PublisherPayload[entities.{{data.spec.payloadType.type}}, map[string]any, string]
+
+func Create{{pascalCase data.metadata.name}}Publisher(config providers.ConfigProvider) (*{{pascalCase data.metadata.name}}Publisher, error) {
+	return rabbitmq.CreatePublisher[entities.{{data.spec.payloadType.type}}, map[string]any, string](config, "{{string data.metadata.name}}")
+}

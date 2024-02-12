@@ -10,7 +10,7 @@ import (
 
 {{#when type type='datatype'}}
 func Get{{type name}}ConfigWithDefault(defaultValue {{type name}}Config) {{type name}}Config {
-    anyconfig := kapeta.CONFIG.GetOrDefault("config", defaultValue)
+    anyconfig := kapeta.CONFIG.GetOrDefault("{{string name}}", defaultValue)
 	result := {{type name}}Config{}
 	err := kapeta.Transcode(anyconfig, &result)
 	if err != nil {
@@ -21,7 +21,7 @@ func Get{{type name}}ConfigWithDefault(defaultValue {{type name}}Config) {{type 
 }
 
 func Get{{type name}}Config() {{type name}}Config {
-    anyconfig := kapeta.CONFIG.Get("config")
+    anyconfig := kapeta.CONFIG.Get("{{string name}}")
 	result := {{type name}}Config{}
 	err := kapeta.Transcode(anyconfig, &result)
 	if err != nil {

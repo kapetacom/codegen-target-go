@@ -67,6 +67,15 @@ spec:
         }
 
   consumers:
+    - kind: kapeta/resource-type-rabbitmq-subscriber:local
+      metadata:
+        name: events
+      spec:
+        payloadType:
+          type: User
+        port:
+          name: amqp
+          type: amqp
     - kind: kapeta/resource-type-auth-jwt-consumer:0.0.2
       metadata:
         name: auth
