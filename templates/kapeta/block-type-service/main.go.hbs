@@ -5,7 +5,7 @@ import (
 {{#provides 'kapeta/resource-type-rest-api'}}
     "github.com/labstack/echo/v4"
 "{{@root.options.basePackage}}/generated"
-    sdkgoconfig "github.com/kapetacom/sdk-go-config"
+    kapeta "github.com/kapetacom/sdk-go-config"
 {{/provides}}
 {{#consumers-of-type 'kapeta/resource-type-auth-jwt-consumer'}}
         "{{@root.options.basePackage}}/generated/auth"
@@ -13,12 +13,9 @@ import (
 )
 
 func main() {
-    {{#provides 'kapeta/resource-type-rest-api'}}
     e := echo.New()
-    {{#providers-of-type 'kapeta/resource-type-rest-api'}}
-    generated.RegisterRouters(e, nil)
-	{{/providers-of-type}}
-    config, err := sdkgoconfig.Init(".")
+
+    config, err := kapeta.Init(".")
     if err != nil {
         panic(err)
     }
@@ -31,12 +28,14 @@ func main() {
     if err != nil {
         panic(err)
     }
+
     {{#consumers-of-type 'kapeta/resource-type-auth-jwt-consumer'}}
-    e.Use(auth.AddJWTMiddleware(cfg)...)
+    e.Use(auth.AddJWTMiddleware(config)...)
     {{/consumers-of-type}}
+
+    generated.RegisterRouters(e, config)
 
     // Start the server and log if it fails
     e.Logger.Debug("Starting server on port " + port)
     e.Logger.Fatal(e.Start(host + ":"+port))
-    {{/provides}}
 }

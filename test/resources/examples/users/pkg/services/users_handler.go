@@ -8,6 +8,10 @@ import (
 type UsersHandler struct {
 }
 
+func NewUsersHandler() (*UsersHandler, error) {
+	return &UsersHandler{}, nil
+}
+
 func (handler *UsersHandler) CreateUser(ctx echo.Context, id string, user *entities.User, metadata map[string]string, tags []string) error {
 	return ctx.JSON(200, entities.User{})
 }

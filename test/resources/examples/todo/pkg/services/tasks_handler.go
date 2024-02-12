@@ -8,6 +8,10 @@ import (
 type TasksHandler struct {
 }
 
+func NewTasksHandler() (*TasksHandler, error) {
+	return &TasksHandler{}, nil
+}
+
 func (handler *TasksHandler) AddTask(ctx echo.Context, userId string, id string, task *entities.Task) error {
 	return ctx.JSON(200, nil)
 }

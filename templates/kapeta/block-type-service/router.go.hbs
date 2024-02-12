@@ -5,14 +5,13 @@ import (
 {{#providers-of-type 'kapeta/resource-type-rest-api'}}
     "{{@root.options.basePackage}}/generated/rest_api"
 {{/providers-of-type}}
-    sdkgoconfig "github.com/kapetacom/sdk-go-config/providers"
+    kapeta "github.com/kapetacom/sdk-go-config/providers"
 )
 
-func RegisterRouters(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
-{{#providers-of-type 'kapeta/resource-type-rest-api'}}
+func RegisterRouters(e *echo.Echo, cfg kapeta.ConfigProvider) {
     {{#kaplang-rest-methods spec.source namespace=metadata.name}}
         rest.Create{{controller-name this}}Router(e, cfg);
     {{/kaplang-rest-methods}}
     rest.CreateHealth(e, cfg);
-{{/providers-of-type}}
+
 }

@@ -8,6 +8,10 @@ import (
 type TasksInnerHandler struct {
 }
 
+func NewTasksInnerHandler() (*TasksInnerHandler, error) {
+	return &TasksInnerHandler{}, nil
+}
+
 func (handler *TasksInnerHandler) RemoveTask(ctx echo.Context, id string) error {
 	return ctx.JSON(200, nil)
 }

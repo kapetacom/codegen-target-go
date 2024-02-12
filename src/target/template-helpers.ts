@@ -250,7 +250,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                         valueName = "_type"
                     }
                     let out = `${valueName} := &${typename}{}\n`
-                    out += `if body, err = request.GetBody(ctx, body); err != nil {\n`
+                    out += `if _, err = request.GetBody(ctx, ${valueName}); err != nil {\n`
                     out += `return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal ${value.name} %v", err))\n}`;
                     return out;
                 })
@@ -305,7 +305,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                     }
 
                     let out =  `var ${valueName} ${value.type.name}\n`
-                    out += `if ${valueName}, err = request.GetQueryParam(ctx, "${value.name}", &${valueName}); err != nil {\n`
+                    out += `if _, err = request.GetQueryParam(ctx, "${value.name}", &${valueName}); err != nil {\n`
                     out += `return ctx.String(400, fmt.Sprintf("bad request, unable to get query param ${value.name} %v", err))\n}`;
                     return out
                 })
@@ -375,7 +375,8 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
             .map((entity) => {
                 const native = DataTypeReader.getNative(entity);
                 if (native) {
-                    return '';
+                    const [packageName] = entity.name.split('.')
+                    return `import ${packageName} "${native}"`;
                 }
                 return ''; //`import ${githubLocation}/entities"`;
             }).join('\n')
@@ -386,7 +387,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
             const imports = datatype.properties?.map((property) => {
                 const thisProp = property.type as DSLDataTypeProperty;
                 if (thisProp.name === "date") {
-                    return Template.SafeString(`import "time"`);
+                    return Template.SafeString(`import kapeta "github.com/kapetacom/sdk-go-config"`);
                 }
                 return '';
             }).filter(item => item !== "");
@@ -418,12 +419,12 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return Template.SafeString(
             referencesEntities
                 .map((entity) => {
+
                     const native = DataTypeReader.getNative(entity);
                     if (native) {
-                        return `import { ${entity.name} } from "${native}";`;
+                        const [packageName] = entity.name.split('.')
+                        return `import ${packageName} "${native}"`;
                     }
-
-                    return `import { ${ucFirst(entity.name)}Config } from './${ucFirst(entity.name)}';`;
                 })
                 .join('\n')
         );

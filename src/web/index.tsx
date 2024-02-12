@@ -45,6 +45,8 @@ const targetConfig: ILanguageTargetProvider<GoTargetConfigOptions>  = {
         'kapeta/resource-type-rest-client',
         'kapeta/resource-type-auth-jwt-consumer',
         'kapeta/resource-type-external-services',
+        'kapeta/resource-type-rabbitmq-subscriber',
+        'kapeta/resource-type-rabbitmq-publisher',
 //        'kapeta/resource-type-postgresql',
 //        'kapeta/resource-type-redis',
 //        'kapeta/resource-type-mongodb',

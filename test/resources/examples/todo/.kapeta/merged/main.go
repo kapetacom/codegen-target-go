@@ -3,14 +3,14 @@ package main
 import (
 	"github.com/kapeta/todo/generated"
 	"github.com/kapeta/todo/generated/auth"
-	sdkgoconfig "github.com/kapetacom/sdk-go-config"
+	kapeta "github.com/kapetacom/sdk-go-config"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
 	e := echo.New()
-	generated.RegisterRouters(e, nil)
-	config, err := sdkgoconfig.Init(".")
+
+	config, err := kapeta.Init(".")
 	if err != nil {
 		panic(err)
 	}
@@ -23,7 +23,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	e.Use(auth.AddJWTMiddleware(cfg)...)
+
+	e.Use(auth.AddJWTMiddleware(config)...)
+
+	generated.RegisterRouters(e, config)
 
 	// Start the server and log if it fails
 	e.Logger.Debug("Starting server on port " + port)

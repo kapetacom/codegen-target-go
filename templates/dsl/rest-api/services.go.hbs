@@ -8,6 +8,11 @@ import (
 )
 type {{pascalCase (controller-name this)}}Handler struct {
 }
+
+func New{{pascalCase (controller-name this)}}Handler() (*{{pascalCase (controller-name this)}}Handler, error) {
+    return &{{pascalCase (controller-name this)}}Handler{}, nil
+}
+
 {{#methods methods}}
 func (handler *{{pascalCase (controller-name ..)}}Handler) {{pascalCase (method name)}}(ctx echo.Context {{request_parameter_arguments_with_type this}}) error {
     return ctx.JSON(200, {{returnTypeDefaultValue returnType}})

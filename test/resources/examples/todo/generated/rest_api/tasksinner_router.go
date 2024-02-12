@@ -8,13 +8,16 @@ import (
 	"github.com/kapeta/todo/generated/entities"
 	genservices "github.com/kapeta/todo/generated/services"
 	"github.com/kapeta/todo/pkg/services"
-	sdkgoconfig "github.com/kapetacom/sdk-go-config/providers"
+	providers "github.com/kapetacom/sdk-go-config/providers"
 	"github.com/kapetacom/sdk-go-rest-server/request"
 	"github.com/labstack/echo/v4"
 )
 
-func CreateTasksInnerRouter(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
-	services := &services.TasksInnerHandler{}
+func CreateTasksInnerRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
+	routeHandler, err := services.NewTasksInnerHandler()
+	if err != nil {
+		return err
+	}
 	handlerFunc := func(s genservices.TasksInnerInterface) {
 		e.DELETE("/v2/tasks/:id", func(ctx echo.Context) error {
 			var err error
@@ -32,5 +35,7 @@ func CreateTasksInnerRouter(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
 			return services.GetTask(ctx, id)
 		})
 	}
-	handlerFunc(services)
+	handlerFunc(routeHandler)
+
+	return nil
 }

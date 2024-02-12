@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	sdkgoconfig "github.com/kapetacom/sdk-go-config"
+	kapeta "github.com/kapetacom/sdk-go-config"
 )
 
 // Configuration for e-mails
@@ -12,9 +12,9 @@ type EmailConfigConfig struct {
 }
 
 func GetEmailConfigConfigWithDefault(defaultValue EmailConfigConfig) EmailConfigConfig {
-	anyconfig := sdkgoconfig.CONFIG.GetOrDefault("config", defaultValue)
+	anyconfig := kapeta.CONFIG.GetOrDefault("config", defaultValue)
 	result := EmailConfigConfig{}
-	err := sdkgoconfig.Transcode(anyconfig, &result)
+	err := kapeta.Transcode(anyconfig, &result)
 	if err != nil {
 		panic(fmt.Errorf("failed to transcode config: %w", err))
 	}
@@ -23,9 +23,9 @@ func GetEmailConfigConfigWithDefault(defaultValue EmailConfigConfig) EmailConfig
 }
 
 func GetEmailConfigConfig() EmailConfigConfig {
-	anyconfig := sdkgoconfig.CONFIG.Get("config")
+	anyconfig := kapeta.CONFIG.Get("config")
 	result := EmailConfigConfig{}
-	err := sdkgoconfig.Transcode(anyconfig, &result)
+	err := kapeta.Transcode(anyconfig, &result)
 	if err != nil {
 		panic(fmt.Errorf("failed to transcode config: %w", err))
 	}
