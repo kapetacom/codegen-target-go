@@ -24,31 +24,42 @@ func CreateUsersRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 		e.POST("/users/:id", func(ctx echo.Context) error {
 			var err error
 			var user User
-			if _, err = request.GetQueryParam(ctx, "user", &user); err != nil {
+			if err = request.GetQueryParam(ctx, "user", &user); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to get query param user %v", err))
 			}
 			var tags Set
-			if _, err = request.GetQueryParam(ctx, "tags", &tags); err != nil {
+			if err = request.GetQueryParam(ctx, "tags", &tags); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to get query param tags %v", err))
 			}
-			var id = ctx.Param("id")
+			var id string
+			if err = request.GetPathParams(ctx, "id", &id); err != nil {
+				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			}
 			metadata := &map[string]string{}
-			if _, err = request.GetBody(ctx, metadata); err != nil {
+			if err = request.GetBody(ctx, metadata); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal metadata %v", err))
 			}
 			return serviceInterface.CreateUser(ctx, id, user, metadata, tags)
 		})
 
 		e.GET("/users/:id", func(ctx echo.Context) error {
+			var err error
 
-			var id = ctx.Param("id")
+			var id string
+			if err = request.GetPathParams(ctx, "id", &id); err != nil {
+				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			}
 
 			return serviceInterface.GetUser(ctx, id, metadata)
 		})
 
 		e.DELETE("/users/:id", func(ctx echo.Context) error {
+			var err error
 
-			var id = ctx.Param("id")
+			var id string
+			if err = request.GetPathParams(ctx, "id", &id); err != nil {
+				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			}
 
 			return serviceInterface.DeleteUser(ctx, id)
 		})

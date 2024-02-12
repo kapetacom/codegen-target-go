@@ -22,15 +22,23 @@ func CreateTasksInnerRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 	// Done like this to ensure interface compliance
 	func(serviceInterface generated.TasksInnerInterface) {
 		e.DELETE("/v2/tasks/:id", func(ctx echo.Context) error {
+			var err error
 
-			var id = ctx.Param("id")
+			var id string
+			if err = request.GetPathParams(ctx, "id", &id); err != nil {
+				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			}
 
 			return serviceInterface.RemoveTask(ctx, id)
 		})
 
 		e.GET("/v2/tasks/:id", func(ctx echo.Context) error {
+			var err error
 
-			var id = ctx.Param("id")
+			var id string
+			if err = request.GetPathParams(ctx, "id", &id); err != nil {
+				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			}
 
 			return serviceInterface.GetTask(ctx, id)
 		})

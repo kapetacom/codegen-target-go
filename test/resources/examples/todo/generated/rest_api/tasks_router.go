@@ -24,18 +24,28 @@ func CreateTasksRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 		e.POST("/tasks/:userid/:id", func(ctx echo.Context) error {
 			var err error
 
-			var userId = ctx.Param("userId")
-			var id = ctx.Param("id")
+			var userId string
+			if err = request.GetPathParams(ctx, "userId", &userId); err != nil {
+				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param userId %v", err))
+			}
+			var id string
+			if err = request.GetPathParams(ctx, "id", &id); err != nil {
+				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			}
 			task := &entities.Task{}
-			if _, err = request.GetBody(ctx, task); err != nil {
+			if err = request.GetBody(ctx, task); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal task %v", err))
 			}
 			return serviceInterface.AddTask(ctx, userId, id, task)
 		})
 
 		e.POST("/tasks/:id/done", func(ctx echo.Context) error {
+			var err error
 
-			var id = ctx.Param("id")
+			var id string
+			if err = request.GetPathParams(ctx, "id", &id); err != nil {
+				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			}
 
 			return serviceInterface.MarkAsDone(ctx, id)
 		})
