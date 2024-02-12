@@ -2,17 +2,25 @@
 package generated
 import (
     "github.com/labstack/echo/v4"
-{{#providers-of-type 'kapeta/resource-type-rest-api'}}
     "{{@root.options.basePackage}}/generated/rest_api"
-{{/providers-of-type}}
-    sdkgoconfig "github.com/kapetacom/sdk-go-config/providers"
+    kapeta "github.com/kapetacom/sdk-go-config/providers"
 )
 
-func RegisterRouters(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
-{{#providers-of-type 'kapeta/resource-type-rest-api'}}
-    {{#kaplang-rest-methods spec.source namespace=metadata.name}}
-        rest.Create{{controller-name this}}Router(e, cfg);
-    {{/kaplang-rest-methods}}
-    rest.CreateHealth(e, cfg);
-{{/providers-of-type}}
+func RegisterRouters(e *echo.Echo, cfg kapeta.ConfigProvider) error {
+    var err error
+    {{#providers-of-type 'kapeta/resource-type-rest-api'}}
+        {{#kaplang-rest-methods spec.source namespace=metadata.name}}
+            err = rest.Create{{controller-name this}}Router(e, cfg);
+            if err != nil {
+                return err
+            }
+        {{/kaplang-rest-methods}}
+    {{/providers-of-type}}
+
+    err = rest.CreateHealth(e);
+    if err != nil {
+        return err
+    }
+
+    return nil
 }

@@ -1,13 +1,19 @@
-//#FILENAME:pkg/services/{{lowercase (controller-name this)}}_handler.go:create-only
+//#FILENAME:pkg/services/{{snakeCase (controller-name this)}}_handler.go:create-only
 package services
 import (
     "github.com/labstack/echo/v4"
+    providers "github.com/kapetacom/sdk-go-config/providers"
 {{#if (golang-import-entities .)}}
     "{{@root.options.basePackage}}/generated/entities"
 {{/if}}
 )
 type {{pascalCase (controller-name this)}}Handler struct {
 }
+
+func New{{pascalCase (controller-name this)}}Handler(cfg providers.ConfigProvider) (*{{pascalCase (controller-name this)}}Handler, error) {
+    return &{{pascalCase (controller-name this)}}Handler{}, nil
+}
+
 {{#methods methods}}
 func (handler *{{pascalCase (controller-name ..)}}Handler) {{pascalCase (method name)}}(ctx echo.Context {{request_parameter_arguments_with_type this}}) error {
     return ctx.JSON(200, {{returnTypeDefaultValue returnType}})

@@ -3,7 +3,7 @@
 //
 package entities
 
-import "time"
+import kapeta "github.com/kapetacom/sdk-go-config"
 
 // Task type
 type Task struct {
@@ -23,7 +23,7 @@ type Task struct {
 	Age float64 `json:"age" xml:"age" yaml:"age"`
 
 	// Created date
-	Created time.Time `json:"created" xml:"created" yaml:"created"`
+	Created kapeta.Epoch `json:"created" xml:"created" yaml:"created"`
 
 	Metadata any `json:"metadata" xml:"metadata" yaml:"metadata"`
 

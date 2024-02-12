@@ -2,7 +2,7 @@
 
 Kapeta block implemented using Language Target "Go"
 
-See [this file](src/.generated/README.md) for more information about the generated code
+See [this file](src/kapeta.md) for more information about the generated code
 
 ## Prerequisites
 - Docker installed and running

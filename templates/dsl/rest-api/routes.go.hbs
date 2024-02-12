@@ -1,12 +1,12 @@
-//#FILENAME:generated/rest_api/{{lowercase (controller-name this)}}_router.go:write-always
+//#FILENAME:generated/rest_api/{{snakeCase (controller-name this)}}_router.go:write-always
 //
 // GENERATED SOURCE - DO NOT EDIT
 //
 package rest
 import (
    "github.com/labstack/echo/v4"
-   sdkgoconfig "github.com/kapetacom/sdk-go-config/providers"
-   genservices  "{{@root.options.basePackage}}/generated/services"
+   providers "github.com/kapetacom/sdk-go-config/providers"
+   generated  "{{@root.options.basePackage}}/generated/services"
    "fmt"
    	"github.com/kapetacom/sdk-go-rest-server/request"
    "{{@root.options.basePackage}}/pkg/services"
@@ -15,18 +15,26 @@ import (
 {{/if}}
 )
 
-func Create{{controller-name this}}Router(e *echo.Echo, cfg sdkgoconfig.ConfigProvider) {
-    services := &services.{{pascalCase (controller-name this)}}Handler{}
-    handlerFunc := func(s genservices.{{pascalCase (controller-name this)}}Interface) {
+func Create{{controller-name this}}Router(e *echo.Echo, cfg providers.ConfigProvider) error {
+    routeHandler, err := services.New{{pascalCase (controller-name this)}}Handler(cfg)
+    if err != nil {
+        return err
+    }
+
+    // Done like this to ensure interface compliance
+    func(serviceInterface generated.{{pascalCase (controller-name this)}}Interface) {
     {{#methods methods}}
         e.{{./method}}("{{echoURLPath path base=../path}}",  func(ctx echo.Context) error {
+        {{#parametersNeedError this}}
         var err error
+        {{/parametersNeedError}}
         {{queryParametersVariables this}}
         {{pathParametersVariables this}}
         {{bodyParametersVariables this}}
-        return services.{{pascalCase (method name)}}(ctx{{requestparameterarguments this}})
+        return serviceInterface.{{pascalCase (method name)}}(ctx{{requestparameterarguments this}})
         })
     {{/methods}}
-    }
-    handlerFunc(services)
+    }(routeHandler)
+
+    return nil
 }

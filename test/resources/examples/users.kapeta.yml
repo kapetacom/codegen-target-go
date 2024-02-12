@@ -38,6 +38,38 @@ spec:
       metadata:
         name: cdnBucket
   providers:
+    - kind: kapeta/resource-type-rabbitmq-publisher:local
+      metadata:
+        name: events
+      spec:
+        port:
+          name: amqp
+          type: amqp
+        payloadType:
+          type: User
+        routeKeys:
+          data:
+            - user.created
+            - user.updated
+            - user.deleted
+          text: |-
+            user.created
+            user.updated
+            user.deleted
+        headers:
+          data:
+            - name: Some-Header
+              values:
+                - value1
+                - value2
+                - value3
+            - name: Other-Header
+              values:
+                - other1
+                - other2
+          text: |-
+            Some-Header: value1, value2, value3
+            Other-Header: other1, other2
     - kind: kapeta/resource-type-auth-jwt-provider:0.0.2
       metadata:
         name: auth

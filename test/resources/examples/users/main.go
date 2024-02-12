@@ -2,14 +2,14 @@ package main
 
 import (
 	"github.com/kapeta/todo/generated"
-	sdkgoconfig "github.com/kapetacom/sdk-go-config"
+	kapeta "github.com/kapetacom/sdk-go-config"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
 	e := echo.New()
-	generated.RegisterRouters(e, nil)
-	config, err := sdkgoconfig.Init(".")
+
+	config, err := kapeta.Init(".")
 	if err != nil {
 		panic(err)
 	}
@@ -19,6 +19,11 @@ func main() {
 	}
 
 	host, err := config.GetServerHost()
+	if err != nil {
+		panic(err)
+	}
+
+	err = generated.RegisterRouters(e, config)
 	if err != nil {
 		panic(err)
 	}
