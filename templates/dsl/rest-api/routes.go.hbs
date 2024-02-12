@@ -23,7 +23,9 @@ func Create{{controller-name this}}Router(e *echo.Echo, cfg providers.ConfigProv
     handlerFunc := func(s genservices.{{pascalCase (controller-name this)}}Interface) {
     {{#methods methods}}
         e.{{./method}}("{{echoURLPath path base=../path}}",  func(ctx echo.Context) error {
+        {{#parametersNeedError this}}
         var err error
+        {{/parametersNeedError}}
         {{queryParametersVariables this}}
         {{pathParametersVariables this}}
         {{bodyParametersVariables this}}

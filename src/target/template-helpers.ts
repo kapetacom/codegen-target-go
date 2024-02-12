@@ -312,6 +312,21 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                 .join('\n')
         );
     });
+    engine.registerHelper('parametersNeedError', (method: RESTMethodReader, options: HelperOptions) => {
+        if (!method.parameters) {
+            return Template.SafeString('');
+        }
+
+        const parameterThatNeedsError = method.parameters.some(
+            (value) => value.transport && ['query', 'body'].includes(value.transport.toLowerCase())
+        );
+
+        if (parameterThatNeedsError) {
+            return options.fn(this);
+        }
+        return options.inverse(this);
+    });
+
 
     function getRestParameters(method: RESTMethodReader, includeTypes: boolean) {
         if (!method.parameters) {

@@ -20,7 +20,6 @@ func CreateTasksInnerRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 	}
 	handlerFunc := func(s genservices.TasksInnerInterface) {
 		e.DELETE("/v2/tasks/:id", func(ctx echo.Context) error {
-			var err error
 
 			var id = ctx.Param("id")
 
@@ -28,7 +27,6 @@ func CreateTasksInnerRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 		})
 
 		e.GET("/v2/tasks/:id", func(ctx echo.Context) error {
-			var err error
 
 			var id = ctx.Param("id")
 

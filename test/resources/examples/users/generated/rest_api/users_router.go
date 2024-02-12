@@ -38,7 +38,6 @@ func CreateUsersRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 		})
 
 		e.GET("/users/:id", func(ctx echo.Context) error {
-			var err error
 
 			var id = ctx.Param("id")
 
@@ -46,7 +45,6 @@ func CreateUsersRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 		})
 
 		e.DELETE("/users/:id", func(ctx echo.Context) error {
-			var err error
 
 			var id = ctx.Param("id")
 

@@ -32,7 +32,6 @@ func CreateTasksRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 		})
 
 		e.POST("/tasks/:id/done", func(ctx echo.Context) error {
-			var err error
 
 			var id = ctx.Param("id")
 

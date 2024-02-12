@@ -7,7 +7,7 @@ import (
 )
 
 // CreateHealth creates health endpoint for the service
-func CreateHealth(e *echo.Echo, cfg kapeta.ConfigProvider) {
+func CreateHealth(e *echo.Echo) {
 	e.GET("/.kapeta/health", func(c echo.Context) error {
 		return c.String(200, "OK")
 	})
