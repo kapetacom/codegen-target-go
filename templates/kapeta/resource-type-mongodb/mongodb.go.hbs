@@ -3,4 +3,23 @@
 // GENERATED SOURCE - DO NOT EDIT
 //
 package data
-// MongoDB not supported
+
+import (
+    "context"
+    "github.com/kapetacom/sdk-go-nosql-mongodb"
+    "github.com/kapetacom/sdk-go-config/providers"
+)
+
+func New{{type data.metadata.name}}(config providers.ConfigProvider) (*mongo.MongoDB, func(), error) {
+    // Create a new MongoDB client
+    client, err := mongo.NewMongoDB(config, "{{data.metadata.name}}")
+    if err != nil {
+        return nil, nil, err
+    }
+    closeFunc := func() {
+      if err := client.Disconnect(context.Background()); err != nil {
+        panic(err)
+      }
+    }
+    return client, closeFunc, nil
+}
