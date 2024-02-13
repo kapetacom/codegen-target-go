@@ -20,11 +20,9 @@ jobs:
         id: setup-node
       - name: Install dependencies
         run: npm install
-        working-directory: ./codegen-target-golang        
 
       - name: Build
         run: npm run build
-        working-directory: ./codegen-target-golang
 
       - name: Publish to Kapeta
         id: kapeta-registry-push
