@@ -7,9 +7,14 @@ import (
 "{{@root.options.basePackage}}/generated"
     kapeta "github.com/kapetacom/sdk-go-config"
 {{/provides}}
-{{#consumers-of-type 'kapeta/resource-type-auth-jwt-consumer'}}
+{{#consumes 'kapeta/resource-type-auth-jwt-consumer'}}
         "{{@root.options.basePackage}}/generated/auth"
-{{/consumers-of-type}}
+{{/consumes}}
+{{#consumes 'kapeta/resource-type-mongodb'}}
+    "{{@root.options.basePackage}}/generated/data"
+    "context"
+    "log"
+{{/consumes}}
 )
 
 func main() {
@@ -37,6 +42,14 @@ func main() {
     if err != nil {
         panic(err)
     }
+
+    {{#consumers-of-type 'kapeta/resource-type-mongodb'}}
+    db{{type metadata.name}}, close{{type metadata.name}}, err := data.New{{type metadata.name}}(config)
+    if err != nil {
+       log.Fatal(err)
+    }
+    defer close{{type metadata.name}}()
+    {{/consumers-of-type}}
 
     // Start the server and log if it fails
     e.Logger.Debug("Starting server on port " + port)
