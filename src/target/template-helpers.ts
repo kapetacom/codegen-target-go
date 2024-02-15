@@ -249,8 +249,8 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                     if (valueName === "type") {
                         valueName = "_type"
                     }
-                    let out = `${valueName} := &${typename}{}\n`
-                    out += `if err = request.GetBody(ctx, ${valueName}); err != nil {\n`
+                    let out = `${valueName} := ${typename}{}\n`
+                    out += `if err = request.GetBody(ctx, &${valueName}); err != nil {\n`
                     out += `return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal ${value.name} %v", err))\n}`;
                     return out;
                 })
@@ -287,6 +287,34 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         );
     });
 
+    engine.registerHelper('headerParametersVariables', (method: RESTMethodReader) => {
+        if (!method.parameters) {
+            return Template.SafeString('');
+        }
+
+        const queryParameters = method.parameters.filter(
+            (value) => value.transport && value.transport.toLowerCase() === 'header'
+        );
+
+        if (queryParameters.length === 0) {
+            return Template.SafeString('');
+        }
+        return Template.SafeString(
+            queryParameters
+                .map((value) => {
+                    let valueName = value.name
+                    if (valueName === "type") {
+                        valueName = "_type"
+                    }
+                    let out =  `var ${valueName} ${value.type.name}\n`
+                    out += `if err = request.GetHeaderParams(ctx, "${value.name}", &${valueName}); err != nil {\n`
+                    out += `return ctx.String(400, fmt.Sprintf("bad request, unable to get path param ${value.name} %v", err))\n}`;
+                    return out
+                })
+                .join('\n')
+        );
+    });
+
     engine.registerHelper('queryParametersVariables', (method: RESTMethodReader) => {
         if (!method.parameters) {
             return Template.SafeString('');
@@ -315,6 +343,36 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                 .join('\n')
         );
     });
+
+
+    engine.registerHelper('queryParametersFunctions', (method: RESTMethodReader) => {
+        if (!method.parameters) {
+            return Template.SafeString('');
+        }
+
+        const queryParameters = method.parameters.filter(
+            (value) => value.transport && value.transport.toLowerCase() === 'query'
+        );
+
+        if (queryParameters.length === 0) {
+            return Template.SafeString('');
+        }
+        let result =             queryParameters
+                .map((value) => {
+                    let valueName = value.name
+                    if (valueName === "type") {
+                        valueName = "_type"
+                    }
+                    let out =  `client.QueryParameterRequestModifier(${valueName})`;
+                    return out
+                })
+                .join(',')
+        if (result !== "") {
+            return Template.SafeString(","+result);
+        }
+        return result;
+    });
+
     engine.registerHelper('parametersNeedError', (method: RESTMethodReader, options: HelperOptions) => {
         if (!method.parameters) {
             return Template.SafeString('');

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"context"
+	"log"
+
 	"github.com/kapeta/todo/generated"
 	"github.com/kapeta/todo/generated/auth"
 	"github.com/kapeta/todo/generated/data"
 	kapeta "github.com/kapetacom/sdk-go-config"
 	"github.com/labstack/echo/v4"
-	"log"
 )
 
 func main() {

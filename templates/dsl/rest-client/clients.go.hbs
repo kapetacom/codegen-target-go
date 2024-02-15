@@ -31,7 +31,8 @@ func (c *{{controller-name ..}}Client) {{ucFirst name}}({{#arguments parameters}
     {{#if (hasReturnValue returnType) }}
     var result {{returnType returnType}}
     {{/if}}
-    resp, err := c.client.{{./method}}(c.client.ResolveURL("{{urlString path base=../path}}"{{pathParamsList this}}) {{bodyParamsList this}})
+    
+    resp, err := c.client.{{./method}}(c.client.ResolveURL("{{urlString path base=../path}}"{{pathParamsList this}}){{bodyParamsList this}}{{queryParametersFunctions this}})
     if err != nil {
          {{#if (hasReturnValue returnType) }}
         return result, err

@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+
 	kapeta "github.com/kapetacom/sdk-go-config"
 )
 

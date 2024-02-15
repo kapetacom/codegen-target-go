@@ -28,6 +28,7 @@ func Create{{controller-name this}}Router(e *echo.Echo, cfg providers.ConfigProv
         {{#parametersNeedError this}}
         var err error
         {{/parametersNeedError}}
+        {{headerParametersVariables this}}
         {{queryParametersVariables this}}
         {{pathParametersVariables this}}
         {{bodyParametersVariables this}}

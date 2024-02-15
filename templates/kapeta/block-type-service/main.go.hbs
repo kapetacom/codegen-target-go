@@ -2,13 +2,13 @@
 package main
 
 import (
+    kapeta "github.com/kapetacom/sdk-go-config"
 {{#provides 'kapeta/resource-type-rest-api'}}
     "github.com/labstack/echo/v4"
 "{{@root.options.basePackage}}/generated"
-    kapeta "github.com/kapetacom/sdk-go-config"
 {{/provides}}
 {{#consumes 'kapeta/resource-type-auth-jwt-consumer'}}
-        "{{@root.options.basePackage}}/generated/auth"
+    "{{@root.options.basePackage}}/generated/auth"
 {{/consumes}}
 {{#consumes 'kapeta/resource-type-mongodb'}}
     "{{@root.options.basePackage}}/generated/data"

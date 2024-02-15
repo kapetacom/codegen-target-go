@@ -3,8 +3,9 @@ package data
 
 import (
 	"context"
+
 	"github.com/kapetacom/sdk-go-config/providers"
-	"github.com/kapetacom/sdk-go-nosql-mongodb"
+	mongo "github.com/kapetacom/sdk-go-nosql-mongodb"
 )
 
 func NewTodo(config providers.ConfigProvider) (*mongo.MongoDB, func(), error) {

@@ -1,9 +1,7 @@
 // GENERATED SOURCE - DO NOT EDIT
-//
 package services
 
 import (
-	"github.com/kapeta/todo/generated/entities"
 	"github.com/labstack/echo/v4"
 )
 

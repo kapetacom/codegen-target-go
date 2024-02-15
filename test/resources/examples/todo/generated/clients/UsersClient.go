@@ -5,8 +5,9 @@ package clients
 //
 import (
 	"encoding/json"
+
 	"github.com/kapeta/todo/generated/entities"
-	"github.com/kapetacom/sdk-go-rest-client"
+	client "github.com/kapetacom/sdk-go-rest-client"
 )
 
 type Users interface {
@@ -26,6 +27,7 @@ func NewUsersClient() Users {
 
 func (c *UsersClient) GetUserById(id string, metadata ...any) (*entities.User, error) {
 	var result *entities.User
+
 	resp, err := c.client.GET(c.client.ResolveURL("/users/%v", id))
 	if err != nil {
 		return result, err
@@ -38,7 +40,8 @@ func (c *UsersClient) GetUserById(id string, metadata ...any) (*entities.User, e
 }
 
 func (c *UsersClient) DeleteUser(id string, metadata map[string]State, tags []string) error {
-	resp, err := c.client.DELETE(c.client.ResolveURL("/users/%v", id), metadata)
+
+	resp, err := c.client.DELETE(c.client.ResolveURL("/users/%v", id), metadata, client.QueryParameterRequestModifier(tags))
 	if err != nil {
 		return err
 	}

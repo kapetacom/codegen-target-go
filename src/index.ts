@@ -49,7 +49,8 @@ export default class GoTarget extends Target {
     private formatGoCode(inputCode: string): string {
         try {
             // Execute gofmt command synchronously with inputCode as input
-            return execSync(`gofmt`, { input: inputCode, encoding: 'utf-8' });
+            const result =  execSync(`gofmt`, { input: inputCode, encoding: 'utf-8' });
+            return execSync(`goimports`, { input: result, encoding: 'utf-8' });
         } catch (error: any) {
             // Handle errors
             throw new Error(`Error executing gofmt: ${error.stderr || error.message}`);
@@ -61,15 +62,10 @@ export default class GoTarget extends Target {
     }
 
     async postprocess(targetDir: string, files: GeneratedAsset[]): Promise<void> {
-        const anyFilesChanged = files.some((file) => file.filename.endsWith('.go') || file.filename === '.mod');
-        if (!anyFilesChanged) {
-            return;
-        }
-        // we should run go mod tidy and gofmt
-        console.log('Running gofmt in %s', targetDir);
-        const fmtchild = exec(`gofmt -w ${targetDir}`);
-        await fmtchild.wait();
-        console.log("done formatting");
+        const anyFilesChanged = files.some((file) => {
+            return file.filename.endsWith('.go') || file.filename === '.mod'
+        });
+
         try {
             console.log('Running go mod tidy in %s', targetDir);
             const child = exec('go mod tidy', {
