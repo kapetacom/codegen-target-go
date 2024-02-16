@@ -3,7 +3,7 @@ package services
 import (
     "github.com/labstack/echo/v4"
     providers "github.com/kapetacom/sdk-go-config/providers"
-{{#if (golang-import-entities .)}}
+{{#if (golang-import-entities-including-returntype .)}}
     "{{@root.options.basePackage}}/generated/entities"
 {{/if}}
 )

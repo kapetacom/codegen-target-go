@@ -1,7 +1,7 @@
 package queues
 
 import (
-	"github.com/kapeta/todo/generated/entities"
+	"github.com/kapeta/users/generated/entities"
 	"github.com/kapetacom/sdk-go-config/providers"
 	"github.com/kapetacom/sdk-go-rabbitmq/rabbitmq"
 )

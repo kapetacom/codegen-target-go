@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { format, Target } from '@kapeta/codegen-target';
-import type { GeneratedAsset, SourceFile, GeneratedFile } from '@kapeta/codegen';
+import {format, Target} from '@kapeta/codegen-target';
+import type {GeneratedAsset, SourceFile, GeneratedFile} from '@kapeta/codegen';
 import Path from 'path';
-import { exec } from '@kapeta/nodejs-process';
-import { execSync } from 'child_process';
-import { mergeDevcontainers } from './target/merge-devcontainers';
-import { addTemplateHelpers } from './target/template-helpers';
+import {execSync} from 'child_process';
+import {mergeDevcontainers} from './target/merge-devcontainers';
+import {addTemplateHelpers} from './target/template-helpers';
 
 export default class GoTarget extends Target {
     constructor(options: any) {
@@ -35,48 +34,38 @@ export default class GoTarget extends Target {
     protected _postProcessCode(filename: string, code: string) {
         if (filename.endsWith('.go')) {
             try {
-                code = this.formatGoCode(code);
-                return code;
+                code = execSync(`gofmt `, {input: code, encoding: 'utf-8'});
             } catch (error: any) {
-                console.log(code)
-                throw new Error(`Error formatting go code for ${filename}: ${error.stderr || error.message}`);
+                // Handle errors
+                throw new Error(`Error executing gofmt/goimports: ${error.stderr || error.message}`);
             }
-
         }
         return format(filename, code);
-    }
-
-    private formatGoCode(inputCode: string): string {
-        try {
-            // Execute gofmt command synchronously with inputCode as input
-            const result =  execSync(`gofmt`, { input: inputCode, encoding: 'utf-8' });
-            return execSync(`goimports`, { input: result, encoding: 'utf-8' });
-        } catch (error: any) {
-            // Handle errors
-            throw new Error(`Error executing gofmt: ${error.stderr || error.message}`);
-        }
     }
 
     generate(data: any, context: any): GeneratedFile[] {
         return super.generate(data, context);
     }
 
+    //This is only execute via the kap cli
     async postprocess(targetDir: string, files: GeneratedAsset[]): Promise<void> {
-        const anyFilesChanged = files.some((file) => {
-            return file.filename.endsWith('.go') || file.filename === '.mod'
-        });
+        for (const file of files) {
+            if (file.filename.endsWith('.go')) {
+                console.log('Running gofmt on %s', file.filename);
+                execSync(`gofmt -w ${file.filename}`);
+            }
+        }
 
         try {
             console.log('Running go mod tidy in %s', targetDir);
-            const child = exec('go mod tidy', {
+            execSync('go mod tidy', {
                 cwd: targetDir,
             });
-
-            await child.wait();
             console.log('done tidying');
         } catch (error: any) {
             // Handle errors
             throw new Error(`Error executing go mod tidy: ${error.stderr || error.message}`);
         }
+
     }
 }

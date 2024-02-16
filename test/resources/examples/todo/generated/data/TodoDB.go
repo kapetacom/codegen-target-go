@@ -3,7 +3,6 @@ package data
 
 import (
 	"context"
-
 	"github.com/kapetacom/sdk-go-config/providers"
 	mongo "github.com/kapetacom/sdk-go-nosql-mongodb"
 )

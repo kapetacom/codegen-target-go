@@ -1,11 +1,13 @@
+//
 // GENERATED SOURCE - DO NOT EDIT
+//
 package rest
 
 import (
 	"fmt"
-
-	generated "github.com/kapeta/todo/generated/services"
-	"github.com/kapeta/todo/pkg/services"
+	"github.com/kapeta/users/generated/entities"
+	generated "github.com/kapeta/users/generated/services"
+	"github.com/kapeta/users/pkg/services"
 	providers "github.com/kapetacom/sdk-go-config/providers"
 	"github.com/kapetacom/sdk-go-rest-server/request"
 	"github.com/labstack/echo/v4"
@@ -22,12 +24,12 @@ func CreateUsersRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 		e.POST("/users/:id", func(ctx echo.Context) error {
 			var err error
 
-			var user User
-			if err = request.GetQueryParam(ctx, "user", &user); err != nil {
+			var user *entities.User
+			if err = request.GetQueryParam(ctx, "user", user); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to get query param user %v", err))
 			}
-			var tags Set
-			if err = request.GetQueryParam(ctx, "tags", &tags); err != nil {
+			var tags *[]string
+			if err = request.GetQueryParam(ctx, "tags", tags); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to get query param tags %v", err))
 			}
 			var id string

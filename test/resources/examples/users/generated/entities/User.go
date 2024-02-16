@@ -1,4 +1,6 @@
+//
 // GENERATED SOURCE - DO NOT EDIT
+//
 package entities
 
 // User object

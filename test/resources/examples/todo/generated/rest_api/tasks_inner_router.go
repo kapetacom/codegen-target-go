@@ -1,9 +1,10 @@
+//
 // GENERATED SOURCE - DO NOT EDIT
+//
 package rest
 
 import (
 	"fmt"
-
 	generated "github.com/kapeta/todo/generated/services"
 	"github.com/kapeta/todo/pkg/services"
 	providers "github.com/kapetacom/sdk-go-config/providers"

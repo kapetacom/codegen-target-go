@@ -5,15 +5,14 @@ package clients
 //
 import (
 	"encoding/json"
-
 	"github.com/kapeta/todo/generated/entities"
-	client "github.com/kapetacom/sdk-go-rest-client"
+	"github.com/kapetacom/sdk-go-rest-client"
 )
 
 type UsersInner interface {
 	GetUserById(id string, metadata ...any) (*entities.User, error)
 
-	DeleteUser(id string, metadata map[string]State, tags []string) error
+	DeleteUser(id string, metadata map[string]*entities.State, tags *[]string) error
 }
 
 type UsersInnerClient struct {
@@ -39,7 +38,7 @@ func (c *UsersInnerClient) GetUserById(id string, metadata ...any) (*entities.Us
 
 }
 
-func (c *UsersInnerClient) DeleteUser(id string, metadata map[string]State, tags []string) error {
+func (c *UsersInnerClient) DeleteUser(id string, metadata map[string]*entities.State, tags *[]string) error {
 
 	resp, err := c.client.DELETE(c.client.ResolveURL("/v2/users/%v", id), metadata, client.QueryParameterRequestModifier(tags))
 	if err != nil {

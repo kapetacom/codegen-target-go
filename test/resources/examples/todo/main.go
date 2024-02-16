@@ -1,13 +1,13 @@
 package main
 
 import (
-	"log"
-
+	"context"
 	"github.com/kapeta/todo/generated"
 	"github.com/kapeta/todo/generated/auth"
 	"github.com/kapeta/todo/generated/data"
 	kapeta "github.com/kapetacom/sdk-go-config"
 	"github.com/labstack/echo/v4"
+	"log"
 )
 
 func main() {
@@ -39,6 +39,10 @@ func main() {
 		log.Fatal(err)
 	}
 	defer closeTodo()
+	err = dbTodo.Ping(context.Background(), nil) // Check if the database is alive
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Start the server and log if it fails
 	e.Logger.Debug("Starting server on port " + port)

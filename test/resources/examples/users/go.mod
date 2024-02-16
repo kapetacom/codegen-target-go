@@ -1,4 +1,4 @@
-module github.com/kapeta/todo
+module github.com/kapeta/users
 
 go 1.21.6
 

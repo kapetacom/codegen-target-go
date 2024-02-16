@@ -5,7 +5,7 @@ package clients
 //
 import (
     "encoding/json"
-{{#if (golang-import-entities .)}}
+{{#if (golang-import-entities-including-returntype .)}}
     "{{@root.options.basePackage}}/generated/entities"
 {{/if}}
  "github.com/kapetacom/sdk-go-rest-client"
