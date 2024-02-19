@@ -45,8 +45,8 @@ func CreateUsersRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 
 		e.GET("/users/:id", func(ctx echo.Context) error {
 			var err error
-			var metadata any
-			if err = request.GetHeaderParams(ctx, "metadata", &metadata); err != nil {
+			var metadata *any
+			if err = request.GetHeaderParams(ctx, "metadata", metadata); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param metadata %v", err))
 			}
 

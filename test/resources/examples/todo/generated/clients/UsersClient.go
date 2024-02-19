@@ -12,7 +12,7 @@ import (
 type Users interface {
 	GetUserById(id string, metadata ...any) (*entities.User, error)
 
-	DeleteUser(id string, metadata map[string]*entities.State, tags *[]string) error
+	DeleteUser(id string, tags *[]string) error
 }
 
 type UsersClient struct {
@@ -38,9 +38,9 @@ func (c *UsersClient) GetUserById(id string, metadata ...any) (*entities.User, e
 
 }
 
-func (c *UsersClient) DeleteUser(id string, metadata map[string]*entities.State, tags *[]string) error {
+func (c *UsersClient) DeleteUser(id string, tags *[]string) error {
 
-	resp, err := c.client.DELETE(c.client.ResolveURL("/users/%v", id), metadata, client.QueryParameterRequestModifier(tags))
+	resp, err := c.client.DELETE(c.client.ResolveURL("/users/%v", id), client.QueryParameterRequestModifier(tags))
 	if err != nil {
 		return err
 	}

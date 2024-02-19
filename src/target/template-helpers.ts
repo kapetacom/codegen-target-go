@@ -60,8 +60,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return fullPath;
     };
 
-//todo implement this
-    function getRealType(type: DSLType): string {
+    function fixType(type: DSLType): string {
         const localType = asComplexType(type);
         const entities = getParsedEntities();
         for (const entity of entities) {
@@ -72,7 +71,6 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         if (localType.list) {
             return `*${GoWriter.toTypeCode(type)}`;
         }
-        //TODO better way to handle this
         if (localType.name === "Set") {
             return `*${GoWriter.toTypeCode(type)}`;
         }
@@ -109,7 +107,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
 
     // returns the variable type for the return type including package name
     engine.registerHelper('variableType', (value: DSLType) => {
-        return Template.SafeString(getRealType(value));
+        return Template.SafeString(fixType(value));
     });
 
     engine.registerHelper('hasReturnValue', (value: DSLType) => {
@@ -133,7 +131,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         if (type.name === 'void') {
             return Template.SafeString('');
         }
-        return Template.SafeString(getRealType(value));
+        return Template.SafeString(fixType(value));
     });
 
     engine.registerHelper('returnTypeDefaultValue', (value: DSLType) => {
@@ -324,18 +322,16 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return Template.SafeString(
             queryParameters
                 .map((value) => {
-                    let typename = `${GoWriter.toTypeCode(value.type)}`;
-                    for (const entity of entities) {
-                        if (entity.name === value.type.name) {
-                            typename = `entities.${GoWriter.toTypeCode(value.type)}`;
-                        }
+                    let typename = fixType(value.type)
+                    if(!typename.startsWith("*")){
+                        typename = "*" + typename
                     }
                     let valueName = value.name
                     if (valueName === "type") {
                         valueName = "_type"
                     }
                     let out = `var ${valueName} ${typename}\n`
-                    out += `if err = request.GetHeaderParams(ctx, "${value.name}", &${valueName}); err != nil {\n`
+                    out += `if err = request.GetHeaderParams(ctx, "${value.name}", ${valueName}); err != nil {\n`
                     out += `return ctx.String(400, fmt.Sprintf("bad request, unable to get path param ${value.name} %v", err))\n}`;
                     return out
                 })
@@ -359,7 +355,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return Template.SafeString(
             queryParameters
                 .map((value) => {
-                    const typename = getRealType(value.type);
+                    const typename = fixType(value.type);
 
                     let valueName = value.name
                     if (valueName === "type") {
@@ -471,7 +467,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                         valueName = "_type"
                     }
 
-                    return Template.SafeString(`${valueName} ${getRealType(value.type)}`);
+                    return Template.SafeString(`${valueName} ${fixType(value.type)}`);
                 }
                 let valueName = value.name
                 if (valueName === "type") {
@@ -533,6 +529,8 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return Template.SafeString(result);
     });
 
+    // returns true if the controller has a method that returns non built in type
+    // this excludes a check for the return type
     engine.registerHelper('golang-import-entities', function (arg: DSLController) {
         const entities = getParsedEntities();
         if (entities.length === 0) {
@@ -553,6 +551,8 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return false;
     });
 
+    // returns true if the controller has a method that returns non built in type
+    // this cheeks both the return type and the parameters of the method
     engine.registerHelper('golang-import-entities-including-returntype', function (arg: DSLController) {
         const entities = getParsedEntities();
         if (entities.length === 0) {
