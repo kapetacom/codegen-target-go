@@ -10,10 +10,11 @@ import (
 	"github.com/kapeta/users/pkg/services"
 	providers "github.com/kapetacom/sdk-go-config/providers"
 	"github.com/kapetacom/sdk-go-rest-server/request"
+	"github.com/kapetacom/sdk-go-rest-server/server"
 	"github.com/labstack/echo/v4"
 )
 
-func CreateUsersRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
+func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) error {
 	routeHandler, err := services.NewUsersHandler(cfg)
 	if err != nil {
 		return err

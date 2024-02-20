@@ -1,12 +1,12 @@
 //#FILENAME:generated/router.go:write-always
 package generated
 import (
-    "github.com/labstack/echo/v4"
+    "github.com/kapetacom/sdk-go-rest-server/server"
     rest "{{@root.options.basePackage}}/generated/rest_api"
     kapeta "github.com/kapetacom/sdk-go-config/providers"
 )
 
-func RegisterRouters(e *echo.Echo, cfg kapeta.ConfigProvider) error {
+func RegisterRouters(e *server.KapetaServer, cfg kapeta.ConfigProvider) error {
     var err error
     {{#providers-of-type 'kapeta/resource-type-rest-api'}}
         {{#kaplang-rest-methods spec.source namespace=metadata.name}}
@@ -16,11 +16,5 @@ func RegisterRouters(e *echo.Echo, cfg kapeta.ConfigProvider) error {
             }
         {{/kaplang-rest-methods}}
     {{/providers-of-type}}
-
-    err = rest.CreateHealth(e);
-    if err != nil {
-        return err
-    }
-
     return nil
 }
