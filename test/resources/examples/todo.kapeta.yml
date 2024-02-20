@@ -95,7 +95,7 @@ spec:
 
             //Delete user by id
             @DELETE("/users/{id}")
-            deleteUser(@Path id:string, @Body metadata:Map<string,State>, tags:Set<string>):void
+            deleteUser(@Path id:string, tags:Set<string>):void
             
             controller Inner('/v2/users') {
               //Get users by id
@@ -104,7 +104,7 @@ spec:
   
               //Delete user by id
               @DELETE("/{id}")
-              deleteUser(@Path id:string, @Body metadata:Map<string,State>, tags:Set<string>):void
+              deleteUser(@Path id:string, tags:Set<string>):void
             }
   providers:
     - kind: kapeta/resource-type-rest-api:0.0.4

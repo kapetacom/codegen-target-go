@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/kapeta/todo/generated"
+	"github.com/kapeta/users/generated"
 	kapeta "github.com/kapetacom/sdk-go-config"
 	"github.com/labstack/echo/v4"
 )

@@ -33,7 +33,7 @@ func CreateTasksRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
 			}
 			task := &entities.Task{}
-			if err = request.GetBody(ctx, task); err != nil {
+			if err = request.GetBody(ctx, &task); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal task %v", err))
 			}
 			return serviceInterface.AddTask(ctx, userId, id, task)

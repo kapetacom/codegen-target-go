@@ -39,6 +39,10 @@ func main() {
 		log.Fatal(err)
 	}
 	defer closeTodo()
+	err = dbTodo.Ping(context.Background(), nil) // Check if the database is alive
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Start the server and log if it fails
 	e.Logger.Debug("Starting server on port " + port)

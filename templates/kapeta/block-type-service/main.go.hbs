@@ -2,18 +2,18 @@
 package main
 
 import (
+    kapeta "github.com/kapetacom/sdk-go-config"
 {{#provides 'kapeta/resource-type-rest-api'}}
     "github.com/labstack/echo/v4"
 "{{@root.options.basePackage}}/generated"
-    kapeta "github.com/kapetacom/sdk-go-config"
 {{/provides}}
 {{#consumes 'kapeta/resource-type-auth-jwt-consumer'}}
-        "{{@root.options.basePackage}}/generated/auth"
+    "{{@root.options.basePackage}}/generated/auth"
 {{/consumes}}
 {{#consumes 'kapeta/resource-type-mongodb'}}
     "{{@root.options.basePackage}}/generated/data"
-    "context"
     "log"
+    "context"
 {{/consumes}}
 )
 
@@ -49,6 +49,13 @@ func main() {
        log.Fatal(err)
     }
     defer close{{type metadata.name}}()
+    err = db{{type metadata.name}}.Ping(context.Background(), nil) // Check if the database is alive
+    if err != nil {
+        log.Fatal(err)
+    }
+    {{/consumers-of-type}}
+
+    {{#consumers-of-type 'kapeta/resource-type-rabbitmq-subscriber'}}
     {{/consumers-of-type}}
 
     // Start the server and log if it fails

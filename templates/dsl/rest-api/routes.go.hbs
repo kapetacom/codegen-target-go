@@ -28,10 +28,11 @@ func Create{{controller-name this}}Router(e *echo.Echo, cfg providers.ConfigProv
         {{#parametersNeedError this}}
         var err error
         {{/parametersNeedError}}
+        {{headerParametersVariables this}}
         {{queryParametersVariables this}}
         {{pathParametersVariables this}}
         {{bodyParametersVariables this}}
-        return serviceInterface.{{pascalCase (method name)}}(ctx{{requestparameterarguments this}})
+        return serviceInterface.{{pascalCase (method name)}}(ctx{{service_interface_arguments this}})
         })
     {{/methods}}
     }(routeHandler)

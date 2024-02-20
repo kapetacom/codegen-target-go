@@ -1,7 +1,7 @@
 package generated
 
 import (
-	"github.com/kapeta/todo/generated/rest_api"
+	rest "github.com/kapeta/todo/generated/rest_api"
 	kapeta "github.com/kapetacom/sdk-go-config/providers"
 	"github.com/labstack/echo/v4"
 )
