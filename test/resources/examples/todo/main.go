@@ -6,12 +6,12 @@ import (
 	"github.com/kapeta/todo/generated/auth"
 	"github.com/kapeta/todo/generated/data"
 	kapeta "github.com/kapetacom/sdk-go-config"
-	"github.com/labstack/echo/v4"
+	"github.com/kapetacom/sdk-go-rest-server/server"
 	"log"
 )
 
 func main() {
-	e := echo.New()
+	e := server.NewWithDefaults()
 
 	config, err := kapeta.Init(".")
 	if err != nil {

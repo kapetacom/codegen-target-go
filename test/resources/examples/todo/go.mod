@@ -8,7 +8,7 @@ require (
 	github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5
 	github.com/kapetacom/sdk-go-rabbitmq v0.1.0
 	github.com/kapetacom/sdk-go-rest-client v0.0.2
-	github.com/kapetacom/sdk-go-rest-server v0.1.1
+	github.com/kapetacom/sdk-go-rest-server v0.1.3
 	github.com/labstack/echo/v4 v4.11.4
 )
 

@@ -10,10 +10,11 @@ import (
 	"github.com/kapeta/todo/pkg/services"
 	providers "github.com/kapetacom/sdk-go-config/providers"
 	"github.com/kapetacom/sdk-go-rest-server/request"
+	"github.com/kapetacom/sdk-go-rest-server/server"
 	"github.com/labstack/echo/v4"
 )
 
-func CreateTasksRouter(e *echo.Echo, cfg providers.ConfigProvider) error {
+func CreateTasksRouter(e *server.KapetaServer, cfg providers.ConfigProvider) error {
 	routeHandler, err := services.NewTasksHandler(cfg)
 	if err != nil {
 		return err

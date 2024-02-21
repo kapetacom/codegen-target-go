@@ -5,6 +5,7 @@
 package rest
 import (
    "github.com/labstack/echo/v4"
+   "github.com/kapetacom/sdk-go-rest-server/server"
    providers "github.com/kapetacom/sdk-go-config/providers"
    generated  "{{@root.options.basePackage}}/generated/services"
    "fmt"
@@ -15,7 +16,7 @@ import (
 {{/if}}
 )
 
-func Create{{controller-name this}}Router(e *echo.Echo, cfg providers.ConfigProvider) error {
+func Create{{controller-name this}}Router(e *server.KapetaServer, cfg providers.ConfigProvider) error {
     routeHandler, err := services.New{{pascalCase (controller-name this)}}Handler(cfg)
     if err != nil {
         return err
