@@ -141,6 +141,9 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         const entities = getParsedEntities();
 
         if (entities.length === 0) {
+            if (GoWriter.toTypeCode(value) === 'void') {
+                return Template.SafeString('nil');
+            }
             return Template.SafeString(GoWriter.toTypeCode(value));
         }
         const type = asComplexType(value);
