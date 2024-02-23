@@ -18,6 +18,6 @@ spec:
     workingDir: /workspace
     healthcheck: 'curl -sSf "http://localhost:80/.kapeta/health" > /dev/null || exit 1'
     handlers:
-      onCreate: /workspace/scripts/start-dev.sh
+      onCreate: sh /workspace/scripts/start-dev.sh
     HostConfig:
       Binds:
