@@ -7,14 +7,11 @@ import (
 )
 
 func RegisterRouters(e *server.KapetaServer, cfg kapeta.ConfigProvider) error {
-	var err error
-	err = rest.CreateTasksInnerRouter(e, cfg)
-	if err != nil {
+	if err := rest.CreateTasksInnerRouter(e, cfg); err != nil {
 		return err
 	}
 
-	err = rest.CreateTasksRouter(e, cfg)
-	if err != nil {
+	if err := rest.CreateTasksRouter(e, cfg); err != nil {
 		return err
 	}
 	return nil

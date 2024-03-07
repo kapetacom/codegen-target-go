@@ -4,7 +4,7 @@ metadata:
   title: User service
 spec:
   target:
-    kind: kapeta/language-target-nodejs:local
+    kind: kapeta/language-target-go:local
   entities:
     source:
       type: kapeta-dsl

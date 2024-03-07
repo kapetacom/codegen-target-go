@@ -37,7 +37,7 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			if err = request.GetPathParams(ctx, "id", &id); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
 			}
-			metadata := map[string]string{}
+			var metadata map[string]string
 			if err = request.GetBody(ctx, &metadata); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal metadata %v", err))
 			}

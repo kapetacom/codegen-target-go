@@ -258,14 +258,18 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                 .map((value) => {
                     let typename = GoWriter.toTypeCode(value.type);
                     if (!isBuiltInType(value.type)) {
-                        typename = `&entities.${GoWriter.toTypeCode(value.type)}`;
+                        typename = `*entities.${GoWriter.toTypeCode(value.type)}`;
                     }
                     let valueName = value.name
                     if (valueName === "type") {
                         valueName = "_type"
                     }
-                    let out = `${valueName} := ${typename}{}\n`
-                    out += `if err = request.GetBody(ctx, &${valueName}); err != nil {\n`
+                    let out = `var ${valueName} ${typename}\n`
+                    if(isBuiltInType(value.type)){
+                        out += `if err = request.GetBody(ctx, &${valueName}); err != nil {\n`
+                    } else {
+                        out += `if err = request.GetBody(ctx, ${valueName}); err != nil {\n`
+                    }
                     out += `return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal ${value.name} %v", err))\n}`;
                     return out;
                 })

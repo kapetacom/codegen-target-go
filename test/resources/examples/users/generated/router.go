@@ -7,9 +7,7 @@ import (
 )
 
 func RegisterRouters(e *server.KapetaServer, cfg kapeta.ConfigProvider) error {
-	var err error
-	err = rest.CreateUsersRouter(e, cfg)
-	if err != nil {
+	if err := rest.CreateUsersRouter(e, cfg); err != nil {
 		return err
 	}
 	return nil

@@ -7,11 +7,9 @@ import (
 )
 
 func RegisterRouters(e *server.KapetaServer, cfg kapeta.ConfigProvider) error {
-    var err error
     {{#providers-of-type 'kapeta/resource-type-rest-api'}}
         {{#kaplang-rest-methods spec.source namespace=metadata.name}}
-            err = rest.Create{{controller-name this}}Router(e, cfg);
-            if err != nil {
+            if err := rest.Create{{controller-name this}}Router(e, cfg); err != nil {
                 return err
             }
         {{/kaplang-rest-methods}}
