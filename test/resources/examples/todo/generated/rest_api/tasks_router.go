@@ -33,8 +33,8 @@ func CreateTasksRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			if err = request.GetPathParams(ctx, "id", &id); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
 			}
-			task := &entities.Task{}
-			if err = request.GetBody(ctx, &task); err != nil {
+			var task *entities.Task
+			if err = request.GetBody(ctx, task); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal task %v", err))
 			}
 			return serviceInterface.AddTask(ctx, userId, id, task)

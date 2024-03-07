@@ -37,6 +37,7 @@ export default class GoTarget extends Target {
                 code = execSync(`gofmt `, {input: code, encoding: 'utf-8'});
             } catch (error: any) {
                 // Handle errors
+                console.log(`There were an error in the following code ${code} and the error is ${error}`);
                 throw new Error(`Error executing gofmt/goimports: ${error.stderr || error.message}`);
             }
         }
