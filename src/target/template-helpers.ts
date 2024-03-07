@@ -305,7 +305,11 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                         valueName = "_type"
                     }
                     let out = `var ${valueName} ${typename}\n`
-                    out += `if err = request.GetPathParams(ctx, "${value.name}", &${valueName}); err != nil {\n`
+                    if(isBuiltInType(value.type)){
+                        out += `if err = request.GetPathParams(ctx, "${value.name}", &${valueName}); err != nil {\n`
+                    } else {
+                        out += `if err = request.GetPathParams(ctx, "${value.name}", ${valueName}); err != nil {\n`
+                    }
                     out += `return ctx.String(400, fmt.Sprintf("bad request, unable to get path param ${value.name} %v", err))\n}`;
                     return out
                 })
@@ -338,7 +342,11 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                         valueName = "_type"
                     }
                     let out = `var ${valueName} ${typename}\n`
-                    out += `if err = request.GetHeaderParams(ctx, "${value.name}", ${valueName}); err != nil {\n`
+                    if(isBuiltInType(value.type)){
+                        out += `if err = request.GetHeaderParams(ctx, "${value.name}", &${valueName}); err != nil {\n`
+                    } else {
+                        out += `if err = request.GetHeaderParams(ctx, "${value.name}", ${valueName}); err != nil {\n`
+                    }
                     out += `return ctx.String(400, fmt.Sprintf("bad request, unable to get path param ${value.name} %v", err))\n}`;
                     return out
                 })
@@ -370,7 +378,11 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                     }
 
                     let out = `var ${valueName} ${typename}\n`
-                    out += `if err = request.GetQueryParam(ctx, "${value.name}", ${valueName}); err != nil {\n`
+                    if(isBuiltInType(value.type)){
+                        out += `if err = request.GetQueryParam(ctx, "${value.name}", &${valueName}); err != nil {\n`
+                    } else {
+                        out += `if err = request.GetQueryParam(ctx, "${value.name}", ${valueName}); err != nil {\n`
+                    }
                     out += `return ctx.String(400, fmt.Sprintf("bad request, unable to get query param ${value.name} %v", err))\n}`;
                     return out
                 })
