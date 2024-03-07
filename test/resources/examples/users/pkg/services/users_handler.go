@@ -17,6 +17,10 @@ func (handler *UsersHandler) CreateUser(ctx echo.Context, id string, user *entit
 	return ctx.JSON(200, entities.User{})
 }
 
+func (handler *UsersHandler) GetUsers(ctx echo.Context) error {
+	return ctx.JSON(200, []entities.User{})
+}
+
 func (handler *UsersHandler) GetUser(ctx echo.Context, id string, metadata any) error {
 	return ctx.JSON(200, entities.User{})
 }

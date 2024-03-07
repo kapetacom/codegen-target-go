@@ -92,6 +92,10 @@ spec:
             //Get users by id
             @GET("/users/{id}")
             getUserById(@Path id:string, @Header metadata?:any):User
+            
+            //Get all users
+            @GET("/users")
+            getUsers():User[]
 
             //Delete user by id
             @DELETE("/users/{id}")

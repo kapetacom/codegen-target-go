@@ -84,6 +84,10 @@ spec:
             @POST("/users/{id}")
             createUser(@Path id:string, @Query user:User, @Body metadata:Map<string,string>, @Query tags?:Set<string>):User
 
+            //Get all users
+            @GET("/users")
+            getUsers():User[]
+  
             //Get user by id
             @GET("/users/{id}")
             getUser(@Path id:string, @Header metadata:any):User

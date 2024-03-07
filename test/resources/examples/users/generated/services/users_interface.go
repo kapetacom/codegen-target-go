@@ -12,6 +12,8 @@ import (
 type UsersInterface interface {
 	CreateUser(ctx echo.Context, id string, user *entities.User, metadata map[string]string, tags *[]string) error
 
+	GetUsers(ctx echo.Context) error
+
 	GetUser(ctx echo.Context, id string, metadata any) error
 
 	DeleteUser(ctx echo.Context, id string) error
