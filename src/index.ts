@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import {format, Target} from '@kapeta/codegen-target';
-import type {GeneratedAsset, SourceFile, GeneratedFile} from '@kapeta/codegen';
+import {format, Target, SourceFile, GeneratedFile} from '@kapeta/codegen-target';
+import type {GeneratedAsset} from '@kapeta/codegen';
 import Path from 'path';
 import {execSync} from 'child_process';
 import {mergeDevcontainers} from './target/merge-devcontainers';
@@ -15,12 +15,12 @@ export default class GoTarget extends Target {
         super(options, Path.resolve(__dirname, '../'));
     }
 
-    mergeFile(sourceFile: SourceFile, newFile: GeneratedFile, lastFile: GeneratedFile): GeneratedFile {
+    mergeFile(sourceFile: SourceFile, targetFile: GeneratedFile, lastFile: GeneratedFile | null) {
         if (sourceFile.filename === '.devcontainer/devcontainer.json') {
-            return mergeDevcontainers(sourceFile, newFile, lastFile);
+            return mergeDevcontainers(sourceFile, targetFile, lastFile);
         }
 
-        return super.mergeFile(sourceFile, newFile, lastFile);
+        return super.mergeFile(sourceFile, targetFile, lastFile);
     }
 
     protected _createTemplateEngine(data: any, context: any) {

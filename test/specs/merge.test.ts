@@ -48,7 +48,7 @@ describe('merging', () => {
                   }
         );
 
-        return JSON.parse(merged.content);
+        return JSON.parse(merged.content.toString());
     }
 
     describe('Can merge files: devcontainer.json', () => {

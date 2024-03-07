@@ -12,6 +12,8 @@ import (
 type Users interface {
 	GetUserById(id string, metadata ...any) (*entities.User, error)
 
+	GetUsers() ([]*entities.User, error)
+
 	DeleteUser(id string, tags *[]string) error
 }
 
@@ -28,6 +30,20 @@ func (c *UsersClient) GetUserById(id string, metadata ...any) (*entities.User, e
 	var result *entities.User
 
 	resp, err := c.client.GET(c.client.ResolveURL("/users/%v", id))
+	if err != nil {
+		return result, err
+	}
+	defer resp.Body.Close()
+
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	return result, err
+
+}
+
+func (c *UsersClient) GetUsers() ([]*entities.User, error) {
+	var result []*entities.User
+
+	resp, err := c.client.GET(c.client.ResolveURL("/users"))
 	if err != nil {
 		return result, err
 	}

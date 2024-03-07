@@ -44,10 +44,15 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			return serviceInterface.CreateUser(ctx, id, user, metadata, tags)
 		})
 
+		e.GET("/users", func(ctx echo.Context) error {
+
+			return serviceInterface.GetUsers(ctx)
+		})
+
 		e.GET("/users/:id", func(ctx echo.Context) error {
 			var err error
-			var metadata *any
-			if err = request.GetHeaderParams(ctx, "metadata", metadata); err != nil {
+			var metadata any
+			if err = request.GetHeaderParams(ctx, "metadata", &metadata); err != nil {
 				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param metadata %v", err))
 			}
 
