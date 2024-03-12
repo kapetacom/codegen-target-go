@@ -20,6 +20,7 @@ import {
 } from '@kapeta/kaplang-core';
 import {DSLController} from "@kapeta/kaplang-core/src/interfaces";
 import isBuiltInType = DSLTypeHelper.isBuiltInType;
+import { get } from 'lodash';
 
 
 const DB_TYPES = ['kapeta/resource-type-mongodb', 'kapeta/resource-type-postgresql'];
@@ -231,146 +232,27 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return $toTypeList(method, 'body');
     });
 
+    engine.registerHelper('generateRequestParameters', (method: RESTMethodReader) => {
+        let out = 'type RequestParameters  struct {\n'
+        if (method.parameters) {
+            method.parameters.forEach((value) => {
+                let typename = toGoTypeCode(value.type, '*');
+                const valueName = value.name
 
-    engine.registerHelper('bodyParametersVariables', (method: RESTMethodReader) => {
-        if (!method.parameters) {
-            return Template.SafeString('');
+                let required = value.optional ? "" : ";required"
+                if(value.transport === "BODY") {
+                    // we can't not have a required body, since the definition of required in httpin is that the 'field' is there
+                    // and a body on a POST is always there.
+                    required = ""
+                }
+                const transport = value.transport === "BODY" ? "body=json" : `${value.transport.toLowerCase()}=${value.name}`
+                out += `${ucFirst(valueName)} ${typename} \`in:"${transport}${required}"\`\n`
+            });
         }
-
-        const queryParameters = method.parameters.filter(
-            (value) => value.transport && value.transport.toLowerCase() === 'body'
-        );
-
-        if (queryParameters.length === 0) {
-            return Template.SafeString('');
-        }
-
-        return Template.SafeString(
-            queryParameters
-                .map((value) => {
-                    let typename = toGoTypeCode(value.type, '*');
-
-                    let valueName = value.name
-                    if (valueName === "type") {
-                        valueName = "_type"
-                    }
-                    let out = `var ${valueName} ${typename}\n`
-                    if (!typename.startsWith('*')) {
-                        out += `if err = request.GetBody(ctx, &${valueName}); err != nil {\n`
-                    } else {
-                        out += `if err = request.GetBody(ctx, ${valueName}); err != nil {\n`
-                    }
-                    out += `return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal ${value.name} %v", err))\n}`;
-                    return out;
-                })
-                .join('\n')
-        );
+        out += '}'
+        return Template.SafeString(out);
     });
 
-
-    engine.registerHelper('pathParametersVariables', (method: RESTMethodReader) => {
-        if (!method.parameters) {
-            return Template.SafeString('');
-        }
-
-        const queryParameters = method.parameters.filter(
-            (value) => value.transport && value.transport.toLowerCase() === 'path'
-        );
-
-        if (queryParameters.length === 0) {
-            return Template.SafeString('');
-        }
-        const entities = getParsedEntities();
-        return Template.SafeString(
-            queryParameters
-                .map((value) => {
-                    let typename = toGoTypeCode(value.type, '*');
-                    let valueName = value.name
-                    if (valueName === "type") {
-                        valueName = "_type"
-                    }
-                    let out = `var ${valueName} ${typename}\n`
-                    if (!typename.startsWith('*')) {
-                        out += `if err = request.GetPathParams(ctx, "${value.name}", &${valueName}); err != nil {\n`
-                    } else {
-                        out += `if err = request.GetPathParams(ctx, "${value.name}", ${valueName}); err != nil {\n`
-                    }
-                    out += `return ctx.String(400, fmt.Sprintf("bad request, unable to get path param ${value.name} %v", err))\n}`;
-                    return out
-                })
-                .join('\n')
-        );
-    });
-
-    engine.registerHelper('headerParametersVariables', (method: RESTMethodReader) => {
-        if (!method.parameters) {
-            return Template.SafeString('');
-        }
-
-        const queryParameters = method.parameters.filter(
-            (value) => value.transport && value.transport.toLowerCase() === 'header'
-        );
-
-        if (queryParameters.length === 0) {
-            return Template.SafeString('');
-        }
-        const entities = getParsedEntities();
-        return Template.SafeString(
-            queryParameters
-                .map((value) => {
-                    let typename = toGoTypeCode(value.type, '*')
-                    let valueName = value.name
-                    if (valueName === "type") {
-                        valueName = "_type"
-                    }
-                    let out = `var ${valueName} ${typename}\n`
-                    if (!typename.startsWith('*')) {
-                        out += `if err = request.GetHeaderParams(ctx, "${value.name}", &${valueName}); err != nil {\n`
-                    } else {
-                        out += `if err = request.GetHeaderParams(ctx, "${value.name}", ${valueName}); err != nil {\n`
-                    }
-                    out += `return ctx.String(400, fmt.Sprintf("bad request, unable to get path param ${value.name} %v", err))\n}`;
-                    return out
-                })
-                .join('\n')
-        );
-    });
-
-    engine.registerHelper('queryParametersVariables', (method: RESTMethodReader) => {
-        if (!method.parameters) {
-            return Template.SafeString('');
-        }
-
-        const queryParameters = method.parameters.filter(
-            (value) => value.transport && value.transport.toLowerCase() === 'query'
-        );
-
-        if (queryParameters.length === 0) {
-            return Template.SafeString('');
-        }
-        const entities = getParsedEntities();
-        return Template.SafeString(
-            queryParameters
-                .map((value) => {
-                    const typename = toGoTypeCode(value.type, '*');
-
-                    let valueName = value.name
-                    if (valueName === "type") {
-                        valueName = "_type"
-                    }
-
-                    let out = `var ${valueName} ${typename}\n`
-                    if (!typename.startsWith('*')) {
-                        out += `if err = request.GetQueryParam(ctx, "${value.name}", &${valueName}); err != nil {\n`
-                    } else {
-                        out += `if err = request.GetQueryParam(ctx, "${value.name}", ${valueName}); err != nil {\n`
-                    }
-                    out += `return ctx.String(400, fmt.Sprintf("bad request, unable to get query param ${value.name} %v", err))\n}`;
-                    return out
-                })
-                .join('\n')
-        );
-    });
 
     engine.registerHelper('queryParametersFunctions', (method: RESTMethodReader) => {
         if (!method.parameters) {
@@ -386,10 +268,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         }
         let result = queryParameters
             .map((value) => {
-                let valueName = value.name
-                if (valueName === "type") {
-                    valueName = "_type"
-                }
+                const valueName = value.name
                 let out = `client.QueryParameterRequestModifier(${valueName})`;
                 return out
             })
@@ -429,16 +308,8 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         }
         let args = parameters
             .map((value) => {
-
-                let valueName = value.name
-                if (valueName === "type") {
-                    valueName = "_type"
-                }
-                if (!isBuiltInType(value.type)) {
-                    return Template.SafeString(`${valueName}`)
-                }
-                return valueName;
-
+                const valueName = value.name
+                return `params.${ucFirst(valueName)}`
             })
             .join(' ,')
         // prefix args with , if not there
@@ -462,19 +333,10 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         }
         let args = parameters
             .map((value) => {
+                const valueName = value.name
                 if (includeTypes) {
-                    let valueName = value.name
-                    if (valueName === "type") {
-                        valueName = "_type"
-                    }
-
                     return Template.SafeString(`${valueName} ${toGoTypeCode(value.type, '*')}`);
                 }
-                let valueName = value.name
-                if (valueName === "type") {
-                    valueName = "_type"
-                }
-
                 return valueName;
 
             })
@@ -611,7 +473,19 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         const writer = new GoWriter();
 
         try {
-            return Template.SafeString(writer.write([entity]));
+           // entity.name = getName(entity.name)
+            let out = writer.write([entity]);
+            if (entity.type === DSLEntityType.ENUM) {
+                const name = entity.name;
+                out += `\nfunc (s *${name}) ToString() (string, error) {
+                    return string(*s), nil
+                }
+                func (s *${name}) FromString(x string) error {
+                    *s = ${name}(x)
+                    return nil
+                }\n`
+            }
+            return Template.SafeString(out);
         } catch (e) {
             console.warn('Failed to write entity', entity);
             throw e;

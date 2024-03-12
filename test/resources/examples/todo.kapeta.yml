@@ -66,6 +66,11 @@ spec:
             total: number
         }
 
+        enum Status {
+            error,
+            success
+        }
+
   consumers:
     - kind: kapeta/resource-type-rabbitmq-subscriber:local
       metadata:
@@ -118,6 +123,9 @@ spec:
         source:
           type: kapeta-dsl
           value: |-
+            
+            @GET("/data")
+            getData(@Query ids: string[]): void
             //Add task for user
             @POST("/tasks/{userId}/{id}")
             addTask(@Path userId:string, @Path id:string, @Body task:Task):void

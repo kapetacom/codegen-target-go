@@ -4,7 +4,6 @@
 package rest
 
 import (
-	"fmt"
 	"github.com/kapeta/users/generated/entities"
 	generated "github.com/kapeta/users/generated/services"
 	"github.com/kapeta/users/pkg/services"
@@ -12,6 +11,7 @@ import (
 	"github.com/kapetacom/sdk-go-rest-server/request"
 	"github.com/kapetacom/sdk-go-rest-server/server"
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) error {
@@ -23,58 +23,57 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 	// Done like this to ensure interface compliance
 	func(serviceInterface generated.UsersInterface) {
 		e.POST("/users/:id", func(ctx echo.Context) error {
-			var err error
+			type RequestParameters struct {
+				Id       string            `in:"path=id;required"`
+				User     *entities.User    `in:"query=user;required"`
+				Metadata map[string]string `in:"body=json"`
+				Tags     *[]string         `in:"query=tags"`
+			}
+			params := &RequestParameters{}
 
-			var user *entities.User
-			if err = request.GetQueryParam(ctx, "user", user); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to get query param user %v", err))
+			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
-			var tags *[]string
-			if err = request.GetQueryParam(ctx, "tags", tags); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to get query param tags %v", err))
-			}
-			var id string
-			if err = request.GetPathParams(ctx, "id", &id); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
-			}
-			var metadata map[string]string
-			if err = request.GetBody(ctx, &metadata); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal metadata %v", err))
-			}
-			return serviceInterface.CreateUser(ctx, id, user, metadata, tags)
+			return serviceInterface.CreateUser(ctx, params.Id, params.User, params.Metadata, params.Tags)
 		})
 
 		e.GET("/users", func(ctx echo.Context) error {
+			type RequestParameters struct {
+			}
+			params := &RequestParameters{}
 
+			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+			}
 			return serviceInterface.GetUsers(ctx)
 		})
 
 		e.GET("/users/:id", func(ctx echo.Context) error {
-			var err error
-			var metadata any
-			if err = request.GetHeaderParams(ctx, "metadata", &metadata); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param metadata %v", err))
+			type RequestParameters struct {
+				Id       string `in:"path=id;required"`
+				Metadata any    `in:"header=metadata;required"`
 			}
+			params := &RequestParameters{}
 
-			var id string
-			if err = request.GetPathParams(ctx, "id", &id); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
-
-			return serviceInterface.GetUser(ctx, id, metadata)
+			return serviceInterface.GetUser(ctx, params.Id, params.Metadata)
 		})
 
 		e.DELETE("/users/:id", func(ctx echo.Context) error {
-			var err error
-
-			var id string
-			if err = request.GetPathParams(ctx, "id", &id); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			type RequestParameters struct {
+				Id string `in:"path=id;required"`
 			}
+			params := &RequestParameters{}
 
-			return serviceInterface.DeleteUser(ctx, id)
+			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+			}
+			return serviceInterface.DeleteUser(ctx, params.Id)
 		})
 	}(routeHandler)
 
 	return nil
+
 }

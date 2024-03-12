@@ -10,12 +10,14 @@ require (
 	github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5
 	github.com/kapetacom/sdk-go-rabbitmq v0.1.0
 	github.com/kapetacom/sdk-go-rest-client v0.0.2
-	github.com/kapetacom/sdk-go-rest-server v0.1.3
+	github.com/kapetacom/sdk-go-rest-server v0.2.0
 	github.com/labstack/echo/v4 v4.11.4
 )
 
 require (
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
+	github.com/ggicci/httpin v0.16.0 // indirect
+	github.com/ggicci/owl v0.7.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.0 // indirect

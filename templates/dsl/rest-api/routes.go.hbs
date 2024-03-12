@@ -4,13 +4,13 @@
 //
 package rest
 import (
-   "github.com/labstack/echo/v4"
-   "github.com/kapetacom/sdk-go-rest-server/server"
-   providers "github.com/kapetacom/sdk-go-config/providers"
-   generated  "{{@root.options.basePackage}}/generated/services"
-   "fmt"
+    "net/http"
+    "github.com/labstack/echo/v4"
+    "github.com/kapetacom/sdk-go-rest-server/server"
+    providers "github.com/kapetacom/sdk-go-config/providers"
+    generated  "{{@root.options.basePackage}}/generated/services"
    	"github.com/kapetacom/sdk-go-rest-server/request"
-   "{{@root.options.basePackage}}/pkg/services"
+    "{{@root.options.basePackage}}/pkg/services"
 {{#if (golang-import-entities .)}}
     "{{@root.options.basePackage}}/generated/entities"
 {{/if}}
@@ -26,17 +26,17 @@ func Create{{controller-name this}}Router(e *server.KapetaServer, cfg providers.
     func(serviceInterface generated.{{pascalCase (controller-name this)}}Interface) {
     {{#methods methods}}
         e.{{./method}}("{{echoURLPath path base=../path}}",  func(ctx echo.Context) error {
-        {{#parametersNeedError this}}
-        var err error
-        {{/parametersNeedError}}
-        {{headerParametersVariables this}}
-        {{queryParametersVariables this}}
-        {{pathParametersVariables this}}
-        {{bodyParametersVariables this}}
+        {{generateRequestParameters this}}
+        params := &RequestParameters{}
+       
+        if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+            return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+        }
         return serviceInterface.{{pascalCase (method name)}}(ctx{{service_interface_arguments this}})
         })
     {{/methods}}
     }(routeHandler)
 
     return nil
+
 }
