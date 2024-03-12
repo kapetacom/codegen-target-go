@@ -4,6 +4,10 @@ github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
 github.com/decred/dcrd/crypto/blake256 v1.0.1/go.mod h1:2OfgNZ5wDpcsFmHmCK5gZTPcCXqlm2ArzUIkw9czNJo=
 github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 h1:8UrgZ3GkP4i/CLijOJx79Yu+etlyjdBU4sfcs2WYQMs=
 github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0/go.mod h1:v57UDF4pDQJcEfFUCRop3lJL149eHGSe9Jvczhzjo/0=
+github.com/ggicci/httpin v0.16.0 h1:ZR6RXH1xNWg39xqM33V7iz7PP/GuR7vc3aHa2g5mWo4=
+github.com/ggicci/httpin v0.16.0/go.mod h1:whE/5nx1jCp//UQ6rgNpq2WNxOr9FV0OpxMnQQC0Xvs=
+github.com/ggicci/owl v0.7.0 h1:+AMlCR0AY7j72q7hjtN4pm8VJiikwpROtMgvPnXtuik=
+github.com/ggicci/owl v0.7.0/go.mod h1:TRPWshRwYej6uES//YW5aNgLB370URwyta1Ytfs7KXs=
 github.com/goccy/go-json v0.10.2 h1:CrxCmQqYDkv1z7lO7Wbh2HN93uovUHgrECaO5ZrCXAU=
 github.com/goccy/go-json v0.10.2/go.mod h1:6MelG93GURQebXPDq3khkgXZkazVtN9CRI+MGFi0w8I=
 github.com/golang-jwt/jwt v3.2.2+incompatible h1:IfV12K8xAKAnZqdXVzCZ+TOjboZ2keLg81eXfW3O+oY=
@@ -21,6 +25,8 @@ github.com/hashicorp/go-hclog v0.9.2 h1:CG6TE5H9/JXsFWJCfoIVpKFIkFe6ysEuHirp4DxC
 github.com/hashicorp/go-hclog v0.9.2/go.mod h1:5CU+agLiy3J7N7QjHK5d05KxGsuXiQLrjA0H7acj2lQ=
 github.com/hashicorp/go-retryablehttp v0.7.5 h1:bJj+Pj19UZMIweq/iie+1u5YCdGrnxCT9yvm0e+Nd5M=
 github.com/hashicorp/go-retryablehttp v0.7.5/go.mod h1:Jy/gPYAdjqffZ/yFGCFV2doI5wjtH1ewM9u8iYVjtX8=
+github.com/justinas/alice v1.2.0 h1:+MHSA/vccVCF4Uq37S42jwlkvI2Xzl7zTPCN5BnZNVo=
+github.com/justinas/alice v1.2.0/go.mod h1:fN5HRH/reO/zrUflLfTN43t3vXvKzvZIENsNEe7i7qA=
 github.com/kapetacom/go-rabbitmq v1.0.0 h1:3JvHheAJ8rLh+MWJ8bKpNODaEM3P30yAtYioDLdNIQ4=
 github.com/kapetacom/go-rabbitmq v1.0.0/go.mod h1:1sUJ53rrW2AIA7LEp8ymmmebHqqq8ksH/gXIfUP0I0s=
 github.com/kapetacom/schemas/packages/go v0.0.0-20240209083259-f5ce079d8abc h1:ghhXNScFqGXUP7uywvPF/dyYBcS7czmirlLcgtc0cEg=
@@ -35,8 +41,8 @@ github.com/kapetacom/sdk-go-rabbitmq v0.1.0 h1:SpkT+rbb/BrXGu0RKvn5dlh9eGkmecMtO
 github.com/kapetacom/sdk-go-rabbitmq v0.1.0/go.mod h1:e5ywN7ymx/Zn1tYAtkdvl42Tth8oWIVw7z6a17DZAb8=
 github.com/kapetacom/sdk-go-rest-client v0.0.2 h1:YPRYHn1e6iqIQCENvr0Hw3fWbZkS9qbqGoCohBGZ/rM=
 github.com/kapetacom/sdk-go-rest-client v0.0.2/go.mod h1:Wo2diUeIjcaIkikD7kv3CCVLxSf59cowQxvoOmnMK9g=
-github.com/kapetacom/sdk-go-rest-server v0.1.3 h1:hGvz9zI6HF9wx4PbJRzA6t1+Rf4R16rVlAvCpQ0B03Y=
-github.com/kapetacom/sdk-go-rest-server v0.1.3/go.mod h1:KTgGHcIGq144Jry9CuCcnKZQEXpCO28ognCd9GRIy+w=
+github.com/kapetacom/sdk-go-rest-server v0.2.0 h1:FqUqJ6K/LJVqEixVcU9rPS9Pa2jC8jNM2FWHe/HkcMY=
+github.com/kapetacom/sdk-go-rest-server v0.2.0/go.mod h1:ybGdfI+QbV2erx7+CU/ZTDAoTjCnOolgJom7dY3fdhs=
 github.com/klauspost/compress v1.13.6/go.mod h1:/3/Vjq9QcHkK5uEr5lBEmyoZ1iFhe47etQ6QUkpK6sk=
 github.com/klauspost/compress v1.17.6 h1:60eq2E/jlfwQXtvZEeBUYADs+BwKBWURIY+Gj2eRGjI=
 github.com/klauspost/compress v1.17.6/go.mod h1:/dCuZOvVtNoHsyb+cuJD3itjs3NbnF6KH9zAO4BDxPM=

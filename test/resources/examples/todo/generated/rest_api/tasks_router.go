@@ -4,7 +4,6 @@
 package rest
 
 import (
-	"fmt"
 	"github.com/kapeta/todo/generated/entities"
 	generated "github.com/kapeta/todo/generated/services"
 	"github.com/kapeta/todo/pkg/services"
@@ -12,6 +11,7 @@ import (
 	"github.com/kapetacom/sdk-go-rest-server/request"
 	"github.com/kapetacom/sdk-go-rest-server/server"
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 func CreateTasksRouter(e *server.KapetaServer, cfg providers.ConfigProvider) error {
@@ -22,35 +22,45 @@ func CreateTasksRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 
 	// Done like this to ensure interface compliance
 	func(serviceInterface generated.TasksInterface) {
-		e.POST("/tasks/:userid/:id", func(ctx echo.Context) error {
-			var err error
+		e.GET("/data", func(ctx echo.Context) error {
+			type RequestParameters struct {
+				Ids *[]string `in:"query=ids;required"`
+			}
+			params := &RequestParameters{}
 
-			var userId string
-			if err = request.GetPathParams(ctx, "userId", &userId); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param userId %v", err))
+			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
-			var id string
-			if err = request.GetPathParams(ctx, "id", &id); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			return serviceInterface.GetData(ctx, params.Ids)
+		})
+
+		e.POST("/tasks/:userid/:id", func(ctx echo.Context) error {
+			type RequestParameters struct {
+				UserId string         `in:"path=userId;required"`
+				Id     string         `in:"path=id;required"`
+				Task   *entities.Task `in:"body=json"`
 			}
-			var task *entities.Task
-			if err = request.GetBody(ctx, task); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to unmarshal task %v", err))
+			params := &RequestParameters{}
+
+			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
-			return serviceInterface.AddTask(ctx, userId, id, task)
+			return serviceInterface.AddTask(ctx, params.UserId, params.Id, params.Task)
 		})
 
 		e.POST("/tasks/:id/done", func(ctx echo.Context) error {
-			var err error
-
-			var id string
-			if err = request.GetPathParams(ctx, "id", &id); err != nil {
-				return ctx.String(400, fmt.Sprintf("bad request, unable to get path param id %v", err))
+			type RequestParameters struct {
+				Id string `in:"path=id;required"`
 			}
+			params := &RequestParameters{}
 
-			return serviceInterface.MarkAsDone(ctx, id)
+			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+			}
+			return serviceInterface.MarkAsDone(ctx, params.Id)
 		})
 	}(routeHandler)
 
 	return nil
+
 }

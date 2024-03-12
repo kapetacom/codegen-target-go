@@ -3,13 +3,15 @@ module github.com/kapeta/users
 go 1.21.6
 
 require (
-	github.com/kapetacom/sdk-go-config v0.1.1
+	github.com/kapetacom/sdk-go-config v0.1.3
 	github.com/kapetacom/sdk-go-rabbitmq v0.1.0
-	github.com/kapetacom/sdk-go-rest-server v0.1.3
+	github.com/kapetacom/sdk-go-rest-server v0.2.0
 	github.com/labstack/echo/v4 v4.11.4
 )
 
 require (
+	github.com/ggicci/httpin v0.16.0 // indirect
+	github.com/ggicci/owl v0.7.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.5 // indirect
