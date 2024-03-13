@@ -359,10 +359,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         const entities = getParsedEntities();
         const resolver = new DSLReferenceResolver();
         const referencesEntities = resolver.resolveReferencesFrom([arg], entities);
-
-        if (referencesEntities.length === 0) {
-            return '';
-        }
+        
         const result = referencesEntities
             .map((entity) => {
                 const native = DataTypeReader.getNative(entity);
