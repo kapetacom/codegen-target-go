@@ -7,10 +7,10 @@ require (
     github.com/kapetacom/sdk-go-config v0.1.3
     github.com/labstack/echo/v4 v4.11.3
     {{#usesAnyOf (toArray 'kapeta/resource-type-auth-jwt-provider' 'kapeta/resource-type-auth-jwt-consumer') }}
-    github.com/kapetacom/sdk-go-auth-jwt v0.0.2
+    github.com/kapetacom/sdk-go-auth-jwt v0.0.3
     {{/usesAnyOf}}
     {{#provides 'kapeta/resource-type-rest-api'}}
-    github.com/kapetacom/sdk-go-rest-server v0.2.0
+    github.com/kapetacom/sdk-go-rest-server v0.2.2
     {{/provides}}
     {{#consumes 'kapeta/resource-type-rest-client'}}
     github.com/kapetacom/sdk-go-rest-client v0.0.2

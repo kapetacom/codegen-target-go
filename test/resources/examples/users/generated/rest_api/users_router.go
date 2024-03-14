@@ -31,7 +31,7 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			}
 			params := &RequestParameters{}
 
-			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.CreateUser(ctx, params.Id, params.User, params.Metadata, params.Tags)
@@ -42,7 +42,7 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			}
 			params := &RequestParameters{}
 
-			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.GetUsers(ctx)
@@ -55,7 +55,7 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			}
 			params := &RequestParameters{}
 
-			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.GetUser(ctx, params.Id, params.Metadata)
@@ -67,7 +67,7 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			}
 			params := &RequestParameters{}
 
-			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.DeleteUser(ctx, params.Id)
