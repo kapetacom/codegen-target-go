@@ -31,8 +31,8 @@ github.com/kapetacom/go-rabbitmq v1.0.0 h1:3JvHheAJ8rLh+MWJ8bKpNODaEM3P30yAtYioD
 github.com/kapetacom/go-rabbitmq v1.0.0/go.mod h1:1sUJ53rrW2AIA7LEp8ymmmebHqqq8ksH/gXIfUP0I0s=
 github.com/kapetacom/schemas/packages/go v0.0.0-20240209083259-f5ce079d8abc h1:ghhXNScFqGXUP7uywvPF/dyYBcS7czmirlLcgtc0cEg=
 github.com/kapetacom/schemas/packages/go v0.0.0-20240209083259-f5ce079d8abc/go.mod h1:dWvKSUqSQRHiqFFnGPnJofgci1dvRT1PPNJLtffVukk=
-github.com/kapetacom/sdk-go-auth-jwt v0.0.2 h1:4JpqYhdYEJzCLkYDcRB4UI8fa4DBHLrxLLd+dBaUY2Q=
-github.com/kapetacom/sdk-go-auth-jwt v0.0.2/go.mod h1:QodwVkid3AOCNANATsqT4B4px5A39d9ezatiAwuSKPQ=
+github.com/kapetacom/sdk-go-auth-jwt v0.0.3 h1:QQj9LbiCrbW6fcBGaQbV0Gg7EvE0Ao54ULwyL+ZgYi4=
+github.com/kapetacom/sdk-go-auth-jwt v0.0.3/go.mod h1:QodwVkid3AOCNANATsqT4B4px5A39d9ezatiAwuSKPQ=
 github.com/kapetacom/sdk-go-config v0.1.3 h1:Vv6j72Dag7XIF+FfHQVifNnxB7Lv/l+APfYoZO4rj0M=
 github.com/kapetacom/sdk-go-config v0.1.3/go.mod h1:8JfwwJJc9qAACr/BPXo7lF9OZE8PL/HNeBnRqRTdMhU=
 github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5 h1:FgdAIMjm/IzMMlRU6zO0p+L0QAKX5etEGMvEEHHqfXM=
@@ -41,8 +41,8 @@ github.com/kapetacom/sdk-go-rabbitmq v0.1.0 h1:SpkT+rbb/BrXGu0RKvn5dlh9eGkmecMtO
 github.com/kapetacom/sdk-go-rabbitmq v0.1.0/go.mod h1:e5ywN7ymx/Zn1tYAtkdvl42Tth8oWIVw7z6a17DZAb8=
 github.com/kapetacom/sdk-go-rest-client v0.0.2 h1:YPRYHn1e6iqIQCENvr0Hw3fWbZkS9qbqGoCohBGZ/rM=
 github.com/kapetacom/sdk-go-rest-client v0.0.2/go.mod h1:Wo2diUeIjcaIkikD7kv3CCVLxSf59cowQxvoOmnMK9g=
-github.com/kapetacom/sdk-go-rest-server v0.2.0 h1:FqUqJ6K/LJVqEixVcU9rPS9Pa2jC8jNM2FWHe/HkcMY=
-github.com/kapetacom/sdk-go-rest-server v0.2.0/go.mod h1:ybGdfI+QbV2erx7+CU/ZTDAoTjCnOolgJom7dY3fdhs=
+github.com/kapetacom/sdk-go-rest-server v0.2.2 h1:hREqQvti4Q4kIRZbWDzRgfnU8JA9Gxczva1/U+dh7eo=
+github.com/kapetacom/sdk-go-rest-server v0.2.2/go.mod h1:ybGdfI+QbV2erx7+CU/ZTDAoTjCnOolgJom7dY3fdhs=
 github.com/klauspost/compress v1.13.6/go.mod h1:/3/Vjq9QcHkK5uEr5lBEmyoZ1iFhe47etQ6QUkpK6sk=
 github.com/klauspost/compress v1.17.6 h1:60eq2E/jlfwQXtvZEeBUYADs+BwKBWURIY+Gj2eRGjI=
 github.com/klauspost/compress v1.17.6/go.mod h1:/dCuZOvVtNoHsyb+cuJD3itjs3NbnF6KH9zAO4BDxPM=

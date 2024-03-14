@@ -28,7 +28,7 @@ func CreateTasksRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			}
 			params := &RequestParameters{}
 
-			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.GetData(ctx, params.Ids)
@@ -42,7 +42,7 @@ func CreateTasksRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			}
 			params := &RequestParameters{}
 
-			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.AddTask(ctx, params.UserId, params.Id, params.Task)
@@ -54,7 +54,7 @@ func CreateTasksRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			}
 			params := &RequestParameters{}
 
-			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.MarkAsDone(ctx, params.Id)

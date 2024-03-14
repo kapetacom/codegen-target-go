@@ -27,7 +27,7 @@ func CreateTasksInnerRouter(e *server.KapetaServer, cfg providers.ConfigProvider
 			}
 			params := &RequestParameters{}
 
-			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.RemoveTask(ctx, params.Id)
@@ -39,7 +39,7 @@ func CreateTasksInnerRouter(e *server.KapetaServer, cfg providers.ConfigProvider
 			}
 			params := &RequestParameters{}
 
-			if err := request.GetRequetParameters(ctx.Request(), params); err != nil {
+			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.GetTask(ctx, params.Id)
