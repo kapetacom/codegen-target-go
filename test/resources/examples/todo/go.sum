@@ -33,8 +33,8 @@ github.com/kapetacom/schemas/packages/go v0.0.0-20240209083259-f5ce079d8abc h1:g
 github.com/kapetacom/schemas/packages/go v0.0.0-20240209083259-f5ce079d8abc/go.mod h1:dWvKSUqSQRHiqFFnGPnJofgci1dvRT1PPNJLtffVukk=
 github.com/kapetacom/sdk-go-auth-jwt v0.0.3 h1:QQj9LbiCrbW6fcBGaQbV0Gg7EvE0Ao54ULwyL+ZgYi4=
 github.com/kapetacom/sdk-go-auth-jwt v0.0.3/go.mod h1:QodwVkid3AOCNANATsqT4B4px5A39d9ezatiAwuSKPQ=
-github.com/kapetacom/sdk-go-config v0.1.3 h1:Vv6j72Dag7XIF+FfHQVifNnxB7Lv/l+APfYoZO4rj0M=
-github.com/kapetacom/sdk-go-config v0.1.3/go.mod h1:8JfwwJJc9qAACr/BPXo7lF9OZE8PL/HNeBnRqRTdMhU=
+github.com/kapetacom/sdk-go-config v0.2.0 h1:yVSEFyyQFFJDZsrB2jYgujdxakZTZq8thL9hEEOAZZ8=
+github.com/kapetacom/sdk-go-config v0.2.0/go.mod h1:ayxOGlxQ4Cz1OQi3JnaleDd7H0lknyl9xr9bSUIeHlM=
 github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5 h1:FgdAIMjm/IzMMlRU6zO0p+L0QAKX5etEGMvEEHHqfXM=
 github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5/go.mod h1:UgCEb8BGZ2rENCbDzVT9pqrf+zNwdzK0wn8E3ee+brs=
 github.com/kapetacom/sdk-go-rabbitmq v0.1.0 h1:SpkT+rbb/BrXGu0RKvn5dlh9eGkmecMtOfXIZ2ymfJs=
