@@ -1,0 +1,19 @@
+//#FILENAME:generated/pubsub/publisher.go:write-always
+// GENERATED SOURCE - DO NOT EDIT
+package pubsub
+
+import (
+"{{@root.options.basePackage}}/generated/entities"
+"github.com/kapetacom/sdk-go-config/providers"
+"github.com/kapetacom/sdk-go-google-pubsub/pubsub"
+)
+
+{{#providers-of-type 'kapeta/resource-type-pubsub-publisher'}}
+type {{this.spec.payloadType.type}}Publisher = pubsub.Publisher[entities.{{this.spec.payloadType.type}}, map[string]string]
+
+type {{this.spec.payloadType.type}}Payload = pubsub.PublisherPayload[entities.{{this.spec.payloadType.type}}, map[string]string]
+
+func Create{{this.spec.payloadType.type}}Publisher(config providers.ConfigProvider) (*{{this.spec.payloadType.type}}Publisher, error) {
+return pubsub.CreatePublisher[entities.{{this.spec.payloadType.type}}, map[string]string](config, "{{this.metadata.name}}")
+}
+{{/providers-of-type}}

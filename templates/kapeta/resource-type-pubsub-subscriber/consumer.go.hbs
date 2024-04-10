@@ -1,0 +1,21 @@
+//#FILENAME:pkg/services/pubsub/{{snakeCase data.spec.payloadType.type}}-consumer.go:create-only
+package pubsub
+
+import (
+    "errors"
+    "{{@root.options.basePackage}}/generated/entities"
+    "github.com/kapetacom/sdk-go-config/providers"
+)
+
+type {{data.spec.payloadType.type}}Consumer struct{}
+
+func New{{data.spec.payloadType.type}}Consumer(cfg providers.ConfigProvider) (*{{data.spec.payloadType.type}}Consumer, error) {
+    return &{{data.spec.payloadType.type}}Consumer{}, nil
+}
+
+func (c *{{data.spec.payloadType.type}}Consumer) OnMessage(message entities.{{data.spec.payloadType.type}}, attributes map[string]string) error {
+    if true {
+        return errors.New("not implemented yet")
+    }
+    return nil
+}

@@ -1,0 +1,24 @@
+//#FILENAME:generated/pubsub/subscriber.go:write-always
+// GENERATED SOURCE - DO NOT EDIT
+package pubsub
+
+import (
+    "github.com/kapetacom/sdk-go-config/providers"
+    "github.com/kapetacom/sdk-go-google-pubsub/pubsub"
+    "{{@root.options.basePackage}}/generated/entities"
+    servicepubsub "{{@root.options.basePackage}}/pkg/services/pubsub"
+)
+
+{{#consumers-of-type 'kapeta/resource-type-pubsub-subscriber'}}
+type {{this.spec.payloadType.type}}Consumer = pubsub.Consumer[entities.{{this.spec.payloadType.type}}]
+
+type {{this.spec.payloadType.type}}MessageHandler = pubsub.MessageHandler[entities.{{this.spec.payloadType.type}}, map[string]string]
+
+func Create{{this.spec.payloadType.type}}Consumer(config providers.ConfigProvider) (*{{this.spec.payloadType.type}}Consumer, error) {
+    consumer, err := servicepubsub.New{{this.spec.payloadType.type}}Consumer(config)
+    if err != nil {
+        return nil, err
+    }
+    return pubsub.CreateConsumer(config, "{{this.metadata.name}}", consumer.OnMessage)
+}
+{{/consumers-of-type}}
