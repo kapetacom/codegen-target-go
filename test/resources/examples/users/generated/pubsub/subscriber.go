@@ -8,14 +8,14 @@ import (
 	"github.com/kapetacom/sdk-go-google-pubsub/pubsub"
 )
 
-type UserConsumer = pubsub.Consumer[entities.User]
+type UsersConsumer = pubsub.Consumer[entities.User]
 
-type UserMessageHandler = pubsub.MessageHandler[entities.User, map[string]string]
+type UsersMessageHandler = pubsub.MessageHandler[entities.User, map[string]string]
 
-func CreateUserConsumer(config providers.ConfigProvider) (*UserConsumer, error) {
-	consumer, err := servicepubsub.NewUserConsumer(config)
+func CreateUsersConsumer(config providers.ConfigProvider) (*UsersConsumer, error) {
+	consumer, err := servicepubsub.NewUsersConsumer(config)
 	if err != nil {
 		return nil, err
 	}
-	return pubsub.CreateConsumer(config, "pubsubsubscription", consumer.OnMessage)
+	return pubsub.CreateConsumer(config, "users", consumer.OnMessage)
 }

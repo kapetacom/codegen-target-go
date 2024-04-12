@@ -144,7 +144,7 @@ spec:
             }
     - kind: kapeta/resource-type-pubsub-publisher:local
       metadata:
-        name: pubsubpublisher
+        name: users
       spec:
         port:
           name: http

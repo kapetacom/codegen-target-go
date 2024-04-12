@@ -10,12 +10,12 @@ import (
 )
 
 {{#consumers-of-type 'kapeta/resource-type-pubsub-subscriber'}}
-type {{this.spec.payloadType.type}}Consumer = pubsub.Consumer[entities.{{this.spec.payloadType.type}}]
+type {{pascalCase this.metadata.name}}Consumer = pubsub.Consumer[entities.{{this.spec.payloadType.type}}]
 
-type {{this.spec.payloadType.type}}MessageHandler = pubsub.MessageHandler[entities.{{this.spec.payloadType.type}}, map[string]string]
+type {{pascalCase this.metadata.name}}MessageHandler = pubsub.MessageHandler[entities.{{this.spec.payloadType.type}}, map[string]string]
 
-func Create{{this.spec.payloadType.type}}Consumer(config providers.ConfigProvider) (*{{this.spec.payloadType.type}}Consumer, error) {
-    consumer, err := servicepubsub.New{{this.spec.payloadType.type}}Consumer(config)
+func Create{{pascalCase this.metadata.name}}Consumer(config providers.ConfigProvider) (*{{pascalCase this.metadata.name}}Consumer, error) {
+    consumer, err := servicepubsub.New{{pascalCase this.metadata.name}}Consumer(config)
     if err != nil {
         return nil, err
     }

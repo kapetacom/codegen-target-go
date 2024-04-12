@@ -7,10 +7,10 @@ import (
 	"github.com/kapetacom/sdk-go-google-pubsub/pubsub"
 )
 
-type UserPublisher = pubsub.Publisher[entities.User, map[string]string]
+type UsersPublisher = pubsub.Publisher[entities.User, map[string]string]
 
-type UserPayload = pubsub.PublisherPayload[entities.User, map[string]string]
+type UsersPayload = pubsub.PublisherPayload[entities.User, map[string]string]
 
-func CreateUserPublisher(config providers.ConfigProvider) (*UserPublisher, error) {
-	return pubsub.CreatePublisher[entities.User, map[string]string](config, "pubsubpublisher")
+func CreateUsersPublisher(config providers.ConfigProvider) (*UserPublisher, error) {
+	return pubsub.CreatePublisher[entities.User, map[string]string](config, "users")
 }

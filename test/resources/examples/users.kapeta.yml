@@ -39,7 +39,7 @@ spec:
         name: cdnBucket
     - kind: kapeta/resource-type-pubsub-subscriber:local
       metadata:
-        name: pubsubsubscription
+        name: users
       spec:
         port:
           name: http

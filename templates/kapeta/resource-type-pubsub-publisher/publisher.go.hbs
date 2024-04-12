@@ -9,11 +9,11 @@ import (
 )
 
 {{#providers-of-type 'kapeta/resource-type-pubsub-publisher'}}
-type {{this.spec.payloadType.type}}Publisher = pubsub.Publisher[entities.{{this.spec.payloadType.type}}, map[string]string]
+type {{pascalCase this.metadata.name}}Publisher = pubsub.Publisher[entities.{{this.spec.payloadType.type}}, map[string]string]
 
-type {{this.spec.payloadType.type}}Payload = pubsub.PublisherPayload[entities.{{this.spec.payloadType.type}}, map[string]string]
+type {{pascalCase this.metadata.name}}Payload = pubsub.PublisherPayload[entities.{{this.spec.payloadType.type}}, map[string]string]
 
-func Create{{this.spec.payloadType.type}}Publisher(config providers.ConfigProvider) (*{{this.spec.payloadType.type}}Publisher, error) {
+func Create{{pascalCase this.metadata.name}}Publisher(config providers.ConfigProvider) (*{{this.spec.payloadType.type}}Publisher, error) {
 return pubsub.CreatePublisher[entities.{{this.spec.payloadType.type}}, map[string]string](config, "{{this.metadata.name}}")
 }
 {{/providers-of-type}}
