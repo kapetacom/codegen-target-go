@@ -11,6 +11,6 @@ type UsersPublisher = pubsub.Publisher[entities.User, map[string]string]
 
 type UsersPayload = pubsub.PublisherPayload[entities.User, map[string]string]
 
-func CreateUsersPublisher(config providers.ConfigProvider) (*UserPublisher, error) {
+func CreateUsersPublisher(config providers.ConfigProvider) (*UsersPublisher, error) {
 	return pubsub.CreatePublisher[entities.User, map[string]string](config, "users")
 }
