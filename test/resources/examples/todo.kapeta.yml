@@ -142,3 +142,12 @@ spec:
               @GET("/{id}")
               getTask(@Path id:string):Task
             }
+    - kind: kapeta/resource-type-pubsub-publisher:local
+      metadata:
+        name: users
+      spec:
+        port:
+          name: http
+          type: http
+        payloadType:
+          type: User

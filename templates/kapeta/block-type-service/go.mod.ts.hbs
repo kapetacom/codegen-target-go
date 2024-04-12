@@ -21,6 +21,9 @@ require (
     {{#usesAnyOf (toArray 'kapeta/resource-type-rabbitmq-publisher' 'kapeta/resource-type-rabbitmq-subscriber') }}
     github.com/kapetacom/sdk-go-rabbitmq v0.1.0
     {{/usesAnyOf}}
+    {{#usesAnyOf (toArray 'kapeta/resource-type-pubsub-publisher' 'kapeta/resource-type-pubsub-subscriber') }}
+    github.com/kapetacom/sdk-go-google-pubsub v0.1.0
+    {{/usesAnyOf}}
 )
 
 {{#usesAnyOf (toArray 'kapeta/resource-type-rabbitmq-publisher' 'kapeta/resource-type-rabbitmq-subscriber') }}

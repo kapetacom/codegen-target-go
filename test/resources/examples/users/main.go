@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"github.com/kapeta/users/generated"
+	"github.com/kapeta/users/generated/pubsub"
 	kapeta "github.com/kapetacom/sdk-go-config"
 	"github.com/kapetacom/sdk-go-rest-server/server"
 )
@@ -27,6 +29,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	usersConsumer, err := pubsub.CreateUsersConsumer(config)
+	if err != nil {
+		panic(err)
+	}
+	go usersConsumer.ReceiveMessages(context.Background())
 
 	// Start the server and log if it fails
 	e.Logger.Debug("Starting server on port " + port)

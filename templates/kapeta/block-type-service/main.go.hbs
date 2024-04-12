@@ -15,6 +15,10 @@ import (
     "log"
     "context"
 {{/consumes}}
+{{#consumes 'kapeta/resource-type-pubsub-subscriber'}}
+    "{{@root.options.basePackage}}/generated/pubsub"
+    "context"
+{{/consumes}}
 )
 
 func main() {
@@ -56,6 +60,14 @@ func main() {
     {{/consumers-of-type}}
 
     {{#consumers-of-type 'kapeta/resource-type-rabbitmq-subscriber'}}
+    {{/consumers-of-type}}
+
+    {{#consumers-of-type 'kapeta/resource-type-pubsub-subscriber'}}
+    {{snakeCase this.metadata.name}}Consumer, err := pubsub.Create{{pascalCase this.metadata.name}}Consumer(config)
+    if err != nil {
+        panic(err)
+    }
+    go {{snakeCase this.metadata.name}}Consumer.ReceiveMessages(context.Background())
     {{/consumers-of-type}}
 
     // Start the server and log if it fails

@@ -2,14 +2,15 @@
  * Copyright 2023 Kapeta Inc.
  * SPDX-License-Identifier: MIT
  */
+import React from "react";
 
 import { ILanguageTargetProvider } from '@kapeta/ui-web-types';
 import { FormField } from '@kapeta/ui-web-components';
+
 // @ts-ignore
 import kapetaDefinition from '../../kapeta.yml';
 // @ts-ignore
 import packageJson from '../../package.json';
-import React from "react";
 
 interface GoTargetConfigOptions {
     basePackage: string;
@@ -48,6 +49,8 @@ const targetConfig: ILanguageTargetProvider<GoTargetConfigOptions>  = {
         'kapeta/resource-type-rabbitmq-subscriber',
         'kapeta/resource-type-rabbitmq-publisher',
         'kapeta/resource-type-mongodb',
+        'kapeta/resource-type-pubsub-publisher',
+        'kapeta/resource-type-pubsub-subscriber',
 //        'kapeta/resource-type-postgresql',
 //        'kapeta/resource-type-redis',
 //        'kapeta/resource-type-smtp-client',

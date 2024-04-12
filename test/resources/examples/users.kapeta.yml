@@ -37,6 +37,15 @@ spec:
     - kind: kapeta/resource-type-cloud-bucket:0.0.2
       metadata:
         name: cdnBucket
+    - kind: kapeta/resource-type-pubsub-subscriber:local
+      metadata:
+        name: users
+      spec:
+        port:
+          name: http
+          type: http
+        payloadType:
+          type: User
   providers:
     - kind: kapeta/resource-type-rabbitmq-publisher:local
       metadata:
