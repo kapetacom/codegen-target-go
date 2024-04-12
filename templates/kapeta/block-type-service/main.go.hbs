@@ -63,11 +63,11 @@ func main() {
     {{/consumers-of-type}}
 
     {{#consumers-of-type 'kapeta/resource-type-pubsub-subscriber'}}
-    {{snakeCase this.spec.payloadType.type}}Consumer, err := pubsub.Create{{this.spec.payloadType.type}}Consumer(config)
+    {{snakeCase this.metadata.name}}Consumer, err := pubsub.Create{{pascalCase this.metadata.name}}Consumer(config)
     if err != nil {
         panic(err)
     }
-    go {{snakeCase this.spec.payloadType.type}}Consumer.ReceiveMessages(context.Background())
+    go {{snakeCase this.metadata.name}}Consumer.ReceiveMessages(context.Background())
     {{/consumers-of-type}}
 
     // Start the server and log if it fails
