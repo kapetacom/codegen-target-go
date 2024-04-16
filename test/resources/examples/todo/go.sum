@@ -106,8 +106,8 @@ github.com/kapetacom/sdk-go-config v0.2.0 h1:yVSEFyyQFFJDZsrB2jYgujdxakZTZq8thL9
 github.com/kapetacom/sdk-go-config v0.2.0/go.mod h1:ayxOGlxQ4Cz1OQi3JnaleDd7H0lknyl9xr9bSUIeHlM=
 github.com/kapetacom/sdk-go-google-pubsub v0.1.0 h1:jZo48NtOdgLTQ6nYI+UpUV9m2VMMot+zv5TFy8El0pA=
 github.com/kapetacom/sdk-go-google-pubsub v0.1.0/go.mod h1:m018xCwBRu+y5VXZ3IJRmcBzgQJ2suuw5rGWP+rsQJw=
-github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5 h1:FgdAIMjm/IzMMlRU6zO0p+L0QAKX5etEGMvEEHHqfXM=
-github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5/go.mod h1:UgCEb8BGZ2rENCbDzVT9pqrf+zNwdzK0wn8E3ee+brs=
+github.com/kapetacom/sdk-go-nosql-mongodb v0.0.6 h1:79exv7REsdJphutNuwA2jX5mmAhVnZvyHk8BvgpSW2E=
+github.com/kapetacom/sdk-go-nosql-mongodb v0.0.6/go.mod h1:WDnDEpo4UJGI1PUBRV6xIh0jNm6rfsK+5l7aSSTqA+U=
 github.com/kapetacom/sdk-go-rabbitmq v0.1.0 h1:SpkT+rbb/BrXGu0RKvn5dlh9eGkmecMtOfXIZ2ymfJs=
 github.com/kapetacom/sdk-go-rabbitmq v0.1.0/go.mod h1:e5ywN7ymx/Zn1tYAtkdvl42Tth8oWIVw7z6a17DZAb8=
 github.com/kapetacom/sdk-go-rest-client v0.0.2 h1:YPRYHn1e6iqIQCENvr0Hw3fWbZkS9qbqGoCohBGZ/rM=

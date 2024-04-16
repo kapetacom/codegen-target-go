@@ -16,7 +16,7 @@ require (
     github.com/kapetacom/sdk-go-rest-client v0.0.2
     {{/consumes}}
     {{#consumes 'kapeta/resource-type-mongodb'}}
-    github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5
+    github.com/kapetacom/sdk-go-nosql-mongodb v0.0.6
     {{/consumes}}
     {{#usesAnyOf (toArray 'kapeta/resource-type-rabbitmq-publisher' 'kapeta/resource-type-rabbitmq-subscriber') }}
     github.com/kapetacom/sdk-go-rabbitmq v0.1.0
