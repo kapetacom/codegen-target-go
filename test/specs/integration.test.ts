@@ -22,6 +22,16 @@ describe('blocks', () => {
         global.console = require('console');
     });
 
+    test('minimal', async () => {
+        const basedir = Path.resolve(__dirname, '../resources/examples/minimal');
+        const data = require('../resources/examples/minimal.kapeta.yml');
+
+        const target = new Target({
+            basePackage: 'github.com/kapeta/minimal',
+        });
+        return testCodeGenFor(target, new BlockCodeGenerator(data), basedir);
+    });
+
     test('todo', async () => {
         const basedir = Path.resolve(__dirname, '../resources/examples/todo');
         const data = require('../resources/examples/todo.kapeta.yml');

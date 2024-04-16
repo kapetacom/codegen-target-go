@@ -2,7 +2,7 @@ module github.com/kapeta/todo
 
 go 1.21.7
 
-toolchain go1.21.8
+toolchain go1.21.9
 
 require (
 	github.com/kapetacom/sdk-go-auth-jwt v0.0.3

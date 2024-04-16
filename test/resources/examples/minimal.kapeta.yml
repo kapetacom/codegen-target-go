@@ -1,0 +1,13 @@
+kind: kapeta/block-type-service:1.3.4
+metadata:
+  name: kapeta/portal
+spec:
+  target:
+    kind: kapeta/language-target-go:local
+  type: service
+  providers: []
+  consumers: []
+  entities:
+    source:
+      type: kapeta-dsl
+      value: ""

@@ -1,19 +1,15 @@
-{{#usesAnyOf (toArray 'kapeta/resource-type-auth-jwt-provider' 'kapeta/resource-type-auth-jwt-consumer') }}
+{{#consumes 'kapeta/resource-type-auth-jwt-consumer'}}
 //#FILENAME:generated/auth/auth-middleware.go:write-always
 package auth
-{{#consumes 'kapeta/resource-type-auth-jwt-consumer'}}
 import (
 	"github.com/kapetacom/sdk-go-auth-jwt/middleware"
 	"github.com/kapetacom/sdk-go-config/providers"
 	"github.com/labstack/echo/v4"
 )
-{{/consumes}}
 
-{{#consumes 'kapeta/resource-type-auth-jwt-consumer'}}
 func AddJWTMiddleware(config providers.ConfigProvider) []echo.MiddlewareFunc {
 	{{#consumers-of-type 'kapeta/resource-type-auth-jwt-consumer'}}
 	return middleware.JWTMiddlewareFromConfig("{{string metadata.name}}", config)
     {{/consumers-of-type}}
 }
 {{/consumes}}
-{{/usesAnyOf}}

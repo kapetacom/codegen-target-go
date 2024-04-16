@@ -1,3 +1,4 @@
+{{#provides 'kapeta/resource-type-rest-api'}}
 //#FILENAME:generated/router.go:write-always
 package generated
 import (
@@ -16,3 +17,4 @@ func RegisterRouters(e *server.KapetaServer, cfg kapeta.ConfigProvider) error {
     {{/providers-of-type}}
     return nil
 }
+{{/provides}}
