@@ -89,12 +89,12 @@ github.com/kapetacom/go-rabbitmq v1.0.0 h1:3JvHheAJ8rLh+MWJ8bKpNODaEM3P30yAtYioD
 github.com/kapetacom/go-rabbitmq v1.0.0/go.mod h1:1sUJ53rrW2AIA7LEp8ymmmebHqqq8ksH/gXIfUP0I0s=
 github.com/kapetacom/schemas/packages/go v0.0.0-20240209083259-f5ce079d8abc h1:ghhXNScFqGXUP7uywvPF/dyYBcS7czmirlLcgtc0cEg=
 github.com/kapetacom/schemas/packages/go v0.0.0-20240209083259-f5ce079d8abc/go.mod h1:dWvKSUqSQRHiqFFnGPnJofgci1dvRT1PPNJLtffVukk=
-github.com/kapetacom/sdk-go-config v0.2.0 h1:yVSEFyyQFFJDZsrB2jYgujdxakZTZq8thL9hEEOAZZ8=
-github.com/kapetacom/sdk-go-config v0.2.0/go.mod h1:ayxOGlxQ4Cz1OQi3JnaleDd7H0lknyl9xr9bSUIeHlM=
+github.com/kapetacom/sdk-go-config v1.0.0 h1:2Kjn1CBdeTH3sJfUHvEyaXODyLuKv1WwK8xRnoyZAbA=
+github.com/kapetacom/sdk-go-config v1.0.0/go.mod h1:ayxOGlxQ4Cz1OQi3JnaleDd7H0lknyl9xr9bSUIeHlM=
 github.com/kapetacom/sdk-go-google-pubsub v0.1.0 h1:jZo48NtOdgLTQ6nYI+UpUV9m2VMMot+zv5TFy8El0pA=
 github.com/kapetacom/sdk-go-google-pubsub v0.1.0/go.mod h1:m018xCwBRu+y5VXZ3IJRmcBzgQJ2suuw5rGWP+rsQJw=
-github.com/kapetacom/sdk-go-rabbitmq v0.1.0 h1:SpkT+rbb/BrXGu0RKvn5dlh9eGkmecMtOfXIZ2ymfJs=
-github.com/kapetacom/sdk-go-rabbitmq v0.1.0/go.mod h1:e5ywN7ymx/Zn1tYAtkdvl42Tth8oWIVw7z6a17DZAb8=
+github.com/kapetacom/sdk-go-rabbitmq v1.0.0 h1:jnCfOMtHFcbGK55ZqsvXqacJYyVBNUd8AdvGKxHrNnM=
+github.com/kapetacom/sdk-go-rabbitmq v1.0.0/go.mod h1:8ZTxyo7lG4zkDQ0kgc8zZKfEFz0WR32F4nGXGj9A9k0=
 github.com/kapetacom/sdk-go-rest-server v0.2.2 h1:hREqQvti4Q4kIRZbWDzRgfnU8JA9Gxczva1/U+dh7eo=
 github.com/kapetacom/sdk-go-rest-server v0.2.2/go.mod h1:ybGdfI+QbV2erx7+CU/ZTDAoTjCnOolgJom7dY3fdhs=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=

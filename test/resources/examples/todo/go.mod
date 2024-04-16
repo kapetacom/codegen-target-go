@@ -6,10 +6,10 @@ toolchain go1.21.9
 
 require (
 	github.com/kapetacom/sdk-go-auth-jwt v0.0.3
-	github.com/kapetacom/sdk-go-config v0.2.0
+	github.com/kapetacom/sdk-go-config v1.0.0
 	github.com/kapetacom/sdk-go-google-pubsub v0.1.0
-	github.com/kapetacom/sdk-go-nosql-mongodb v0.0.6
-	github.com/kapetacom/sdk-go-rabbitmq v0.1.0
+	github.com/kapetacom/sdk-go-nosql-mongodb v1.0.0
+	github.com/kapetacom/sdk-go-rabbitmq v1.0.0
 	github.com/kapetacom/sdk-go-rest-client v0.0.2
 	github.com/kapetacom/sdk-go-rest-server v0.2.2
 	github.com/labstack/echo/v4 v4.11.4
