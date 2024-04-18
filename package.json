@@ -22,7 +22,7 @@
     "homepage": "https://github.com/kapetacom/golang-language-target#readme",
     "dependencies": {
         "@kapeta/codegen-target": "^1.6.1",
-        "@kapeta/kaplang-core": "^1.11.4",
+        "@kapeta/kaplang-core": "^1.11.6",
         "@kapeta/schemas": "^3",
         "@kapeta/nodejs-process": "^1.2.0",
         "@kapeta/nodejs-utils": "^0.1.3",

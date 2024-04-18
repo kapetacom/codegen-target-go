@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	e := server.NewWithDefaults()
+	serverInstance := server.NewWithDefaults()
 
 	config, err := kapeta.Init(".")
 	if err != nil {
@@ -27,9 +27,9 @@ func main() {
 		panic(err)
 	}
 
-	e.Use(auth.AddJWTMiddleware(config)...)
+	serverInstance.Use(auth.AddJWTMiddleware(config)...)
 
-	err = generated.RegisterRouters(e, config)
+	err = generated.RegisterRouters(serverInstance, config)
 	if err != nil {
 		panic(err)
 	}
@@ -45,6 +45,6 @@ func main() {
 	}
 
 	// Start the server and log if it fails
-	e.Logger.Debug("Starting server on port " + port)
-	e.Logger.Fatal(e.Start(host + ":" + port))
+	serverInstance.Logger.Debug("Starting server on port " + port)
+	serverInstance.Logger.Fatal(serverInstance.Start(host + ":" + port))
 }

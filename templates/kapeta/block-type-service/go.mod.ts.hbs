@@ -4,11 +4,11 @@ module {{@root.options.basePackage}}
 go 1.21.6
 
 require (
-    github.com/kapetacom/sdk-go-config v0.2.0
+    github.com/kapetacom/sdk-go-config v1.0.0
     github.com/labstack/echo/v4 v4.11.3
-    {{#usesAnyOf (toArray 'kapeta/resource-type-auth-jwt-provider' 'kapeta/resource-type-auth-jwt-consumer') }}
+    {{#consumes 'kapeta/resource-type-auth-jwt-consumer' }}
     github.com/kapetacom/sdk-go-auth-jwt v0.0.3
-    {{/usesAnyOf}}
+    {{/consumes}}
     {{#provides 'kapeta/resource-type-rest-api'}}
     github.com/kapetacom/sdk-go-rest-server v0.2.2
     {{/provides}}
@@ -16,10 +16,10 @@ require (
     github.com/kapetacom/sdk-go-rest-client v0.0.2
     {{/consumes}}
     {{#consumes 'kapeta/resource-type-mongodb'}}
-    github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5
+    github.com/kapetacom/sdk-go-nosql-mongodb v1.0.0
     {{/consumes}}
     {{#usesAnyOf (toArray 'kapeta/resource-type-rabbitmq-publisher' 'kapeta/resource-type-rabbitmq-subscriber') }}
-    github.com/kapetacom/sdk-go-rabbitmq v0.1.0
+    github.com/kapetacom/sdk-go-rabbitmq v1.0.0
     {{/usesAnyOf}}
     {{#usesAnyOf (toArray 'kapeta/resource-type-pubsub-publisher' 'kapeta/resource-type-pubsub-subscriber') }}
     github.com/kapetacom/sdk-go-google-pubsub v0.1.0
