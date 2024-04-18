@@ -1,6 +1,4 @@
-//
 // GENERATED SOURCE - DO NOT EDIT
-//
 package rest
 
 import (
@@ -71,6 +69,19 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.DeleteUser(ctx, params.Id)
+		})
+
+		e.POST("/plan", func(ctx echo.Context) error {
+			type RequestParameters struct {
+				Type string `in:"query=type;required"`
+				Body string `in:"body=json"`
+			}
+			params := &RequestParameters{}
+
+			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+			}
+			return serviceInterface.HandlePlan(ctx, params.Type, params.Body)
 		})
 	}(routeHandler)
 

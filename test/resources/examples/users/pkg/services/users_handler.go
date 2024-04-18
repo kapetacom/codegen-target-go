@@ -28,3 +28,7 @@ func (handler *UsersHandler) GetUser(ctx echo.Context, id string, metadata any) 
 func (handler *UsersHandler) DeleteUser(ctx echo.Context, id string) error {
 	return ctx.JSON(200, nil)
 }
+
+func (handler *UsersHandler) HandlePlan(ctx echo.Context, _type string, body string) error {
+	return ctx.JSON(200, "")
+}

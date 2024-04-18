@@ -1,5 +1,4 @@
 // GENERATED SOURCE - DO NOT EDIT
-//
 package services
 
 import (

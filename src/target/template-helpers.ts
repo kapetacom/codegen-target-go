@@ -333,7 +333,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         }
         let args = parameters
             .map((value) => {
-                const valueName = value.name
+                const valueName = GoWriter.restMethodParameterReaderReservedWordMapper(value)
                 if (includeTypes) {
                     return Template.SafeString(`${valueName} ${toGoTypeCode(value.type, '*')}`);
                 }

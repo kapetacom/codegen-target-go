@@ -1,5 +1,4 @@
 // GENERATED SOURCE - DO NOT EDIT
-//
 package services
 
 import (
@@ -17,4 +16,6 @@ type UsersInterface interface {
 	GetUser(ctx echo.Context, id string, metadata any) error
 
 	DeleteUser(ctx echo.Context, id string) error
+
+	HandlePlan(ctx echo.Context, _type string, body string) error
 }

@@ -104,3 +104,6 @@ spec:
             //Delete user by id
             @DELETE("/users/{id}")
             deleteUser(@Path id:string):void
+
+            @POST("/plan")
+            handlePlan(@Query type: string, @Body body: string): string
