@@ -1,6 +1,4 @@
-//
 // GENERATED SOURCE - DO NOT EDIT
-//
 package rest
 
 import (

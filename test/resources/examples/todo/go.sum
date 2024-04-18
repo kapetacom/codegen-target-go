@@ -104,6 +104,8 @@ github.com/kapetacom/sdk-go-auth-jwt v0.0.3 h1:QQj9LbiCrbW6fcBGaQbV0Gg7EvE0Ao54U
 github.com/kapetacom/sdk-go-auth-jwt v0.0.3/go.mod h1:QodwVkid3AOCNANATsqT4B4px5A39d9ezatiAwuSKPQ=
 github.com/kapetacom/sdk-go-config v0.2.0 h1:yVSEFyyQFFJDZsrB2jYgujdxakZTZq8thL9hEEOAZZ8=
 github.com/kapetacom/sdk-go-config v0.2.0/go.mod h1:ayxOGlxQ4Cz1OQi3JnaleDd7H0lknyl9xr9bSUIeHlM=
+github.com/kapetacom/sdk-go-google-pubsub v0.1.0 h1:jZo48NtOdgLTQ6nYI+UpUV9m2VMMot+zv5TFy8El0pA=
+github.com/kapetacom/sdk-go-google-pubsub v0.1.0/go.mod h1:m018xCwBRu+y5VXZ3IJRmcBzgQJ2suuw5rGWP+rsQJw=
 github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5 h1:FgdAIMjm/IzMMlRU6zO0p+L0QAKX5etEGMvEEHHqfXM=
 github.com/kapetacom/sdk-go-nosql-mongodb v0.0.5/go.mod h1:UgCEb8BGZ2rENCbDzVT9pqrf+zNwdzK0wn8E3ee+brs=
 github.com/kapetacom/sdk-go-rabbitmq v0.1.0 h1:SpkT+rbb/BrXGu0RKvn5dlh9eGkmecMtOfXIZ2ymfJs=
