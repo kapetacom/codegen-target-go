@@ -25,6 +25,8 @@ type Task struct {
 	// Created date
 	Created kapeta.Epoch `json:"created" xml:"created" yaml:"created"`
 
+	LastUpdated kapeta.Epoch `json:"lastUpdated" xml:"lastUpdated" yaml:"lastUpdated"`
+
 	Metadata any `json:"metadata" xml:"metadata" yaml:"metadata"`
 
 	Details struct {

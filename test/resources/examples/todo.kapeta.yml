@@ -38,6 +38,8 @@ spec:
             //Created date
             created: date
         
+            lastUpdated: date
+        
             metadata: any
         
             details: {
