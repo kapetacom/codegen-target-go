@@ -1,24 +1,25 @@
-//#FILENAME:generated/pubsub/subscriber.go:write-always
+//#FILENAME:generated/pubsub/{{snakeCase data.metadata.name}}-subscriber.go:write-always
 // GENERATED SOURCE - DO NOT EDIT
 package pubsub
 
 import (
     "github.com/kapetacom/sdk-go-config/providers"
     "github.com/kapetacom/sdk-go-google-pubsub/pubsub"
+{{#isEntityType data.spec.payloadType.type}}
     "{{@root.options.basePackage}}/generated/entities"
+{{/isEntityType}}
     servicepubsub "{{@root.options.basePackage}}/pkg/services/pubsub"
 )
 
-{{#consumers-of-type 'kapeta/resource-type-pubsub-subscriber'}}
-type {{pascalCase this.metadata.name}}Consumer = pubsub.Consumer[entities.{{this.spec.payloadType.type}}]
 
-type {{pascalCase this.metadata.name}}MessageHandler = pubsub.MessageHandler[entities.{{this.spec.payloadType.type}}, map[string]string]
+type {{pascalCase data.metadata.name}}Consumer = pubsub.Consumer[{{variableType data.spec.payloadType.type prefix=""}}]
 
-func Create{{pascalCase this.metadata.name}}Consumer(config providers.ConfigProvider) (*{{pascalCase this.metadata.name}}Consumer, error) {
-    consumer, err := servicepubsub.New{{pascalCase this.metadata.name}}Consumer(config)
+type {{pascalCase data.metadata.name}}MessageHandler = pubsub.MessageHandler[{{variableType data.spec.payloadType.type prefix=""}}, map[string]string]
+
+func Create{{pascalCase data.metadata.name}}Consumer(config providers.ConfigProvider) (*{{pascalCase data.metadata.name}}Consumer, error) {
+    consumer, err := servicepubsub.New{{pascalCase data.metadata.name}}Consumer(config)
     if err != nil {
         return nil, err
     }
-    return pubsub.CreateConsumer(config, "{{this.metadata.name}}", consumer.OnMessage)
+    return pubsub.CreateConsumer(config, "{{data.metadata.name}}", consumer.OnMessage)
 }
-{{/consumers-of-type}}

@@ -62,20 +62,31 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         return fullPath;
     };
 
+    function getEntityType(type: DSLType): DSLData | undefined {
+        const localType = asComplexType(type);
+        const entities = getParsedEntities();
+        for (const entity of entities) {
+            if (entity.name === localType.name) {
+                return entity;
+            }
+        }
+        return undefined;
+    }
+
     /**
      * Wraps GoWriter.toTypeCode to handle naming the package of the types
      */
     function toGoTypeCode(type: DSLType, prefix = ''): string {
         const localType = asComplexType(type);
-        const entities = getParsedEntities();
-        for (const entity of entities) {
-            if (entity.name === localType.name) {
-                if (localType.list) {
-                    return GoWriter.toTypeCode(type).replace(/^\[]/, `[]${prefix}entities.`);
-                }
-                return `${prefix}entities.${GoWriter.toTypeCode(type)}`;
+
+        const entityType = getEntityType(type);
+        if (entityType) {
+            if (localType.list) {
+                return GoWriter.toTypeCode(type).replace(/^\[]/, `[]${prefix}entities.`);
             }
+            return `${prefix}entities.${GoWriter.toTypeCode(type)}`;
         }
+
         if (localType.list) {
             return `${prefix}${GoWriter.toTypeCode(type)}`;
         }
@@ -108,9 +119,17 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
 
     });
 
+    engine.registerHelper('isEntityType', (type: DSLType, options: HelperOptions) => {
+        const entityType = getEntityType(type);
+        if (entityType) {
+            return options.fn(this);
+        }
+        return options.inverse(this);
+    });
+
     // returns the variable type for the return type including package name
-    engine.registerHelper('variableType', (value: DSLType) => {
-        return Template.SafeString(toGoTypeCode(value, '*'));
+    engine.registerHelper('variableType', (value: DSLType, options: HelperOptions) => {
+        return Template.SafeString(toGoTypeCode(value, options.hash['prefix'] ?? '*'));
     });
 
     engine.registerHelper('hasReturnValue', (value: DSLType) => {

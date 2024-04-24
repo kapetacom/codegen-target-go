@@ -3,7 +3,9 @@ package pubsub
 
 import (
     "errors"
+{{#isEntityType data.spec.payloadType.type}}
     "{{@root.options.basePackage}}/generated/entities"
+{{/isEntityType}}
     "github.com/kapetacom/sdk-go-config/providers"
 )
 
@@ -13,7 +15,7 @@ func New{{pascalCase data.metadata.name}}Consumer(cfg providers.ConfigProvider) 
     return &{{pascalCase data.metadata.name}}Consumer{}, nil
 }
 
-func (c *{{pascalCase data.metadata.name}}Consumer) OnMessage(message entities.{{data.spec.payloadType.type}}, attributes map[string]string) error {
+func (c *{{pascalCase data.metadata.name}}Consumer) OnMessage(message {{variableType data.spec.payloadType.type prefix=""}}, attributes map[string]string) error {
     if true {
         return errors.New("not implemented yet")
     }

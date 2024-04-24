@@ -1,19 +1,19 @@
-//#FILENAME:generated/pubsub/publisher.go:write-always
+//#FILENAME:generated/pubsub/{{snakeCase data.metadata.name}}-publisher.go:write-always
 // GENERATED SOURCE - DO NOT EDIT
 package pubsub
 
 import (
-"{{@root.options.basePackage}}/generated/entities"
-"github.com/kapetacom/sdk-go-config/providers"
-"github.com/kapetacom/sdk-go-google-pubsub/pubsub"
+{{#isEntityType data.spec.payloadType.type}}
+    "{{@root.options.basePackage}}/generated/entities"
+{{/isEntityType}}
+    "github.com/kapetacom/sdk-go-config/providers"
+    "github.com/kapetacom/sdk-go-google-pubsub/pubsub"
 )
 
-{{#providers-of-type 'kapeta/resource-type-pubsub-publisher'}}
-type {{pascalCase this.metadata.name}}Publisher = pubsub.Publisher[entities.{{this.spec.payloadType.type}}, map[string]string]
+type {{pascalCase data.metadata.name}}Publisher = pubsub.Publisher[{{variableType data.spec.payloadType.type prefix=""}}, map[string]string]
 
-type {{pascalCase this.metadata.name}}Payload = pubsub.PublisherPayload[entities.{{this.spec.payloadType.type}}, map[string]string]
+type {{pascalCase data.metadata.name}}Payload = pubsub.PublisherPayload[{{variableType data.spec.payloadType.type prefix=""}}, map[string]string]
 
-func Create{{pascalCase this.metadata.name}}Publisher(config providers.ConfigProvider) (*{{pascalCase this.metadata.name}}Publisher, error) {
-return pubsub.CreatePublisher[entities.{{this.spec.payloadType.type}}, map[string]string](config, "{{this.metadata.name}}")
+func Create{{pascalCase data.metadata.name}}Publisher(config providers.ConfigProvider) (*{{pascalCase data.metadata.name}}Publisher, error) {
+return pubsub.CreatePublisher[{{variableType data.spec.payloadType.type prefix=""}}, map[string]string](config, "{{data.metadata.name}}")
 }
-{{/providers-of-type}}
