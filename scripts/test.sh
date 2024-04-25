@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-jest --testMatch '<rootDir>/test/**/*.test.ts'
+if ! jest --testMatch '<rootDir>/test/**/*.test.ts'; then
+  exit $RESULT
+fi
 cd test/resources/examples/users
 go mod tidy -v
 go build ./...

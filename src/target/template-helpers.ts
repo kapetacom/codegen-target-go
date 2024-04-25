@@ -359,7 +359,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
         const entities = getParsedEntities();
         const resolver = new DSLReferenceResolver();
         const referencesEntities = resolver.resolveReferencesFrom([arg], entities);
-        
+
         const result = referencesEntities
             .map((entity) => {
                 const native = DataTypeReader.getNative(entity);
@@ -379,13 +379,18 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                     return Template.SafeString(`import kapeta "github.com/kapetacom/sdk-go-config"`);
                 }
                 return '';
-            }).filter(item => item !== "");
+            }).filter(item => item !== "")
+            .filter((value, index, self) => {
+                const uniqueSet = new Set(self.map(item => item.toString()));
+                return uniqueSet.has(value.toString()) && [...uniqueSet].indexOf(value.toString()) === index;
+            });
 
             if (imports && imports.length > 0) {
                 return Template.SafeString(imports.join('\n'));
             }
             return '';
         }
+
         return Template.SafeString(result);
     });
 
