@@ -36,11 +36,11 @@ func main() {
 	}
 	go usersConsumer.ReceiveMessages(context.Background())
 
-	any_eventsConsumer, err := pubsub.CreateAnyEventsConsumer(config)
+	anyEventsConsumer, err := pubsub.CreateAnyEventsConsumer(config)
 	if err != nil {
 		panic(err)
 	}
-	go any_eventsConsumer.ReceiveMessages(context.Background())
+	go anyEventsConsumer.ReceiveMessages(context.Background())
 
 	// Start the server and log if it fails
 	serverInstance.Logger.Debug("Starting server on port " + port)
