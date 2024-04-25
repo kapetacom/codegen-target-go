@@ -46,7 +46,25 @@ spec:
           type: http
         payloadType:
           type: User
+    - kind: kapeta/resource-type-pubsub-subscriber:local
+      metadata:
+        name: anyEvents
+      spec:
+        port:
+          name: http
+          type: http
+        payloadType:
+          type: any
   providers:
+    - kind: kapeta/resource-type-rabbitmq-publisher:local
+      metadata:
+        name: anyEvents
+      spec:
+        port:
+          name: amqp
+          type: amqp
+        payloadType:
+          type: any
     - kind: kapeta/resource-type-rabbitmq-publisher:local
       metadata:
         name: events

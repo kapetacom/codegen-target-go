@@ -2,14 +2,16 @@
 package queues
 
 import (
-	"{{@root.options.basePackage}}/generated/entities"
+{{#isEntityType data.spec.payloadType.type}}
+    "{{@root.options.basePackage}}/generated/entities"
+{{/isEntityType}}
 	"github.com/kapetacom/sdk-go-config/providers"
 	"github.com/kapetacom/sdk-go-rabbitmq/rabbitmq"
 )
 
 
-type {{pascalCase data.metadata.name}}Handler = rabbitmq.MessageHandler[entities.{{data.spec.payloadType.type}}]
+type {{pascalCase data.metadata.name}}Handler = rabbitmq.MessageHandler[{{variableType data.spec.payloadType.type prefix=""}}]
 
 func Create{{pascalCase data.metadata.name}}Consumer(config providers.ConfigProvider, handler {{pascalCase data.metadata.name}}Handler) (*rabbitmq.Consumer, error) {
-	return rabbitmq.CreateConsumer[entities.{{data.spec.payloadType.type}}](config, "{{string data.metadata.name}}", handler)
+	return rabbitmq.CreateConsumer[{{variableType data.spec.payloadType.type prefix=""}}](config, "{{string data.metadata.name}}", handler)
 }

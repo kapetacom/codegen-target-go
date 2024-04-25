@@ -83,6 +83,15 @@ spec:
         port:
           name: amqp
           type: amqp
+    - kind: kapeta/resource-type-rabbitmq-subscriber:local
+      metadata:
+        name: anyThing
+      spec:
+        payloadType:
+          type: any
+        port:
+          name: amqp
+          type: amqp
     - kind: kapeta/resource-type-auth-jwt-consumer:0.0.2
       metadata:
         name: auth
@@ -153,3 +162,12 @@ spec:
           type: http
         payloadType:
           type: User
+    - kind: kapeta/resource-type-pubsub-publisher:local
+      metadata:
+        name: anyCommands
+      spec:
+        port:
+          name: http
+          type: http
+        payloadType:
+          type: any
