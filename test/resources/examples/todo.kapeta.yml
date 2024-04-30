@@ -72,6 +72,15 @@ spec:
             error,
             success
         }
+        
+        type NativeWrapper {
+          name: Native
+        }
+        
+        @Native('github.com/kapeta/todo/pkg/model.Native')
+        type Native {
+          name: string
+        }
 
   consumers:
     - kind: kapeta/resource-type-rabbitmq-subscriber:local
