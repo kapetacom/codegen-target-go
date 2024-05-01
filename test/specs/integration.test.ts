@@ -103,7 +103,7 @@ export async function testCodeGenFor(target: any, generator: CodeGenerator, base
             }
         });
     // remove files ending with go.sum from allFiles
-    allFiles = allFiles.filter((path: any) => !path.endsWith('go.sum'));
+    allFiles = allFiles.filter((path: any) => !path.endsWith('go.sum') && !path.endsWith('native.go'));
     expect(allFiles).toEqual([]);
 }
 

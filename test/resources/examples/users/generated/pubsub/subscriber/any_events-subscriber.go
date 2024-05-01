@@ -1,8 +1,8 @@
 // GENERATED SOURCE - DO NOT EDIT
-package pubsub
+package subscriber
 
 import (
-	servicepubsub "github.com/kapeta/users/pkg/services/pubsub"
+	servicepubsub "github.com/kapeta/users/pkg/services/pubsub/subscriber"
 	"github.com/kapetacom/sdk-go-config/providers"
 	"github.com/kapetacom/sdk-go-google-pubsub/pubsub"
 )

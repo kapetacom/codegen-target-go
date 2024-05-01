@@ -1,6 +1,6 @@
-//#FILENAME:generated/pubsub/{{snakeCase data.metadata.name}}-subscriber.go:write-always
+//#FILENAME:generated/pubsub/subscriber/{{snakeCase data.metadata.name}}-subscriber.go:write-always
 // GENERATED SOURCE - DO NOT EDIT
-package pubsub
+package subscriber
 
 import (
     "github.com/kapetacom/sdk-go-config/providers"
@@ -8,7 +8,7 @@ import (
 {{#isEntityType data.spec.payloadType.type}}
     "{{@root.options.basePackage}}/generated/entities"
 {{/isEntityType}}
-    servicepubsub "{{@root.options.basePackage}}/pkg/services/pubsub"
+    servicepubsub "{{@root.options.basePackage}}/pkg/services/pubsub/subscriber"
 )
 
 

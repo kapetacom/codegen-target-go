@@ -8,11 +8,14 @@ import {HelperOptions} from 'handlebars';
 import {
     asComplexType,
     DataTypeReader,
-    DSLData, DSLDataType, DSLDataTypeProperty,
+    DSLData,
+    DSLDataType,
+    DSLDataTypeProperty,
     DSLEntity,
-    DSLEntityType, DSLMethod,
+    DSLEntityType,
     DSLReferenceResolver,
-    DSLType, DSLTypeHelper,
+    DSLType,
+    DSLTypeHelper,
     GoWriter,
     RESTMethodParameterReader,
     RESTMethodReader,
@@ -20,7 +23,6 @@ import {
 } from '@kapeta/kaplang-core';
 import {DSLController} from "@kapeta/kaplang-core/src/interfaces";
 import isBuiltInType = DSLTypeHelper.isBuiltInType;
-import { get } from 'lodash';
 
 
 const DB_TYPES = ['kapeta/resource-type-mongodb', 'kapeta/resource-type-postgresql'];
@@ -383,10 +385,11 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
             .map((entity) => {
                 const native = DataTypeReader.getNative(entity);
                 if (native) {
-                    const [packageName] = entity.name.split('.')
-                    return `import ${packageName} "${native}"`;
+                    const lastIndex = native.lastIndexOf('.');
+                    const packageName = native.substring(0, lastIndex);
+                    return `import "${packageName}"`;
                 }
-                return ''; //`import ${githubLocation}/entities"`;
+                return '';
             }).join('\n')
 
         if (arg.type === DSLEntityType.DATATYPE) {
@@ -404,10 +407,17 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
                 return uniqueSet.has(value.toString()) && [...uniqueSet].indexOf(value.toString()) === index;
             });
 
+            let out = '';
+
             if (imports && imports.length > 0) {
-                return Template.SafeString(imports.join('\n'));
+                out = imports.join('\n');
             }
-            return '';
+
+            if (result && result.length > 0) {
+                out += result;
+            }
+
+            return Template.SafeString(out);
         }
 
         return Template.SafeString(result);
@@ -491,10 +501,9 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
     });
 
     engine.registerHelper('golang-dto', (entity: DSLData) => {
-        const writer = new GoWriter();
+        const writer = new GoWriter({entities: getParsedEntities()});
 
         try {
-           // entity.name = getName(entity.name)
             let out = writer.write([entity]);
             if (entity.type === DSLEntityType.ENUM) {
                 const name = entity.name;
@@ -514,7 +523,7 @@ export const addTemplateHelpers = (engine: HandleBarsType, data: any, context: a
     });
 
     engine.registerHelper('go-config', (entity: DSLData) => {
-        const writer = new GoWriter();
+        const writer = new GoWriter({entities: getParsedEntities()});
 
         try {
             // All config entities are postfixed with Config
