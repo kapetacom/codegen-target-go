@@ -21,3 +21,6 @@ spec:
       onCreate: sh /workspace/scripts/start-dev.sh
     HostConfig:
       Binds:
+        - ~/.ssh:~/.ssh:ro
+        - ~/.netrc:~/.netrc:ro:optional
+        - ~/.gitconfig:~/.gitconfig:ro:optional
