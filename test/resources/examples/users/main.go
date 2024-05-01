@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/kapeta/users/generated"
-	"github.com/kapeta/users/generated/pubsub"
+	"github.com/kapeta/users/generated/pubsub/subscriber"
 	kapeta "github.com/kapetacom/sdk-go-config"
 	"github.com/kapetacom/sdk-go-rest-server/server"
 )
@@ -30,13 +30,13 @@ func main() {
 		panic(err)
 	}
 
-	usersConsumer, err := pubsub.CreateUsersConsumer(config)
+	usersConsumer, err := subscriber.CreateUsersConsumer(config)
 	if err != nil {
 		panic(err)
 	}
 	go usersConsumer.ReceiveMessages(context.Background())
 
-	anyEventsConsumer, err := pubsub.CreateAnyEventsConsumer(config)
+	anyEventsConsumer, err := subscriber.CreateAnyEventsConsumer(config)
 	if err != nil {
 		panic(err)
 	}

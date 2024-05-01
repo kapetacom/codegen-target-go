@@ -16,7 +16,7 @@ import (
     "context"
 {{/consumes}}
 {{#consumes 'kapeta/resource-type-pubsub-subscriber'}}
-    "{{@root.options.basePackage}}/generated/pubsub"
+    "{{@root.options.basePackage}}/generated/pubsub/subscriber"
     "context"
 {{/consumes}}
 )
@@ -62,7 +62,7 @@ func main() {
     {{/consumers-of-type}}
 
     {{#consumers-of-type 'kapeta/resource-type-pubsub-subscriber'}}
-    {{camelCase this.metadata.name}}Consumer, err := pubsub.Create{{pascalCase this.metadata.name}}Consumer(config)
+    {{camelCase this.metadata.name}}Consumer, err := subscriber.Create{{pascalCase this.metadata.name}}Consumer(config)
     if err != nil {
         panic(err)
     }

@@ -1,5 +1,5 @@
 // GENERATED SOURCE - DO NOT EDIT
-package pubsub
+package publisher
 
 import (
 	"github.com/kapetacom/sdk-go-config/providers"
