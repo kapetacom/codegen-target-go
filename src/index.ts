@@ -53,7 +53,9 @@ export default class GoTarget extends Target {
         for (const file of files) {
             if (file.filename.endsWith('.go')) {
                 console.log('Running gofmt on %s', file.filename);
-                execSync(`gofmt -w ${file.filename}`);
+                execSync(`gofmt -w ${file.filename}`,{
+                    cwd: targetDir,
+                });
             }
         }
 
