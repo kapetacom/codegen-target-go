@@ -25,9 +25,9 @@ func Create{{controller-name this}}Router(e *server.KapetaServer, cfg providers.
     {{#methods methods}}
         e.{{./method}}("{{echoURLPath path base=../path}}",  func(ctx echo.Context) error {
         {{generateRequestParameters this}}
-        params := &RequestParameters{}
-       
-        if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
+        params := RequestParameters{}
+
+        if err := request.FillStruct(ctx, &params); err != nil {
             return echo.NewHTTPError(http.StatusBadRequest, err.Error())
         }
         return serviceInterface.{{pascalCase (method name)}}(ctx{{service_interface_arguments this}})
