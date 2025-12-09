@@ -1,0 +1,20 @@
+// #FILENAME:.devcontainer/devcontainer.json:merge
+{
+    "name": "MCP Server Development",
+    "image": "mcr.microsoft.com/devcontainers/go:1.21",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "golang.go",
+                "ms-vscode.vscode-json",
+                "ms-vscode.vscode-xml"
+            ]
+        }
+    },
+    "postCreateCommand": "go mod tidy",
+    "remoteUser": "vscode"
+}

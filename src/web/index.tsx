@@ -2,7 +2,7 @@
  * Copyright 2023 Kapeta Inc.
  * SPDX-License-Identifier: MIT
  */
-import React from "react";
+import React from 'react';
 
 import { ILanguageTargetProvider } from '@kapeta/ui-web-types';
 import { FormField } from '@kapeta/ui-web-components';
@@ -23,7 +23,6 @@ function validatePackageName(fieldName: string, value: string) {
     }
 }
 
-
 const GoTargetConfig = () => {
     return (
         <>
@@ -36,11 +35,11 @@ const GoTargetConfig = () => {
         </>
     );
 };
-const targetConfig: ILanguageTargetProvider<GoTargetConfigOptions>  = {
+const targetConfig: ILanguageTargetProvider<GoTargetConfigOptions> = {
     kind: kapetaDefinition.metadata.name,
     version: packageJson.version,
     title: kapetaDefinition.metadata.title,
-    blockKinds: ['kapeta/block-type-service'],
+    blockKinds: ['kapeta/block-type-service', 'kapeta/block-type-mcp'],
     resourceKinds: [
         'kapeta/resource-type-rest-api',
         'kapeta/resource-type-rest-client',
@@ -51,11 +50,13 @@ const targetConfig: ILanguageTargetProvider<GoTargetConfigOptions>  = {
         'kapeta/resource-type-mongodb',
         'kapeta/resource-type-pubsub-publisher',
         'kapeta/resource-type-pubsub-subscriber',
-//        'kapeta/resource-type-postgresql',
-//        'kapeta/resource-type-redis',
-//        'kapeta/resource-type-smtp-client',
-//        'kapeta/resource-type-auth-jwt-provider',
-//        'kapeta/resource-type-cloud-bucket',
+        'kapeta/resource-type-mcp-tools-server',
+        'kapeta/resource-type-mcp-tools-client',
+        //        'kapeta/resource-type-postgresql',
+        //        'kapeta/resource-type-redis',
+        //        'kapeta/resource-type-smtp-client',
+        //        'kapeta/resource-type-auth-jwt-provider',
+        //        'kapeta/resource-type-cloud-bucket',
     ],
     editorComponent: GoTargetConfig,
     definition: kapetaDefinition,
@@ -77,7 +78,6 @@ const targetConfig: ILanguageTargetProvider<GoTargetConfigOptions>  = {
         }
         return errors;
     },
-
 };
 
 export default targetConfig;

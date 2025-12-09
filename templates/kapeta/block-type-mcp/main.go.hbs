@@ -1,0 +1,82 @@
+// #FILENAME:main.go:create-only
+package main
+
+import (
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+    "context"
+	"github.com/mark3labs/mcp-go/server"
+	kapeta "github.com/kapetacom/sdk-go-config"
+	"{{@root.options.basePackage}}/generated"
+)
+
+func main() {
+	config, err := kapeta.Init(".")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Create a new MCP server using the block name from metadata
+	mcpServer := server.NewMCPServer(
+		"{{data.metadata.name}}",
+		"1.0.0",
+		server.WithToolCapabilities(true),
+		server.WithResourceCapabilities(true, true),
+		server.WithPromptCapabilities(true),
+	)
+
+	// Register MCP tools, resources, and prompts
+	if err := generated.RegisterMCPHandlers(mcpServer); err != nil {
+		log.Printf("Failed to register MCP handlers: %v", err)
+	}
+
+	// Get server port from configuration
+	port, err := config.GetServerPort("mcp")
+	if err != nil {
+		log.Printf("Failed to get server port, using default 8080: %v", err)
+		port = "8080"
+	}
+
+	// Create and start streamable HTTP server (this is now the only transport)
+	httpServer := server.NewStreamableHTTPServer(mcpServer,
+		server.WithEndpointPath("/mcp"),
+	)
+
+	addr := ":" + port
+	log.Printf("Starting MCP server with streamable HTTP transport on %s", addr)
+
+	// Create HTTP server with timeout settings
+	srv := &http.Server{
+		Addr:         addr,
+		Handler:      httpServer,
+		ReadTimeout:  30 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
+
+	// Start server in a goroutine
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Failed to start HTTP server: %v", err)
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("Shutting down server...")
+
+	// Gracefully shutdown the server with a timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Printf("Server forced to shutdown: %v", err)
+	}
+
+	log.Println("Server exited")
+}

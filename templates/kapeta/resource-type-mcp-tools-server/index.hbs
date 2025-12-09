@@ -1,0 +1,157 @@
+{{! Template for kapeta/resource-type-mcp-tools-api }}
+{{! This template generates Go code for tools defined in the MCP Tools API }}
+
+{{#if data.spec.tools}}
+{{#each data.spec.tools}}
+//#FILENAME:pkg/tools/{{@key}}_tool.go:write-always
+package tools
+
+import (
+	"context"
+	"fmt"
+	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/mark3labs/mcp-go/server"
+)
+
+// Register{{pascalCase @key}}Tool registers the {{@key}} tool with the MCP server
+func Register{{pascalCase @key}}Tool(mcpServer *server.MCPServer, toolImpl {{pascalCase @key}}ToolInterface) error {
+	tool := mcp.NewTool("{{@root.options.basePackage}}/{{@key}}",
+		mcp.WithDescription("{{#if this.description}}{{this.description}}{{else}}Tool for {{@key}}{{/if}}"),
+		{{#if this.parameters}}
+		{{#each this.parameters}}
+		mcp.WithString("{{name}}",
+			{{#if required}}mcp.Required(),{{/if}}
+			mcp.Description("{{#if description}}{{description}}{{else}}{{name}} parameter{{/if}}"),
+		),
+		{{/each}}
+		{{/if}}
+	)
+
+	mcpServer.AddTool(tool, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		{{#if this.parameters}}
+		{{#each this.parameters}}
+		{{name}}, err := request.RequireString("{{name}}")
+		if err != nil {
+			return mcp.NewToolResultError(fmt.Sprintf("Missing {{name}} parameter: %v", err)), nil
+		}
+		{{/each}}
+		{{/if}}
+
+		// Call the implementation provided by the user
+		{{#if this.parameters}}
+		result, err := toolImpl.Execute{{pascalCase @key}}(ctx {{#each this.parameters}}, {{name}}{{/each}})
+		{{else}}
+		result, err := toolImpl.Execute{{pascalCase @key}}(ctx)
+		{{/if}}
+		if err != nil {
+			return mcp.NewToolResultError(fmt.Sprintf("Tool execution error: %v", err)), nil
+		}
+
+		return mcp.NewToolResultText(result), nil
+	})
+
+	return nil
+}
+{{/each}}
+
+//#FILENAME:pkg/tools/interfaces.go:write-always
+package tools
+
+import (
+	"context"
+)
+
+// This file contains interfaces that users need to implement for their tools
+
+{{#each data.spec.tools}}
+// {{pascalCase @key}}ToolInterface defines the interface for the {{@key}} tool implementation
+type {{pascalCase @key}}ToolInterface interface {
+	Execute{{pascalCase @key}}(ctx context.Context {{#if this.parameters}}{{#each this.parameters}}, {{name}} string{{/each}}{{/if}}) (string, error)
+}
+{{/each}}
+
+{{#each data.spec.tools}}
+//#FILENAME:pkg/tools/{{@key}}_impl.go:write-always
+package tools
+
+import (
+	"context"
+)
+
+// {{pascalCase @key}}ToolImpl is a default implementation of the {{@key}} tool interface
+type {{pascalCase @key}}ToolImpl struct{}
+
+// Execute{{pascalCase @key}} implements {{pascalCase @key}}ToolInterface
+func (impl *{{pascalCase @key}}ToolImpl) Execute{{pascalCase @key}}(ctx context.Context {{#if this.parameters}}{{#each this.parameters}}, {{name}} string{{/each}}{{/if}}) (string, error) {
+	panic("Execute{{pascalCase @key}} not implemented - please provide your implementation")
+}
+{{/each}}
+
+//#FILENAME:pkg/tools/defaults.go:write-always
+package tools
+
+// GetDefaultToolImplementations returns a map of default tool implementations
+// that panic with 'not implemented' message until the user provides their own
+func GetDefaultToolImplementations() map[string]interface{} {
+	defaultImpls := make(map[string]interface{}){{#each data.spec.tools}}
+	defaultImpls["{{@key}}"] = &{{pascalCase @key}}ToolImpl{}{{/each}}
+	return defaultImpls
+}
+
+//#FILENAME:pkg/tools/mcp_tools.go:write-always
+package tools
+
+import (
+	"github.com/mark3labs/mcp-go/server"
+)
+
+// RegisterTools registers all tools defined in the kapeta/resource-type-mcp-tools-api resource
+func RegisterTools(mcpServer *server.MCPServer, toolImpls map[string]interface{}) error {
+{{#each data.spec.tools}}
+	if impl, exists := toolImpls["{{@key}}"].({{pascalCase @key}}ToolInterface); exists {
+		if err := Register{{pascalCase @key}}Tool(mcpServer, impl); err != nil {
+			return err
+		}
+	}
+{{/each}}
+	return nil
+}
+{{else}}
+{{! Fallback if no tools are defined directly, check for source-based tools }}
+{{#if data.spec.source}}
+{{! This handles tools defined in the source DSL }}
+{{! We'll use a generic approach to process tools from source }}
+{{/if}}
+
+//#FILENAME:pkg/tools/interfaces.go:write-always
+package tools
+
+import (
+	"context"
+)
+
+// This file contains interfaces that users need to implement for their tools
+
+//#FILENAME:pkg/tools/defaults.go:write-always
+package tools
+
+// GetDefaultToolImplementations returns a map of default tool implementations
+// that panic with 'not implemented' message until the user provides their own
+func GetDefaultToolImplementations() map[string]interface{} {
+	defaultImpls := make(map[string]interface{})
+	return defaultImpls
+}
+
+//#FILENAME:pkg/tools/mcp_tools.go:write-always
+package tools
+
+import (
+	"github.com/mark3labs/mcp-go/server"
+)
+
+// RegisterTools registers all tools defined in the kapeta/resource-type-mcp-tools-api resource
+func RegisterTools(mcpServer *server.MCPServer, toolImpls map[string]interface{}) error {
+	// No tools defined in the resource specification
+	return nil
+}
+{{/if}}

@@ -27,9 +27,9 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 				Metadata map[string]string `in:"body=json"`
 				Tags     *[]string         `in:"query=tags"`
 			}
-			params := &RequestParameters{}
+			params := RequestParameters{}
 
-			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
+			if err := request.FillStruct(ctx, &params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.CreateUser(ctx, params.Id, params.User, params.Metadata, params.Tags)
@@ -38,9 +38,9 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 		e.GET("/users", func(ctx echo.Context) error {
 			type RequestParameters struct {
 			}
-			params := &RequestParameters{}
+			params := RequestParameters{}
 
-			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
+			if err := request.FillStruct(ctx, &params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.GetUsers(ctx)
@@ -51,9 +51,9 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 				Id       string `in:"path=id;required"`
 				Metadata any    `in:"header=metadata;required"`
 			}
-			params := &RequestParameters{}
+			params := RequestParameters{}
 
-			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
+			if err := request.FillStruct(ctx, &params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.GetUser(ctx, params.Id, params.Metadata)
@@ -63,9 +63,9 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			type RequestParameters struct {
 				Id string `in:"path=id;required"`
 			}
-			params := &RequestParameters{}
+			params := RequestParameters{}
 
-			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
+			if err := request.FillStruct(ctx, &params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.DeleteUser(ctx, params.Id)
@@ -76,9 +76,9 @@ func CreateUsersRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 				Type string `in:"query=type;required"`
 				Body string `in:"body=json"`
 			}
-			params := &RequestParameters{}
+			params := RequestParameters{}
 
-			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
+			if err := request.FillStruct(ctx, &params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.HandlePlan(ctx, params.Type, params.Body)
