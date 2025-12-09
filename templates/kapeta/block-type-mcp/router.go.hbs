@@ -1,0 +1,13 @@
+// #FILENAME:generated/mcpHandlers.go:write-always
+package generated
+
+import (
+	"github.com/mark3labs/mcp-go/server"
+	"{{@root.options.basePackage}}/pkg/tools"
+)
+
+// RegisterMCPHandlers registers all MCP tools, resources, and prompts with the server
+func RegisterMCPHandlers(mcpServer *server.MCPServer) error {
+	toolImpls := tools.GetDefaultToolImplementations()
+	return tools.RegisterTools(mcpServer, toolImpls)
+}

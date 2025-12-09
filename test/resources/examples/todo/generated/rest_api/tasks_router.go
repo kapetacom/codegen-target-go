@@ -24,9 +24,9 @@ func CreateTasksRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			type RequestParameters struct {
 				Ids *[]string `in:"query=ids;required"`
 			}
-			params := &RequestParameters{}
+			params := RequestParameters{}
 
-			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
+			if err := request.FillStruct(ctx, &params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.GetData(ctx, params.Ids)
@@ -38,9 +38,9 @@ func CreateTasksRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 				Id     string         `in:"path=id;required"`
 				Task   *entities.Task `in:"body=json"`
 			}
-			params := &RequestParameters{}
+			params := RequestParameters{}
 
-			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
+			if err := request.FillStruct(ctx, &params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.AddTask(ctx, params.UserId, params.Id, params.Task)
@@ -50,9 +50,9 @@ func CreateTasksRouter(e *server.KapetaServer, cfg providers.ConfigProvider) err
 			type RequestParameters struct {
 				Id string `in:"path=id;required"`
 			}
-			params := &RequestParameters{}
+			params := RequestParameters{}
 
-			if err := request.GetRequestParameters(ctx.Request(), params); err != nil {
+			if err := request.FillStruct(ctx, &params); err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 			return serviceInterface.MarkAsDone(ctx, params.Id)

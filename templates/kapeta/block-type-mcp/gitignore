@@ -1,0 +1,26 @@
+# #FILENAME:.gitignore:merge
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Build artifacts
+tmp/
+main
+main.exe
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+log/
+*.log
+build-errors.log
+
+# Environment specific
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
